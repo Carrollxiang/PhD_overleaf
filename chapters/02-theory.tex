@@ -1,0 +1,180 @@
+% chapters/01-introduction.tex
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% 章节内容...
+
+本章将系统阐述支撑这一实验平台的物理理论基础。全章逻辑结构遵循实验构建的物理流程：首先从单原子与光场的相互作用出发，建立量子态操控的基本描述；其次深入探讨激光冷却与磁光阱（MOT）的原理，这是制备冷原子样品的温床；随后，详细论述微观光镊中的偶极力囚禁机制及实现单原子确定性装载的碰撞阻塞效应；最后，核心部分将聚焦于里德堡原子的奇特物理性质、长程相互作用的微观起源及其在多体哈密顿量中的映射关系。这些理论推导不仅是理解实验现象的钥匙，更是设计新型量子模拟序列的基石。
+\section{光与原子的相干相互作用} 
+在量子模拟实验中，无论是冷却、囚禁，还是量子比特的门操作，其核心本质都是电磁场与原子内部能级的相互作用。理解这一过程的动力学演化，是构建整个实验体系的第一步。
+\subsection{半经典近似下的哈密顿量构建}
+处理中性原子（如碱金属原子 $^{87}\text{Rb}$ 或碱土金属原子 $^{88}\text{Sr}$）与激光场的相互作用时，通常采用半经典近似（Semi-classical approximation）。在此框架下，原子的内部自由度被量子化描述，而高强度的激光场则被视为经典的电磁波 4。
+
+考虑一个理想的二能级原子系统，其基态为 $|g\rangle$，激发态为 $|e\rangle$，本征能量分别为 $E_g$ 和 $E_e$，能级间隔为 $\hbar\omega_0 = E_e - E_g$。原子受到一束频率为 $\omega_L$、偏振为 $\hat{\epsilon}$ 的单色激光场作用，其电场形式可表示为：
+
+$$\mathbf{E}(t) = \mathbf{E}_0 \cos(\omega_L t + \phi) = \frac{1}{2} \mathbf{E}_0 (e^{-i(\omega_L t + \phi)} + e^{i(\omega_L t + \phi)})$$
+系统的总哈密顿量 $H$ 由原子自由哈密顿量 $H_0$ 和相互作用哈密顿量 $H_{\text{int}}$ 组成。选取基态能量为零点，则 $H_0 = \hbar\omega_0 |e\rangle\langle e|$。在偶极近似（Dipole Approximation）下，原子尺寸远小于光波波长，相互作用项由电偶极矩算符 $\mathbf{d} = -e\mathbf{r}$ 与电场的耦合决定：
+
+$$H_{\text{int}} = -\mathbf{d} \cdot \mathbf{E}(t)$$
+由于原子本征态具有确定的宇称（Parity），偶极算符的对角元为零（$\langle g|\mathbf{d}|g\rangle = \langle e|\mathbf{d}|e\rangle = 0$），非对角元描述了能级间的跃迁耦合。定义跃迁偶极矩 $\mu_{eg} = \langle e|\mathbf{d} \cdot \hat{\epsilon}|g\rangle$，则哈密顿量可写为：
+
+$$H = \hbar\omega_0 |e\rangle\langle e| - \mu_{eg} E_0 \cos(\omega_L t + \phi) (|e\rangle\langle g| + |g\rangle\langle e|)$$
+此时引入拉比频率（Rabi Frequency） $\Omega \equiv \frac{\mu_{eg} E_0}{\hbar}$，它表征了光场驱动原子在两个能级间跃迁的耦合强度 5。
+
+\subsection{旋波近似 (Rotating Wave Approximation) 与相互作用绘景}
+为了求解含时薛定谔方程，我们需要消除哈密顿量中的快速振荡项。首先将电场的余弦项展开为指数形式，此时哈密顿量包含两类频率成分：一类是频率为 $\omega_L - \omega_0$ 的近共振项（detuning term），另一类是频率为 $\omega_L + \omega_0$ 的反向旋转项（counter-rotating term）。
+当激光频率接近原子共振频率（$|\omega_L - \omega_0| \ll \omega_L + \omega_0$）且驱动强度远小于跃迁频率（$\Omega \ll \omega_0$）时，反向旋转项对系统演化的平均贡献趋于零，可以被忽略。这就是著名的旋波近似（RWA） 6。
+为了消除哈密顿量的显式时间依赖性，我们将系统转换到一个以激光频率 $\omega_L$ 旋转的参考系中（Rotating Frame）。通过幺正变换 $U(t) = e^{i\omega_L t |e\rangle\langle e|}$，在RWA近似下，系统的有效哈密顿量简化为非含时形式：
+
+$$H_{\text{RWA}} = -\frac{\hbar}{2} \begin{pmatrix} 0 & \Omega \\ \Omega^* & -2\Delta \end{pmatrix}$$
+其中，失谐量定义为 $\Delta = \omega_L - \omega_0$。该哈密顿量的本征值和本征态描述了原子在光场驱动下的相干演化。当 $\Delta = 0$ 时，系统处于共振驱动，原子在基态和激发态之间以频率 $\Omega$ 进行周期性的全布居数翻转，即拉比振荡（Rabi Oscillation）。当存在非零失谐时，振荡频率变为广义拉比频率 $\Omega_{\text{eff}} = \sqrt{\Omega^2 + \Delta^2}$，且最大激发几率被抑制为 $\Omega^2 / \Omega_{\text{eff}}^2$ 8。
+这一物理图像是理解单量子比特门操作的基础。例如，通过控制激光脉冲的持续时间 $\tau$ 使得 $\Omega \tau = \pi$，即可实现基态到激发态的翻转（$\pi$ 脉冲），对应于量子逻辑门中的 Pauli-X 操作；而控制相位 $\phi$ 则可实现绕不同轴的旋转。
+
+\subsection{光学布洛赫方程 (Optical Bloch Equations)}
+在真实的量子模拟实验中，原子不仅受到相干光场的驱动，还会通过自发辐射（Spontaneous Emission）与真空电磁场发生不可逆的相互作用，导致量子态的退相干。单纯的波函数描述无法涵盖这一非幺正过程，因此必须引入密度矩阵算符 $\rho = \sum_i P_i |\psi_i\rangle\langle\psi_i|$ 来描述系统的混合态性质 7。
+密度矩阵的演化遵循刘维尔-冯·诺依曼方程（Liouville-von Neumann equation），并需加入描述耗散过程的林德布拉德（Lindblad）项 $\mathcal{L}(\rho)$：
+
+$$\frac{d\rho}{dt} = -\frac{i}{\hbar} + \mathcal{L}(\rho)$$
+对于二能级原子，耗散项由自发辐射速率 $\Gamma$（自然线宽）主导。展开该方程可得到著名的光学布洛赫方程（Optical Bloch Equations, OBE）：
+
+$$\begin{aligned} \frac{d\rho_{ee}}{dt} &= -\Gamma \rho_{ee} + \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{gg}}{dt} &= \Gamma \rho_{ee} - \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{ge}}{dt} &= -\left(\frac{\Gamma}{2} + i\Delta\right)\rho_{ge} + \frac{i\Omega}{2}(\rho_{ee} - \rho_{gg}) \end{aligned}$$
+OBE 方程组揭示了原子动力学的两个关键时间尺度：布居数弛豫时间 $T_1 = 1/\Gamma$ 和偶极相干弛豫时间 $T_2 = 2/\Gamma$。在稳态条件下（$d\rho/dt = 0$），我们可以求解激发态布居数 $\rho_{ee}$，进而得到光子散射速率 $R_{\text{sc}} = \Gamma \rho_{ee}$：
+
+$$R_{\text{sc}} = \frac{\Gamma}{2} \frac{s_0}{1 + s_0 + (2\Delta/\Gamma)^2}$$
+其中 $s_0 = 2\Omega^2/\Gamma^2 = I/I_{\text{sat}}$ 为共振饱和参数，$I_{\text{sat}}$ 为饱和光强。这一公式不仅解释了共振荧光光谱的洛伦兹线型，也是设计原子探测方案和评估退相干误差的理论依据。在量子模拟中，为了保持量子态的长寿命，通常需要使原子处于“暗态”或远失谐光阱中，以极力压制 $R_{\text{sc}}$ 10。
+
+\section{激光冷却与磁光阱技术}
+将原子从室温下的热运动状态（速度约几百米每秒）减速并囚禁至微开尔文量级（速度约几厘米每秒），是进行精密量子操控的前置条件。这一过程依赖于光子动量传递产生的辐射压力。
+\subsection{多普勒冷却与磁光阱 (MOT) 原理}
+多普勒冷却机制：当原子在两束对向传播的激光场中运动时，若激光频率略低于原子共振频率（红失谐，$\delta < 0$），由于多普勒效应，原子会更倾向于吸收迎面而来的光子。吸收光子会获得一个反向的动量反冲 $\hbar k$，而随后的自发辐射是各向同性的，平均动量改变量为零。这一过程产生了速度依赖的阻尼力 $\mathbf{F} \approx -\alpha \mathbf{v}$，将原子像在粘稠液体中一样“冷却”下来，故称为“光学粘胶”（Optical Molasses） 11。
+多普勒冷却存在一个理论极限温度，即多普勒温度 $T_D$，由加热效应（光子反冲引起的随机游走）与冷却速率的平衡决定：
+
+$$T_D = \frac{\hbar\Gamma}{2k_B}$$
+对于 $^{87}\text{Rb}$ 原子，$T_D \approx 146 \, \mu\text{K}$ 13。
+磁光阱 (MOT) 的囚禁力：单纯的多普勒冷却只能减速原子，无法限制其空间位置。磁光阱通过引入四极磁场（Quadrupole Magnetic Field，梯度为 $dB/dz$），利用塞曼效应（Zeeman Effect）将原子的内部能级与空间位置关联起来。在非均匀磁场中，原子的跃迁频率随位置发生变化。配合圆偏振光的选择定则（$\sigma^+ / \sigma^-$），使得偏离中心的原子优先吸收将其推回中心的光子，产生位置依赖的回复力 $\mathbf{F} \approx -k \mathbf{r}$ 11。因此，MOT 同时提供了冷却和囚禁功能，是制备冷原子团的标准起始步骤。
+\subsection{亚多普勒冷却：偏振梯度冷却 (PGC)}
+实验发现，在 MOT 阶段之后，通过精细调节光场，可以获得远低于多普勒极限 $T_D$ 的温度（约 $10-20 \, \mu\text{K}$）。这种机制被称为亚多普勒冷却，其核心物理图像是西西弗斯冷却（Sisyphus Cooling）或偏振梯度冷却 12。
+在三维空间中，多束激光的干涉会形成复杂的偏振梯度（例如 lin $\perp$ lin 配置）。这导致原子的塞曼子能级（Zeeman sublevels）产生空间调制的交流斯塔克位移（Light Shift）。
+物理图像：运动的原子在光场势能面上“爬坡”，将动能转化为势能。
+光泵浦效应：当原子运动到势能最高点附近时，光泵浦过程倾向于将其抽运到能量较低的子能级（势能谷底）。
+能量耗散：原子周而复始地进行“爬坡-被泵浦回谷底”的过程，如同希腊神话中的西西弗斯，不断消耗动能。
+Cohen-Tannoudji 等人的理论指出 15，PGC 的极限温度不再受限于 $\Gamma$，而是受限于光子反冲能量，即反冲极限（Recoil Limit） $T_R$：
+
+$$T_R = \frac{\hbar^2 k^2}{2mk_B}$$
+对于 $^{87}\text{Rb}$，$T_R \approx 360 \, \text{nK}$。在实际操作中，通常在 MOT 加载完成后，关闭磁场，增大激光失谐量并降低光强，进行 5-10 ms 的 PGC 过程，将原子团温度降低至 $10 \, \mu\text{K}$ 左右，这对后续单原子在微观光镊中的高效装载至关重要 17。
+\section{微观光镊中的单原子囚禁与操控}
+
+为了实现数字化（Digital）的量子模拟，我们需要对单个原子进行独立的寻址和控制。基于强聚焦远失谐光束的微观光镊（Optical Tweezer）阵列是目前最主流的技术方案。
+\subsection{远失谐光偶极阱 (FORT) 理论}
+光镊利用光场诱导的原子偶极矩与光场本身的相互作用势（AC Stark Shift）来囚禁原子。对于基态原子，偶极势 $U_{\text{dip}}(\mathbf{r})$ 与局域光强 $I(\mathbf{r})$ 成正比 18：
+
+$$U_{\text{dip}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\omega_0^3} \left( \frac{\Gamma}{\Delta} \right) I(\mathbf{r})$$
+其中 $\Delta = \omega_L - \omega_0$ 为激光失谐量。
+红失谐陷阱 ($\Delta < 0$)：$U_{\text{dip}} < 0$，势能最小值位于光强最大处（焦点），原子被吸引至光束中心。这是最常用的光镊形式。
+蓝失谐陷阱 ($\Delta > 0$)：$U_{\text{dip}} > 0$，原子被排斥出光强高处，通常用于构建空心光束阱或瓶子阱（Bottle Beam Trap），优势在于囚禁区域光强接近零，相干性更好 19。
+与偶极势伴随的是光子散射率 $\Gamma_{\text{sc}}$，它会导致原子的加热和量子态退相干：
+
+$$\Gamma_{\text{sc}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\hbar\omega_0^3} \left( \frac{\Gamma}{\Delta} \right)^2 I(\mathbf{r})$$
+关键设计原则：对比两式可知，$U_{\text{dip}} \propto I/\Delta$ 而 $\Gamma_{\text{sc}} \propto I/\Delta^2$。为了在获得足够阱深（通常 ~1 mK 以抵抗热运动）的同时最小化散射率，实验上必须选择极大的失谐量 $\Delta$，并相应提高激光功率 $I$。例如，对于 780 nm 的 Rb 原子，常使用 850 nm 或 1064 nm 的高功率激光进行囚禁 10。
+
+\subsection{碰撞阻塞效应 (Collisional Blockade)}
+在微米尺度的光镊中实现确定性的单原子装载，依赖于一种称为“碰撞阻塞”的非线性机制。这解决了从大量原子中筛选单个原子的随机性问题。
+
+\subsubsection{物理机制：光致碰撞}
+
+当光镊的束腰半径极小（通常 $w_0 < 1 \, \mu\text{m}$）时，势阱的有效体积非常小。如果在 MOT 加载过程中，第二个原子进入了已经存在一个原子的光镊，两个原子在近共振冷却光的辅助下会发生强烈的光致碰撞（Light-assisted Collision） 20。
+碰撞过程中，原子对被激发到分子态势能曲线（如 $S+P$ 态），随后发生非辐射衰变或受激辐射回到基态。这一过程释放的内能转化为原子对的动能。由于冷却光的失谐量通常在 $10-100 \, \text{MHz}$ 量级，释放的能量对应的温度高达 $10^{-3} \sim 10^{-2} \, \text{K}$，远大于典型光镊的势阱深度（~1 mK）。结果是，两个碰撞的原子都会被弹出势阱。
+
+\subsubsection{动力学速率方程与装载极限}
+光镊中原子数 $N(t)$ 的演化可以用主方程描述，主要包含三个过程：
+装载：从背景 MOT 中捕获原子的速率 $R$。
+单体损失：由背景气体碰撞引起的损失速率 $\gamma$。
+两体碰撞损失：由光致碰撞引起的非线性损失速率 $\beta'$（通常写作 $\beta N(N-1)$）。
+速率方程为：
+
+
+$$\frac{dN}{dt} = R - \gamma N - \beta N(N-1)$$
+在强聚焦光镊中，$\beta$ 值非常大（$\beta \gg \gamma, R$），这意味着一旦 $N \ge 2$，系统会迅速发生二体损失衰变至 $N=0$ 或 $N=1$ 的状态。$N=2$ 的平均寿命极短。
+因此，系统在长时间加载下的原子数分布呈现亚泊松分布（Sub-Poissonian Statistics）。原子数在 $N=0$ 和 $N=1$ 之间快速翻转。由于 $0 \to 1$（装载一个原子）和 $1 \to 2 \to 0$（装载第二个原子导致双双损失）的过程交替进行，在统计平衡下，光镊中有一个原子的概率 $P_1$ 趋近于 0.5 23。
+
+$$P_1 \approx \frac{1}{2} \quad (\text{当 } \beta \to \infty)$$
+这种 "50\% 装载率" 是标准红失谐光镊的特征。虽然看似低效，但通过后选择（Post-selection）或实时重排（Rearrangement）技术，可以在阵列中制备出无缺陷的单原子晶体。
+值得注意的是，最新的实验技术通过使用蓝失谐光辅助碰撞或调整相互作用势，可以实现仅剔除其中一个原子的碰撞机制，从而突破 50\% 的限制，将单原子装载率提升至 80\%-90\% 25。这为大规模量子模拟提供了更高的初态保真度。
+\section{里德堡原子的物理性质}
+里德堡原子是指最外层电子被激发到高主量子数（Principal Quantum Number, $n \gg 1$）状态的原子。在这种状态下，价电子距离原子核极远，原子表现出夸张的物理性质，这正是利用其进行量子模拟的核心所在。
+\subsection{量子亏损与能级结构}
+对于碱金属原子，核心电子层（Core electrons）并未完全屏蔽原子核的电荷。当里德堡电子的角动量量子数 $l$ 较小时，其波函数有一定概率穿透到原子实内部，感受到比单纯库仑势更强的吸引力。这导致能级相较于氢原子发生下移。修正后的能量公式引入了量子亏损（Quantum Defect） $\delta_{nlj}$ 27：
+
+$$E_{n,l,j} = -\frac{Ry}{(n - \delta_{nlj})^2} = -\frac{Ry}{(n^*)^2}$$
+其中 $Ry \approx 13.6 \, \text{eV}$ 是里德堡常数，$n^* = n - \delta_{nlj}$ 是有效主量子数。量子亏损 $\delta$ 主要取决于角动量 $l$，对于 $^{87}\text{Rb}$，$S$ 态的 $\delta \approx 3.13$，$P$ 态的 $\delta \approx 2.64$。准确计算里德堡态的波函数和能级是选取实验工作波长和计算相互作用强度的前提。
+\subsection{关键物理量的标度律 (Scaling Laws)}
+里德堡原子的许多物理属性随有效主量子数 $n^*$ 呈现显著的幂律依赖关系。下表总结了对量子模拟至关重要的几个标度律 27：
+
+\begin{table}[]
+\begin{tabular}{l|l|l|l}
+\hline
+物理属性    & 符号                  & 标度关系                 & 物理机制与实验意义                                                      \\ \hline
+轨道半径    & $\langle r \rangle$ & $\propto (n^*)^2$    & 电子轨道巨大。$n=100$ 时半径约为 $1 \, \mu\text{m}$，使得原子极易被极化。             \\
+结合能     & $E_n$               & $\propto (n^*)^{-2}$ & 相邻能级间隔 $\Delta E \propto (n^*)^{-3}$。高 $n$ 态能级非常密集，需使用窄线宽激光激发。 \\
+辐射寿命 & $\tau$ & $\propto (n^*)^3$ & 低 $l$ 态寿命受限于与基态的重叠积分（随 $n$ 减小）。$n \sim 60$ 时寿命达 $100 \, \mu\text{s}$，加上黑体辐射诱导跃迁后仍很长，允许进行复杂的量子操作。 \\
+极化率     & $\alpha$            & $\propto (n^*)^7$    & 极化率极高，对外部电场极其敏感。微小的杂散电场都会导致巨大的能级移动（DC Stark Shift），需精密电场补偿。    \\
+范德瓦尔斯系数 & $C_6$               & $\propto (n^*)^{11}$ & 相互作用强度随 $n$ 剧烈增强。这是实现快速两比特门和强关联物理模拟的关键。                       
+\end{tabular}
+\end{table}
+
+\subsection{里德堡原子在电场中的斯塔克效应}
+由于极高的极化率（$\alpha \propto n^7$），里德堡原子展现出巨大的直流斯塔克效应（DC Stark Effect）。在弱场下，能级移动遵循二次方关系 $\Delta E = -\frac{1}{2}\alpha \mathcal{E}^2$。随着电场增强，不同角动量态的能级发生交叉，形成斯塔克图（Stark Map）。
+这一效应在实验中有双重意义：
+环境噪声：必须将实验腔体内的背景杂散电场控制在 $\text{mV/cm}$ 量级，否则会破坏共振条件。
+相互作用调控：通过施加精确控制的电场，可以调节原子能级，使其接近弗斯特共振（Förster Resonance），从而将相互作用从短程的范德瓦尔斯型切换为长程的偶极-偶极型，或大幅增强相互作用强度 31。
+\section{里德堡相互作用与多体哈密顿量}
+里德堡原子间极强的相互作用是实现量子纠缠和模拟多体物理的资源。
+\subsection{多极展开与相互作用形式}
+考虑两个相距 $R$ 的里德堡原子，其相互作用势可以通过多极展开（Multipole Expansion）得到。主导项通常是偶极-偶极相互作用项 $V_{dd}$：
+
+$$V_{dd} = \frac{1}{4\pi\epsilon_0 R^3} \left[ \mathbf{d}_1 \cdot \mathbf{d}_2 - 3(\mathbf{d}_1 \cdot \mathbf{n})(\mathbf{d}_2 \cdot \mathbf{n}) \right]$$
+其中 $\mathbf{d}_i$ 是第 $i$ 个原子的偶极算符，$\mathbf{n}$ 是连接两原子的单位向量 32。
+\subsubsection{范德瓦尔斯相互作用 (van der Waals Interaction)}
+当两个原子处于相同的本征态（例如 $|nS, nS\rangle$）且无外场时，由于宇称守恒，一阶偶极耦合矩阵元为零（$\langle nS|\mathbf{d}|nS\rangle = 0$）。此时，相互作用来源于二阶微扰效应：
+
+$$V_{vdW} = - \sum_k \frac{|\langle \psi_k | V_{dd} | \psi_{initial} \rangle|^2}{E_k - E_{initial}} \approx \frac{C_6}{R^6}$$
+这里的 $C_6 \propto n^{11}$。这种 $1/R^6$ 的相互作用形式随距离衰减极快，但在短距离下非常强。对于 $n=60$ 的 Rb 原子，在 $10 \, \mu\text{m}$ 距离下，相互作用强度可达几 MHz 至几十 MHz。这种相互作用是各向同性的（对于 S 态），常用于实现伊辛（Ising）型自旋模型。
+\subsubsection{共振偶极-偶极相互作用}
+如果制备原子对处于不同的宇称态（如 $|nS, nP\rangle$），或者通过电场调节能级使得 $|nS, nS\rangle \leftrightarrow |nP, n'P\rangle$ 发生能量共振（弗斯特共振），则一阶微扰项不为零。此时相互作用表现为长程的 $1/R^3$ 形式：
+
+$$V_{dip} = \frac{C_3}{R^3}$$
+这种相互作用具有各向异性，依赖于原子间轴与量子化轴的夹角，适用于模拟 XY 自旋模型、拓扑模型以及能量输运过程 31。
+\subsection{里德堡阻塞效应 (Rydberg Blockade)}
+里德堡阻塞效应是基于里德堡阵列的量子计算和模拟的核心机制。
+物理原理：
+考虑两个被激光驱动到里德堡态 $|r\rangle$ 的原子。激光的拉比频率为 $\Omega$，线宽为 $\gamma$。当原子间距 $R$ 减小到一定程度，使得相互作用引起的能级移动 $V(R)$ 远大于激发的谱宽（即 $V(R) \gg \hbar\Omega, \hbar\gamma$）时，双激发态 $|rr\rangle$ 就会被移出共振区，激光无法同时激发两个原子 1。
+阻塞半径 (Blockade Radius)：
+定义阻塞半径 $R_b$ 为相互作用强度等于拉比频率时的距离：
+
+
+$$R_b = \left( \frac{C_6}{\hbar\Omega} \right)^{1/6}$$
+
+在 $R < R_b$ 的区域内（阻塞球），系统只能容纳一个里德堡激发。
+集体态增强：
+在阻塞球内，这 $N$ 个原子形成一个“超原子”（Superatom）。激光会将整个原子系综激发到集体纠缠态（单激发态）：
+
+
+$$|W\rangle = \frac{1}{\sqrt{N}} \sum_{i=1}^N |g_1...r_i...g_N\rangle$$
+
+由于量子相干叠加，基态到该集体态的有效拉比频率增强为 $\sqrt{N}\Omega$。这一特性被广泛用于实现快速的高保真度量子逻辑门和制备多体纠缠态。
+\subsection{映射到自旋哈密顿量}
+基于上述物理性质，里德堡原子阵列的动力学可以精确映射为量子自旋模型。通常将基态 $|g\rangle$ 映射为自旋下 $|\downarrow\rangle$，里德堡态 $|r\rangle$ 映射为自旋上 $|\uparrow\rangle$。在多体系统中，演化由以下哈密顿量支配 3：
+
+$$H = \sum_i \frac{\hbar\Omega_i(t)}{2} \sigma_x^i - \sum_i \hbar\Delta_i(t) n_i + \sum_{i<j} V_{ij} n_i n_j$$
+第一项（横场项）：描述激光驱动的相干翻转，类似于横向磁场下的自旋进动。
+第二项（纵场项）：由激光失谐 $\Delta$ 决定，相当于纵向磁场。$n_i = |r_i\rangle\langle r_i| = (1 + \sigma_z^i)/2$ 是粒子数算符。正失谐倾向于让原子处于基态，负失谐倾向于激发原子。
+第三项（相互作用项）：描述里德堡原子间的范德瓦尔斯斥力（或引力）。这是非平凡多体关联的来源。
+通过对 $\Omega(t)$、$\Delta(t)$ 的时序控制以及光镊阵列几何构型 $V_{ij}$ 的设计，该平台可以模拟量子伊辛模型中的相变（如反铁磁相变）、拓扑物态（如环面码、自旋液体）以及非平衡动力学中的量子疤痕（Quantum Scars）等前沿物理现象。
+
+% 交叉引用示例：见图~\ref{fig:example} % 可以引用主文档的标签
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{figures/example.pdf}
+%   \caption{示例图片}
+%   \label{fig:example}
+% \end{figure}
+\end{document}
