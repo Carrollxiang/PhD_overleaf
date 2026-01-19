@@ -5,6 +5,12 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage{geometry}   % 如果页面边距太窄，可以调宽
+\usepackage{booktabs}   % 专业横线
+\usepackage{tabularx}   % 自动折行
+\usepackage{amsmath}    % 数学符号
+\usepackage{makecell}   % 表头多行
+\renewcommand\theadfont{\bfseries} % 表头加粗
 \addbibresource{preamble/ref.bib}
 
 \title{中文标题}
@@ -36,13 +42,13 @@ English abstract content.
 
 
 \chapter{理论}
-\subfile{chapters/02-theory}
+\subfile{chapters/chapter_02/02-theory}
 
 \chapter{实验装置}
-\subfile{chapters/03-setup}
+\subfile{chapters/chapter_03/03-setup}
 
-\chapter{里德堡原子操控}
-\subfile{chapters/04-Rydberg_control}
+\chapter{原子内态操控与里德堡激发}
+\subfile{chapters/chapter_04/04-Rydberg_control}
 
 \chapter{电场调控}
 \subfile{chapters/05-electric_field_control}
