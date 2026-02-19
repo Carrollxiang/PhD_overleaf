@@ -6,7 +6,7 @@
 
 理解规范场论的非平衡动力学是高能物理中的核心挑战之一，特别是涉及从真空中产生粒子及其散射的过程，经典计算往往难以处理。基于里德堡原子的量子模拟器为解决这一问题提供了新的途径。 本章介绍利用可编程里德堡原子阵列模拟 (1+1) 维 U(1) 晶格规范场论（Lattice Gauge Theory, LGT）的实验工作。通过设计具有交错失谐的里德堡哈密顿量，我们将原子阵列映射为 Schwinger 模型，并以此研究了高能物理中的基本现象。首先，我们通过淬火动力学观测了禁闭（Confinement）与解禁闭（Deconfinement）相变，以及伴随的味弦断裂（String Breaking）现象。进一步地，利用里德堡原子平台优异的时空操控能力，我们实现了对带电粒子（介子）波包的实时追踪，观测到了介子-介子散射过程中的干涉条纹。为了捕捉散射过程中的瞬态，我们开发了一种“量子冻结”（Quantum Freeze-out）协议，能够在碰撞发生的瞬间通过快速改变哈密顿量参数将系统投影到禁闭相，从而对散射中间态进行成像。这些结果展示了中性原子平台在模拟高能物理复杂动力学方面的潜力。
 
-\section{引言 (Introduction)}
+\section{引言}
 
 {\bf 理解规范场论的非平衡动力学仍然是高能物理中的一个基本挑战~\cite{Calzetta_Hu_2008,  gross_50_2023}。事实上，大多数关于规范场论的大规模实验本质上依赖于极度远离平衡态的动力学，从重离子碰撞到轻子和强子碰撞，这通常极难进行\textit{从头计算（ab initio）}处理~\cite{bauer_quantum_2023-1}。量子模拟在解决这一问题上具有引人注目的潜力 \cite{jordan_quantum_2012, zohar_quantum_2016, Bañuls2020, Karpov_Spatiotemporal_2022, bauer_quantum_2023, bauer_quantum_2023-1, di_meglio_quantum_2024, su_cold-atom_2024, cheng_emergent_2024, halimeh_cold-atom_2025, farrell_digital_2025}，并且开创性的实验已经观察到了规范场论的不同特征 \cite{martinez_real-time_2016,kokail_self-verifying_2019, tan_observation_2021, meth_simulating_2025, mueller_quantum_2025,schweizer_floquet_2019, gorg_realization_2019, yang_observation_2020, mil_scalable_2020, frolian_realizing_2022,  zhou_thermalization_2022, wang_interrelated_2023, zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,  datla_statistical_2025,gonzalez-cuadra_observation_2025, Cochran2025,de_observation_2024, liu_string_2024,zenesini_false_2024,zhu_probing_2024, vodeb_stirring_2025}，例如弦断裂 \cite{gonzalez-cuadra_observation_2025, Cochran2025,de_observation_2024, liu_string_2024} 和假真空衰变~\cite{zenesini_false_2024, zhu_probing_2024, vodeb_stirring_2025}。本文利用可编程里德堡原子阵列，观测了 (1+1) 维 U(1) 晶格规范场论中的实时散射和冻结动力学。
 通过时空哈密顿量工程，本文演示了动力学禁闭-解禁闭相变，揭示了淬火过程中的弦破碎和对称性恢复。我们在不同参数体系下以单格点分辨率追踪了散射过程。利用双重淬火协议，本文观测到了动力学冻结：在散射后对哈密顿量进行淬火时，尽管注入了大量能量，系统演化——无论是低阶关联还是纠缠——都发生了冻结，有效地稳定在了一个高度关联的平衡态——这种情况让人联想到重离子碰撞中的情景~\cite{Berges_QCD_2021}。本论文建立了一种探测非微扰规范动力学的高分辨率方法~\cite{CarmenBañuls_Review_2020}，为研究高能物理中的远离平衡态现象开辟了替代途径。} 
@@ -486,7 +486,7 @@ $\theta$ 项的调节和局域寻址下的相干演化需要仔细抑制退相�
 \end{figure*}
 
 
-\section{总结与展望 (Conclusion and Outlook)}
+\section{总结与展望}
 
 
 \noindent\textbf{\large 讨论与展望}
