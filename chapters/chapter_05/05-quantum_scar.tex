@@ -1,29 +1,202 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-\chapter{里德堡原子阵列中的量子多体疤痕与信息输运}
+\chapter{里德堡原子阵列中的量子多体疤痕}
 
-摘要： 封闭量子多体系统的热化动力学通常遵循本征态热化假说（ETH），初始的局部量子信息会迅速扩散到整个系统而变得不可恢复。然而，近期发现的“量子多体疤痕”（Quantum Many-Body Scars）现象挑战了这一范式，表明在某些强相互作用系统中存在弱各态历经性破缺，允许系统在长时间内保持相干性。 本章首先介绍基于里德堡原子阵列实现的 PXP 模型及其动力学约束机制。我们详细阐述了如何在实验上高保真度地制备与疤痕态子空间重叠极大的反铁磁 $\mathbb{Z}_2$ 初态。为了深入探究该系统中的量子信息动力学，我们引入了 Holevo 信息（Holevo Information）作为探测工具。与传统的布居数测量不同，Holevo 信息能够量化量子通道中可传输信息的上限。实验结果显示，在疤痕态演化过程中，Holevo 信息表现出显著的非马尔可夫（Non-Markovian）特征，即原本耗散到环境中的信息会周期性地回流到局部子系统中。这一发现从量子信息输运的角度揭示了动力学约束对多体系统热化的抑制作用，为后续章节研究更复杂的信息加扰动力学奠定了基础。
-
-\section{引言}
-量子信息加扰（Quantum information scrambling）——即初始局部信息在相互作用多体系统中扩散至整个系统的过程\cite{lewis2019dynamics, swingle2018unscrambling}——揭示了量子热化与混沌\cite{deutsch1991quantum,srednicki1994chaos,rigol2008thermalization,sekino2008fast,hosur2016chaos,maldacena2016bound}、黑洞信息悖论\cite{hayden2007black,shenker2014black}以及量子机器学习\cite{Shen2020Information,garcia2022Quantifying}中的基本物理机制。理解加扰动力学对于推进量子模拟、基准测试和精密测量等量子技术的发展至关重要\cite{garttner2017measuring,mi2021information,choi2023preparing,li2023improving}。近期的研究揭示了量子多体系统中丰富的信息动力学现象，从混沌不可积哈密顿量导致的快速加扰\cite{lewis2019dynamics,swingle2018unscrambling}，到多体局域化系统（MBL）中对数级缓慢的信息传播\cite{nandkishore2015many,abanin2019colloquium,lukin2019probing,schreiber2015observation,choi2016exploring,rispoli2019quantum,huang2017out,chen2017out,fan2017out,deng2017logarithmic,he2017characterizing,swingle2017slow,banuls2017dynamics}。然而，多体物理的广阔版图，以其多样的相互作用形式和涌现现象，预示着更多未被探索的信息加扰动力学机制。
-
-在此背景下，动力学约束系统（Kinetically Constrained Systems, KCS）中的量子信息动力学成为了一个引人注目的前沿领域，例如里德堡原子阵列\cite{kumar2018sorting,sheng2022defect,graham2022multi,barnes2022assembly,kim2022rydberg,okuno2022high,chen2023continuous,liu2023realization,singh2023mid,eckner2023realizing,ma2023high,zhao2023floquet,bluvstein2024logical,gregory2024second,pause2024supercharged,shaw2024benchmarking}。里德堡原子间的强范德瓦尔斯相互作用导致了里德堡阻塞（Rydberg blockade）机制\cite{lukin2001dipole,urban2009observation_combined}，从而限制了局域量子比特的翻转。这一核心物理机制可以近似地由 PXP 哈密顿量描述\cite{lesanovsky2012interacting,turner2018weak}：
+\subsection*{1.1 引言与理论背景}
+在此背景下，一个引人注目的前沿是动力学受限系统内的量子信息动力学，例如里德堡原子阵列\cite{kumar2018sorting,sheng2022defect,graham2022multi,barnes2022assembly,kim2022rydberg,okuno2022high,chen2023continuous,liu2023realization,singh2023mid,eckner2023realizing,ma2023high,zhao2023floquet,bluvstein2024logical,gregory2024second,pause2024supercharged,shaw2024benchmarking}。
+里德堡原子之间的强范德瓦尔斯相互作用导致里德堡阻塞机制\cite{lukin2001dipole,urban2009observation_combined}，并约束局域量子比特翻转。这一基本物理过程可以由 PXP 哈密顿量近似描述\cite{lesanovsky2012interacting,turner2018weak}：
 \begin{equation}
   \hat{H}_\text{PXP} =
   \sum_i\hat{P}_i\hat\sigma^x_{i+1}\hat{P}_{i+2}.\label{Eq:PXP}
 \end{equation}
-此处，$\hat{P}_i = (1 - \hat\sigma^z_i)/2$ 是第 $i$ 个格点上自旋向下 $\ket{\downarrow}$ 态的投影算符，$\hat\sigma^{x,y,z}_i$ 是第 $i$ 个自旋的泡利矩阵。对这些系统的既往研究发现了量子多体疤痕（Quantum Many-Body Scars）现象\cite{bernien2017probing,turner2018weak,serbyn2021quantum,bluvstein2021controlling, desaules2024ergodicity}。此外，近期的理论研究\cite{yuan2022quantum}表明，动力学约束多体系统（如 PXP 模型描述的系统）可能蕴藏着尚未被发现的信息加扰机制，为探索超越多体疤痕范畴的独特时空量子信息动力学开辟了新前沿。
+这里，$\hat{P}_i = (1 - \hat\sigma^z_i)/2$ 是格点 $i$ 处自旋向下 $\ket{\downarrow}$ 态的投影算符，$\hat\sigma^{x,y,z}_i$ 是第 $i$ 个自旋的泡利矩阵。先前对这些系统的研究揭示了量子多体疤痕\cite{bernien2017probing,turner2018weak,serbyn2021quantum,bluvstein2021controlling, desaules2024ergodicity}。此外，最近的理论研究\cite{yuan2022quantum}表明，动力学受限多体系统，如 PXP 模型描述的系统，可能蕴藏着尚未发现的信息加扰机制，为探索超越多体疤痕范围的独特时空量子信息动力学开辟了新前沿。
 
-图~\ref{Fig:1}a 展示了该动力学约束系统中新颖信息传播动力学的直观图像。在 PXP 模型中，翻转反铁磁 N\'eel 态 $\ket{\mathbb{Z}_2} = \ket{\uparrow\downarrow\uparrow\downarrow\uparrow\cdots}$ 中的中心自旋编码了一比特的信息。这一局域扰动导致邻近自旋的旋转发生迟滞，这种迟滞随即以弹道形式传播，形成线性的光锥状波前。在该光锥内部，自旋恢复其受限旋转，但自旋态的可区分性（distinguishability）表现出周期性的消失与重现，这由其 $\hat\sigma^y$ 期望值的差异所标识（虚线圆圈）。这种行为与典型的混沌量子系统显著不同，在后者中，光锥内的自旋态由于加扰会迅速变得不可区分。这些动力学约束动力学可能导致持续的信息回流（information backflow）和量子混沌的非寻常破坏，暗示了探索独特信息加扰动力学的新途径\cite{yuan2022quantum}。
+图~\ref{Fig:1}a 描绘了对这种动力学受限系统中新颖信息传播动力学的直观理解。在 PXP 模型中，翻转反铁磁奈尔态
+$\ket{\mathbb{Z}_2}=
+ \ket{\uparrow\downarrow\uparrow\downarrow\uparrow\cdots}
+$
+中的中心自旋编码了一比特信息。这种局域微扰诱导了相邻自旋旋转的迟滞，然后弹道式传播，形成线性光锥状波前。在这个光锥内，自旋恢复其受限旋转，但自旋态的可分辨性周期性地消失和重现，这由它们 $\hat\sigma^y$ 期望值的差异（虚线圆圈）所标志。这种行为与典型的混沌量子系统显著不同，在后者中，光锥内的自旋态由于加扰而迅速变得不可分辨。
+这些动力学受限动力学可能导致持续的信息回流和量子混沌的不寻常破坏，暗示了探测独特信息加扰动力学的新途径\cite{yuan2022quantum}。
 
-然而，在多体系统中对量子信息动力学进行实验探索面临着巨大挑战。诸如序时关联函数（OTOCs）和 Holevo 信息等关键探测工具，对态制备、多体演化控制以及原位（in-situ）态测量提出了极高的精度要求\cite{lewis2019dynamics,swingle2018unscrambling}。
+\subsection*{1.2 实验装置与控制}
 
-本文在动力学约束的里德堡原子阵列中探索了新颖的量子信息动力学。通过开发并集成新的实验技术，本文克服了上述挑战，成功测量了 OTOC 和 Holevo 信息以探测信息加扰。值得注意的是，本文观察到了多体系统中量子信息的时空“塌缩与复苏”（collapse-and-revival）现象，揭示了独特的相干性质：局部编码的信息在扩散至远处格点后，尽管存在强多体相互作用，仍能周期性地保持可访问性。这一行为与典型的混沌系统及多体局域化系统均有显著差异，为量子加扰提供了新的见解，并凸显了里德堡原子阵列在动力学约束天然提供的动态量子保护下进行新型量子信息处理的潜力。
+\subsection{方法}
 
-\section{实验模型与态制备}
-\label{sec:model_setup}
-本文的量子模拟器采用由光镊阵列囚禁的最多 25 个 $^{87}$Rb 原子组成的线性链，如图~\ref{Fig:1}b, c 所示。量子比特态 $\ket{\downarrow}$ 和 $\ket{\uparrow}$ 分别编码在原子基态 $\ket{g} = \ket{5S_{1/2}, F=2, m_F=2}$ 和里德堡态 $\ket{r} = \ket{68D_{5/2}, m_J=5/2}$ 上。系统的哈密顿量由下式给出：
+\textbf{无缺陷原子阵列的制备}
+
+在本文的实验中，原子从磁光阱加载并被通过空间光调制器 (SLM) 衍射的聚焦 808-\unit{nm} 激光束形成的光镊捕获。测量和反馈过程消除了原子链中的缺陷，实现了全填充阵列的快速创建（图~\ref{Fig:extended_1}a）。
+
+\textbf{实验参数}
+
+一旦制备好无缺陷阵列，所有原子都被光泵浦到基态。原子间距约为 \SI{7}{\micro m}，导致最近邻和次近邻相互作用分别为 $V_{i,i+1} = 2\pi \times \SI{7.3}{MHz}$ 和 $V_{i,i+2} = 2\pi \times \SI{0.11}{MHz}$。为了尽管 vdW 相互作用 $V_{i,i+1} / V_{i,i+2}$ 的固定比率为 64 仍能紧密近似 PXP 模型，基态-里德堡驱动拉比频率 $\Omega$ 在态演化期间设置为 $V_{i,i+1}/6 = 2\pi \times \SI{1.21(1)}{\MHz}$，在两个相互作用强度之间取得平衡。此外，引入小的失谐 $\Delta =2\pi\times\SI{0.22(1)}{\MHz}$ 以补偿残留的次近邻里德堡相互作用 $V_{i,i+2}$。
+在这些实验参数下，实验里德堡哈密顿量可以被 PXP 模型很好地近似，数值模拟显示偏差可忽略不计（详见补充材料第 2.2 节）。
+
+\textbf{高保真度 $\ket{\mathbb{Z}_2}$ 态制备}
+
+795-\unit{\nano\meter} 和 480-\unit{\nano\meter} 寻址激光束通过 SLM 衍射产生，并通过高数值孔径物镜聚焦到原子上，通过调整 SLM 相位图案实现选择性寻址。795-\unit{\nano\meter} 寻址光束非共振地耦合 $\ket{5S_{1/2}}$ 基态到 $\ket{5P_{1/2}}$ 态（图~\ref{Fig:extended_1}b），在被寻址原子上诱导光频移。在 $\ket{\mathbb{Z}_2}$ 态制备期间，被寻址原子经历 $2\pi \times \SI{12.2(3)}{MHz}$ 的光频移，足以屏蔽原子免受里德堡激发。
+结合高保真度全局 $\pi$ 脉冲，我们实现了多达 25 个原子阵列的高保真度制备（图~\ref{Fig:2}b）。
+
+\begin{figure*}[!ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{chapters/chapter_06/figure/Extended_Fig_1.png}  
+  \caption{
+    \textbf{实验装置和原子能级图。} 
+    \textbf{a}, 实验装置中基本元件的示意图。808-nm 静态光镊由 SLM 产生，而原子运输光镊由两个声光偏转器 (AODs) 控制。480-\unit{\nano\meter} 寻址激光束由另一个 SLM 产生。商业物镜 (G Plan Apo 50$\times$, Mitutoyo, NA = 0.5) 聚焦 808-nm 光镊光束和 480-\unit{\nano\meter} 寻址光束，同时收集 795-\unit{\nano\meter} 原子荧光用于电子倍增 CCD (EMCCD) 相机上的成像。反向传播的 780-\unit{\nano\meter} 和 480-\unit{\nano\meter} 拉曼光束实现相干基态-里德堡操控。用于局域微扰 \(\hat\sigma_c^z\) 的 795-\unit{\nano\meter} 寻址激光和负责产生用于 $\ket{\mathbb{Z}_2}$ 态制备的交替光频移的激光阵列瞄准同一 SLM 的不同区域。这些不同区域显示不同的全息图，实现不同的寻址激光图案。这种空间复用技术允许在 \(\ket{\mathbb{Z}_2}\) 态制备和局域微扰激光配置之间进行亚微秒切换。795-\unit{\nano\meter} 寻址激光束通过自制物镜 (NA = 0.4) 聚焦到原子上。腔体附近的微波喇叭产生用于里德堡态操控（相位门）和探测的微波脉冲。插图显示了原子阵列。
+    \textbf{b}, 显示实验中涉及的 $^{87}$Rb 原子能级的能级图。我们的里德堡激发方案采用从基态 \(\ket{\downarrow} = \ket{5S_{1/2}, F=2, m_F=2}\) 到里德堡态 \(\ket{\uparrow} = \ket{68D_{5/2}, m_J=5/2}\) 的双光子拉曼跃迁。该跃迁由 \(\hat\sigma^+\) 偏振的 780-\unit{\nano\meter} 激光（耦合基态到中间态 \(\ket{e}=\ket{5P_{3/2}, F=3, m_F=3}\)）和 \(\hat\sigma^+\) 偏振的 480-\unit{\nano\meter} 激光（连接中间态到里德堡态）驱动。两束激光相对于中间态失谐 \(\Delta = 2\pi\times\SI{1.16}{\giga\hertz}\)。微波场相对于 \(\ket{\uparrow}\) 到 \(\ket{69P_{3/2}, m_J=3/2}\) 跃迁红失谐 $2\pi\times\SI{2.2}{\giga\hertz}$，在里德堡态上产生交流斯塔克频移，并提供用于反转 PXP 哈密顿量的相位门。对于局域单量子比特控制，采用相对于 \(\ket{\downarrow}\)-\(\ket{5P_{1/2}}\) 跃迁蓝失谐 $2\pi\times\SI{15}{\giga\hertz}$ 的 795-\unit{\nano\meter} 寻址光束，以及与 \(\ket{\uparrow}\)-\(\ket{e}\) 跃迁共振的 480-\unit{\nano\meter} 寻址光束。
+    }
+  \label{Fig:extended_1}
+\end{figure*}
+
+\section{实验细节}
+\label{section:experiment}
+{
+可编程原子阵列已成为量子模拟和计算的新型平台，为探索量子多体现象提供了卓越的控制能力和可扩展性。
+在过去十年中，该领域取得了显著进展，包括原子阵列的制备~\cite{piotrowicz2013two,endres2016atom,barredo2016atom,lee2017defect,barredo2018synthetic,kumar2018sorting,sheng2022defect,barnes2022assembly,okuno2022high,liu2023realization,pause2024supercharged}，在量子计算~\cite{isenhower2010demonstration,jau2016entangling,sheng2018high,omran2019generation,guo2020balanced,bluvstein2022quantum,graham2022multi,fu2022high,schine2022long,singh2023mid,evered2023high,scholl2023erasure,ma2023high,zhao2023floquet,bluvstein2024logical,gregory2024second,shaw2024benchmarking}、量子优化~\cite{graham2022multi,ebadi2022quantum,kim2022rydberg,bluvstein2024logical}、量子模拟~\cite{bernien2017probing,keesling2019quantum,ebadi2021quantum,scholl2021quantum,semeghini2021probing,fang2024probing,DeLeseleuc2019,scholl2022microwave,chen2023continuous,kim2024realization}以及量子计量学~\cite{bornet2023scalable,eckner2023realizing}方面的努力。
+本节介绍了我们实验的细节，包括实验装置、时序以及 $\ket{\mathbb{Z}_2}$ 态的制备和表征。
+}
+
+\subsection{实验装置}
+\label{section:setup}
+
+{
+本文的实验平台建立在双腔真空系统周围，由 2D 磁光阱 (MOT) 腔和科学腔组成。在 2D-MOT 腔中，$^{87}$Rb 原子源（安瓿）产生扩散的原子蒸气。这些原子被磁场和 780-\SI{}{\nano\meter} 激光冷却和束缚，激光相对于 $\ket{5S_{1/2}, F=2} \rightarrow \ket{5P_{3/2}, F=3}$ 循环跃迁红失谐 $2\pi\times \SI{30}{\MHz}$。预冷的原子系综随后通过差分泵浦孔径由 780-\SI{}{\nano\meter} 推送光束转移到科学腔中。
+科学腔是一个定制设计的具有大光学通道的长方体玻璃腔 (Japan Cell)。腔内的超高真空条件由非蒸散型吸气剂泵 (NEXTorr D 200-5, SAES) 维持，实现了远低于 \(10^{-11}\) mbar 的压力。这种低背景压力最初允许单原子捕获寿命超过 10 分钟。然而，由于 2D-MOT 腔中离子泵 (SP-4, JJJvac) 的故障，寿命已降至约 \SI{90} 秒。原子在科学腔中被三维磁光阱 (3D-MOT) 捕获和冷却，使用三对反向传播的 780-\SI{}{\nano\meter} 激光束，磁场梯度为 \SI{15}{\gauss\per\cm}。每束光包含相对于 \(\ket{5S_{1/2}, F=2} \rightarrow \ket{5P_{3/2}, F=3}\) 循环跃迁红失谐 $2\pi\times \SI{24}{\MHz}$ 的冷却光，以及与 \(\ket{5S_{1/2}, F=1} \rightarrow \ket{5P_{3/2}, F=2}\) 跃迁共振的再泵浦光。
+}
+
+{
+单个原子被捕获在由 808-nm 激光器 (TA pro, Toptica) 在自由运行模式下产生的静态二维光镊阵列中。激光束照射加载了通过加权 Gerchberg-Saxton (WGS) 算法生成的相位全息图的相位控制空间光调制器 (SLM, HED 6010-NIR-080-C, Holoeye)。此外，一个原子运输光镊系统，利用与静态阵列相同的 808-nm 激光源但偏振正交，允许精确的原子重排。原子运输光镊由一对正交取向的声光偏转器 (AODs, DTSX-400-800.850, AA Opto-Electronic) 控制，由双通道任意波形发生器 (AWG, M4i.6631-x8, Spectrum) 生成的具有独立任意波形的射频驱动。
+}
+
+{高数值孔径物镜 (G Plan Apo 50$\times$, Mitutoyo, NA = 0.5) 聚焦静态和可移动光镊，同时收集原子荧光，荧光被引导到电子倍增 CCD (EMCCD, iXon Ultra 888, Andor) 相机进行探测。此外，用于局域里德堡控制的 480-\SI{}{\nano\meter} 光束，利用类似的基于 SLM 的方法，通过同一物镜聚焦（见图~5a）。这种用于捕获、寻址和荧光探测的共享配置增强了系统的稳定性。}
+{
+与 Mitutoyo 物镜相对的是一个数值孔径为 0.4 的自制物镜。CCD 相机对静态光镊阵列成像，该阵列由 36 \(\times\) 2 个光镊组成，间距为 \SI{7}{\um}，束腰约为 \SI{0.9}{\um}。通过迭代反馈和调整，整个阵列的强度变化保持在 1\% 以下。对于 \(\ket{\mathbb{Z}_2}\) 态制备和局域微扰至关重要的 795-\SI{}{\nano\meter} 寻址激光束通过自制物镜聚焦。两束反向传播的激光束——一束在 \SI{780}{\nm}，另一束在 \SI{480}{\nm}——实现全局基态-里德堡相干操控。位于科学腔附近的微波天线产生用于里德堡态操控和探测的微波脉冲。
+}
+
+{
+实验装置集成了用于态制备、量子比特控制和探测的多个激光系统。780-\SI{}{\nano\meter} 激光系统，一个锥形放大器激光器 (TA Pro, Toptica)，用于 MOT 冷却光束和里德堡激发方案中的拉曼光。其频率被稳定到精细度为 26,000 的超低膨胀参考腔 (SLS)。AWG 驱动针对调制带宽进行了优化的单次通过声光调制器 (AOM, SGT200-780-0.5TA-B)，以动态调整脉冲频率和强度。
+为了耦合 \(\ket{e} \rightarrow \ket{r}\) 跃迁，采用了 480-\SI{}{\nano\meter} 激光系统（倍频 TA-SHG Pro, Toptica），960-nm 种子激光器锁定到与 780-\SI{}{\nano\meter} 激光器相同的参考腔。由直接数字合成 (DDS, AD9910) 驱动的 AOM 控制 480-\SI{}{\nano\meter} 激光束，该光束经过强度稳定并在整个里德堡操作序列中保持开启。里德堡激发激光的快速上升和下降沿是使用电光调制器 (EOMs) 实现的，以进行精确的开关切换。
+}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{chapters/chapter_06/figure/SI_Timing_sequence.png}  
+  \caption{
+    \textbf{实验时序。} 
+    如第~\hyperref[section:timing sequence]{1.2} 节所述的典型实验序列总结。用于 OTOC 和 Holevo 信息测量的详细里德堡实验序列在图~\ref{SI_OTOC_sequence},\ref{SI_HI_sequence} 中提供。
+    }
+  \label{Fig:S1}
+\end{figure}
+
+\subsection{实验时序} 
+\label{section:timing sequence}
+
+{
+实验序列开始于在科学腔中制备冷原子系综。3D MOT 加载 \SI{200}{\ms}，产生直径为 \SI{500}{\um}、温度为 \SI{150}{\micro\kelvin} 的原子云，通过飞行时间 (TOF) 膨胀测量。为了进一步降低温度，应用了偏振梯度冷却 (PGC)。该过程涉及快速关闭磁场梯度（在 \SI{500}{\us} 内），同时将冷却光失谐增加到约 $2\pi\times\SI{90}{\MHz}$ 并降低冷却和再泵浦激光的强度。结果，原子被进一步冷却至约 \SI{40}{\micro\kelvin}。
+}
+{
+激光冷却的原子系综作为随机加载可编程原子阵列的库。对于随机加载，使用两束反向传播的 795-\SI{}{\nano\meter} 激光束实施 \(\Lambda\) 增强灰光学粘团 (\(\Lambda\)GM)。
+随后应用针对阱内冷却优化的额外偏振梯度冷却 (PGC) 阶段。这种组合冷却方法导致单原子加载效率约为 80\%，在深度为 \SI{1}{\milli\kelvin} 的阱中平均原子温度为 \SI{15}{\micro\kelvin}，这是使用释放-再捕获 (R\&R) 方法测量的。原子荧光探测利用用于 \(\Lambda\)GM 的相同 795-\SI{}{\nano\meter} 光束，在将光阱深度增加到 \SI{1.3}{\milli\kelvin} 后进行复用。通过仔细平衡加热和冷却速率，在 \SI{30}{\ms} 曝光时间内实现了超过 99.9\% 的探测保真度，同时保持每次探测的平均原子损失低于 1\%。使用 795-\SI{}{\nano\meter} 荧光成像最小化了来自强 780-\SI{}{\nano\meter} 光束的串扰，确保了准确的原子探测。
+}
+
+{
+原子重排过程产生无缺陷的一维原子链。该过程开始于将可移动光镊的强度从零线性增加到静态阱深度的三倍，将原子从静态 SLM 生成的阱转移到可移动光镊。然后用含时波形驱动 AODs 以平均速度 \SI{100}{\um\per\ms} 运输原子，遵循正弦速度分布以确保平滑的加速和减速。重排序列是使用改进的匈牙利算法 \cite{lee2017defect} 确定的，逐列优化原子移动。为了最小化移动光镊扫过静态阱时不必要的原子损失和加热，光镊路径包括额外的段以绕过中间的阱。重排过程的所有 AOD 波形都是预先计算的，允许快速执行序列。重排后测量表明，在 \SI{1}{\milli\kelvin} 深的阱中，原子温度增加到约 \SI{50}{\micro\kelvin}。
+}
+
+{
+对于相干里德堡激发，采用双光子拉曼方案。具有 \(\sigma^+\) 偏振的红失谐 780-\SI{}{\nano\meter} 激光将基态耦合到中间态 \(\ket{5P_{3/2}, F=3, m_F=3}\)（见图~5b）。准直的 780-\SI{}{\nano\meter} 激光被引导到原子上，束腰约为 \SI{300}{\um}，最大拉比频率为 \(\sim 2\pi\times\SI{100}{\MHz}\)。同时，同样具有 \(\sigma^+\) 偏振的蓝失谐 480-\SI{}{\nano\meter} 激光将中间态连接到里德堡态 \(\ket{\uparrow} = \ket{68D_{5/2}, m_J=5/2}\)。480-\SI{}{\nano\meter} 激光聚焦到原子上，束腰为 \SI{13}{\um}，最大拉比频率为 \(\sim 2\pi\times\SI{70}{\MHz}\)。两束激光相对于中间态失谐 \(\Delta = 2\pi\times\SI{1.16}{\GHz}\)。
+整个实验过程中施加 30 \unit{\gauss} 的偏置磁场。
+图~\ref{SI_Block_Rabi}a（蓝色圆圈）展示了由 780-\SI{}{\nano\meter} 和 480-\SI{}{\nano\meter} 激光驱动的单个原子的高对比度基态-里德堡态拉比振荡。当两个原子位于里德堡阻塞区域内时，$\Omega \ll V$，双里德堡激发受到强烈抑制，如图~\ref{SI_Block_Rabi}a 中的黄色方块所示。图~\ref{SI_Block_Rabi}a 中的红色菱形显示，贝尔态 $\frac{1}{\sqrt{2}}(\ket{\downarrow}\ket{\uparrow}+\ket{\uparrow}\ket{\downarrow})$ 和基态 $\ket{\downarrow}\ket{\downarrow}$ 之间的拉比振荡增强了 \(\sqrt{2}\) 倍。图~\ref{SI_Block_Rabi}b 展示了单个原子的基态-里德堡相干性，其中我们执行两个由可变间隙隔开的 \(\pi/2\) 基态-里德堡旋转，以实施 Ramsey 序列。Ramsey 振荡条纹的衰减揭示了 $T^*_2=\SI{11(1)}{\us}$ 的基态-里德堡相干时间。在我们的系统中实现的高对比度拉比振荡和长相干时间为后续实验中的高保真度操作奠定了坚实的基础。
+}
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_06/figure/SI_Block_Rabi.png}  
+  \caption{
+\textbf{基态-里德堡态拉比振荡、里德堡阻塞和 Ramsey 相干性。} 
+{
+\textbf{a}, 当单个原子由 480-\SI{}{\nano\meter} 和 780-\SI{}{\nano\meter} 拉曼激光驱动时，观察到高对比度基态-里德堡态拉比振荡（蓝色圆圈）。对于阻塞半径内的一对原子，双里德堡激发（黄色方块）受到强烈抑制，并且由于里德堡阻塞效应，单激发的拉比频率（红色菱形）增强了 \(\sqrt{2}\) 倍。曲线是阻尼正弦拟合。
+\textbf{b}, Ramsey 振荡显示高斯型非均匀退相，相干时间为 \(T^*_2 = \SI{11(1)}{\micro\second}\)。测量的概率代表间隙时间后的 \(\frac{1}{2}(\langle \sigma^y \rangle + 1)\)。
+}
+}
+  \label{SI_Block_Rabi}
+\end{figure}
+
+{
+为了在基态和里德堡态上执行局域操作，我们采用由 SLM 生成的 795-\SI{}{\nano\meter} 和 480-\SI{}{\nano\meter} 寻址激光束。795-\SI{}{\nano\meter} 激光束相对于 \(\ket{5S_{1/2}, F=2} \rightarrow \ket{5P_{1/2}}\) 跃迁蓝失谐 \(2\pi \times \SI{15}{\GHz}\)，提供 \(2\pi \times \SI{12.2(3)}{\MHz}\) 的光频移。这使得能够创建可激发和不可激发原子的交替图案，允许系统被制备在 $\mathbb{Z}_2$ 有序配置中。
+在 EMCCD 上同时对 795-\SI{}{\nano\meter} 原子荧光和 795-\SI{}{\nano\meter} 寻址激光束成像，确保了激光和原子之间的精确空间重叠。测量表明，对链中相邻原子的串扰被抑制到低于 \(2\pi \times \SI{1}{\kHz}\)。
+与 $\ket{r}-\ket{e}$ 跃迁共振的 480-\SI{}{\nano\meter} 激光束用于实现选择性里德堡-基态转移，并在最近邻 (NN) 和次近邻 (NNN) 格点中创建 EIT 条件。480-\SI{}{\nano\meter} 激光束对准通过最大化目标格点上的里德堡-基态转移效率同时最小化相邻格点上的串扰来优化。优化后，目标格点中超过 96\% 的里德堡态布居被快速转移到基态，而相邻格点中的里德堡态布居减少不到 1\%。
+}
+
+{
+最后，实施态探测方案以区分基态和里德堡态。在里德堡操作后 \SI{1}{\us} 内，阱深度迅速增加到 \SI{1.3}{\milli\kelvin} 以将里德堡原子从捕获区域排出，同时重新捕获基态原子。随后，使用射频功率放大器 (HXPA7081G, HXINWB) 施加扫描强 \SI{2.4}{\GHz} 微波脉冲以耗尽剩余的里德堡布居。这种综合探测方案确保了将里德堡原子误识别为基态的概率小于 1\%。
+}
+
+
+\subsection*{1.3 $\mathbb{Z}_2$ 疤痕态的高保真制备}
+\subsection{$\ket{\mathbb{Z}_2}$ 态制备和表征}
+\label{section:Z2}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{chapters/chapter_06/figure/SI_Z2.png}  
+  \caption{
+    \textbf{$\ket{\mathbb{Z}_2}$ 态制备细节。} 
+    \textbf{a}, {被寻址（红色）和未被寻址（蓝色）原子的里德堡激发光谱。里德堡布居显示为拉曼激发激光失谐的函数。}
+    \textbf{b}, {反阻塞效应和寻址激光诱导的光频移对态制备保真度的影响。模拟的 $\ket{\mathbb{Z}_2}$ 态制备保真度作为 795-\SI{}{\nano\meter} 寻址激光光频移（以里德堡拉曼激发拉比频率 $\Omega$ 为单位）的函数，针对各种系统尺寸，最近邻里德堡相互作用强度 $V_{i,i+1}=3\Omega$。红星标记了我们的实验条件。}
+    \textbf{c}, {$\ket{\mathbb{Z}_2}$ 态制备保真度作为系统尺寸的函数。红线和蓝线：校正和未校正 $\ket{\mathbb{Z}_2}$ 态保真度的指数拟合。黄线：当前实验寻址方法的理论上限。}
+    \textbf{d}, {13 量子比特微观态数量作为来自 1,774 次实验的出现次数的函数。成功制备的 $\ket{\mathbb{Z}_2}$ 态：1,246 次计数（70\% 的事件）。}
+    \textbf{e}, {测量的 13 量子比特微观态分布。插图：主要错误态。}
+  }
+  \label{Fig:S2}
+\end{figure}
+
+
+快速热化在遍历量子多体系统中普遍存在，导致旨在发现具有根本不同动力学的系统的大量研究~\cite{deutsch1991quantum,srednicki1994chaos,rigol2008thermalization,deutsch2018eigenstate,lewis2019dynamics}。
+% swingle2018unscrambling, abanin2019colloquium
+最近，涉及里德堡原子阵列的研究已经确定了多体疤痕态~\cite{bernien2017probing,turner2018weak,choi2019emergent,ho2019periodic,bluvstein2021controlling,turner2021correspondence,serbyn2021quantum}，这些态表现出遍历性的弱破坏，并在延长的时标上保持一定程度的相干性。{类似的现象已在其他系统中观察到，例如超导处理器~\cite{zhang2023many}和玻色-哈伯德量子模拟器~\cite{su2023observation}，并引发了进一步的理论研究~\cite{maskara2021discrete,dong2023disorder,liu2024novel, desaules2024ergodicity, aron2024quantum}。}
+先前的理论工作~\cite{yuan2022quantum}预测，当使用 $\mathbb{Z}_2$ 有序奈尔态作为研究反时序关联函数和 Holevo 信息时空演化的初态时，可能会观察到持续的信息回流和量子混沌的不寻常破坏。这些结果表明了研究动力学受限多体系统中量子信息加扰独特动力学的新途径。
+在此，本文使用两种初态研究量子信息加扰：(1) $\mathbb{Z}_2$ 有序态 \(\ket{\mathbb{Z}_2} = \ket{\uparrow \downarrow \uparrow \downarrow \uparrow...}\) 和 (2) 平凡直积态 \(\ket{\mathbf{0}} = \ket{\downarrow \downarrow \downarrow \downarrow \downarrow...}\)。虽然 \(\ket{\mathbf{0}}\) 可以很容易地使用光泵浦制备，但在大规模系统中实现 \(\ket{\mathbb{Z}_2}\) 态的高保真度制备仍然具有挑战性。
+先前的研究已经通过绝热态转移技术在一维和二维原子阵列中成功制备了 \(\ket{\mathbb{Z}_2}\) 态~\cite{bernien2017probing,omran2019generation,bluvstein2021controlling}，其中设计哈密顿量的基态从 \(\ket{\mathbf{0}}\) 绝热变换为 \(\ket{\mathbb{Z}_2}\)。然而，随着系统尺寸的增加，希尔伯特空间的指数增长导致能隙减小，这导致态制备保真度的迅速下降。
+
+本文的实验采用了一种可扩展的态制备方法，结合了全局里德堡激发和格点选择性激光寻址。SLM 用于在原子阵列上产生定制的光频移图案，选择性地使某些格点从基态-里德堡跃迁失谐（图~\ref{Fig:S2}a），从而创建可激发和不可激发原子的交替排列。
+795-\SI{}{\nano\meter} 寻址光束，相对于 D1 线共振失谐 $2\pi \times \SI{15}{\GHz}$，在基态上诱导 $2\pi \times \SI{12.2(3)}{MHz}$ 的能量移动。由 795-\SI{}{\nano\meter} 寻址光束引起的散射率约为 $2\pi \times \SI{5}{kHz}$，明显低于拉曼激光束引起的散射率。数值模拟（图~\ref{Fig:S2}b）表明，为了最大化 \(\ket{\mathbb{Z}_2}\) 态的保真度，光频移的符号必须与里德堡相互作用的符号相反，以避免反阻塞效应。在我们的实验条件下，数值模拟产生的制备非保真度约为每个量子比特 0.012。
+
+我们的方法在系统尺寸扩大时仍然非常有效（图~\ref{Fig:S2}c）。制备非保真度主要归因于不相关的单量子比特翻转误差：来自里德堡激发低效率的每个量子比特 0.8\%，由于有限能量移动的每个量子比特 1.2\%，以及来自态探测误差的 1\% ($\ket{\downarrow}\rightarrow\ket{\uparrow}$) 和 0.5\% ($\ket{\uparrow}\rightarrow\ket{\downarrow}$)。
+%of many-body scar state preparation 
+这种分解为单量子比特态制备的方式
+增强了我们方法相对于绝热转移协议的可扩展性。
+在多达 25 个原子的阵列中，我们实现了目标 $\ket{\mathbb{Z}_2}$ 态，测量保真度为 49(3)\%，在考虑探测误差后校正为 60(3)\%。在 $2^{25}$ 维的希尔伯特空间中的这种高保真度制备强调了我们协议的鲁棒性和可扩展性。
+
+实验制备的 $\ket{\mathbb{Z}_2}$ 态的微观态分布分析揭示了非泊松误差发生（图~\ref{Fig:S2}d）。
+图~\ref{Fig:S2}e 显示了测量的微观态分布，突显了主要误差是从 $\ket{\uparrow}$ 到 $\ket{\downarrow}$ 的单量子比特翻转，进一步证实了我们的方法采用单量子比特操作来制备多体态。这种可预测的误差分布有助于在 $\ket{\mathbb{Z}_2}$ 态中量子信息加扰的实验测量数据中进行误差缓解，如第~\ref{section:error} 节所讨论的。
+
+\subsection*{1.4 动力学受限系统中的弱热化观测}
+\subsection{结果}
+\textbf{动力学受限自旋动力学}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{chapters/chapter_06/figure/Z2.png}
+  \caption{
+\textbf{态制备与动力学受限多体态演化。} 
+\textbf{a}, 在全局相干驱动下，795-\unit{\nano\meter} 激光寻址的原子（红色）保持静止，而未寻址的原子（蓝色）表现出基态-里德堡态拉比振荡。
+\textbf{b}, $\ket{\mathbb{Z}_2}$ 态制备保真度 $\mathcal{F}_{\mathbb{Z}_2}$ 作为系统尺寸的函数。
+\textbf{c}, 测量的 25 量子比特 $\ket{\mathbb{Z}_2}$ 态的格点分辨里德堡概率 $P_i(\uparrow)$。上图：$\ket{\mathbb{Z}_2}$ 态的原子荧光图示，其中红圈表示里德堡原子。
+\textbf{d}--\textbf{g}, 动力学受限多体动力学。
+\textbf{d} 和 \textbf{f}, 分别从初态 $\ket{\mathbb{Z}_2}$ 和 $\hat\sigma^x_c\ket{\mathbb{Z}_2}$ 开始，测量的作为演化时间函数的格点分辨里德堡态概率 $P_i(\uparrow)$。
+在 $\hat\sigma^x_c\ket{\mathbb{Z}_2}$ 情况 (\textbf{f}) 中观察到线性光锥结构，其起源在补充材料第 2.3 节中详述。
+\textbf{e} 和 \textbf{g} 是来自数值模拟的相应结果。
+这些模拟采用了完整的里德堡哈密顿量，并根据我们对这些噪声源的表征考虑了实验噪声（见方法和补充材料第 4.3 节）。
+\textbf{d}--\textbf{g} 中的红色虚线曲线展示了传播波前，而 \textbf{f} 和 \textbf{g} 中的蓝色虚线显示了线性光锥。}
+  \label{Fig:2}
+\end{figure*}
+
+\noindent
+如图~\ref{Fig:1}b, c 所示，本文的量子模拟器采用了一个由多达 25 个被光镊捕获的单个 $^{87}$Rb 原子组成的线性阵列。
+量子比特态 $\ket{\downarrow}$ 和 $\ket{\uparrow}$ 分别编码在原子基态 $\ket{g}$ 和里德堡态 $\ket{r}$ 中。
+支配系统的哈密顿量为：
 \begin{equation}
 \label{Rydberg Hamiltonian}
   \hat{H}_\text{R}=
@@ -31,76 +204,49 @@
   \Delta\sum_i\hat{n}_i+
   \sum_{i<j}V_{ij}\hat{n}_i\hat{n}_j,
 \end{equation}
-其中 $\Omega$ 是 $\ket{\uparrow}$ 和 $\ket{\downarrow}$ 之间相干驱动的拉比频率，$\Delta$ 是驱动激光相对于基态-里德堡态跃迁的失谐量，$\hat{n}_i = \ket{\uparrow_i}\bra{\uparrow_i}$ 是第 $i$ 个格点上里德堡态的投影算符，$V_{ij} \propto 1/R^6_{ij}$ 表示距离为 $R_{ij}$ 的第 $i$ 和第 $j$ 个格点处里德堡原子间的范德瓦尔斯相互作用。
+其中 $\Omega$ 是 $\ket{\uparrow}$ 和 $\ket{\downarrow}$ 之间相干驱动的拉比频率，$\Delta$ 是驱动激光相对于基态-里德堡跃迁的失谐，$\hat{n}_i = \ket{\uparrow_i}\bra{\uparrow_i}$ 是向态 $\ket{\uparrow_i}$ 的投影算符，$V_{ij} \propto 1/R^6_{ij}$ 代表位于格点 $i$ 和 $j$、距离为 $R_{ij}$ 的里德堡原子之间的范德瓦尔斯相互作用。
+在 \(V_{i,i+2} \ll \Omega \ll V_{i,i+1}\) 的区域，里德堡阻塞防止相邻量子比特同时处于 \(\ket{\uparrow}\) 态（例如 \(\ket{\cdots \uparrow_i \uparrow_{i+1} \cdots}\)）的配置，使得系统可以被式~(\ref{Eq:PXP}) 中的 PXP 模型很好地近似。
 
-在满足 $V_{i,i+2} \ll \Omega \ll V_{i,i+1}$ 的参数区间内，里德堡阻塞效应禁止相邻量子比特同时处于 $\ket{\uparrow}$ 态（例如 $\ket{\cdots \uparrow_i \uparrow_{i+1} \cdots}$），使得系统可以被 PXP 模型很好地近似。
+高保真度态制备对于所有后续实验的成功至关重要。
+我们通过结合全局里德堡激发激光（\SI{780}{nm} 和 \SI{480}{nm}）与格点选择性 795-\unit{\nano\meter} 寻址激光来制备 $\ket{\mathbb{Z}_2}$ 态。后者使被寻址原子从基态-里德堡跃迁失谐，产生可激发和不可激发原子的交替图案（图~\ref{Fig:2}a）。
+如图~\ref{Fig:2}b, c 所示，我们的方法实现了高 $\ket{\mathbb{Z}_2}$ 态制备保真度：13 个中心量子比特为 70(1)\%，整个 25 量子比特链为 49(3)\%。校正探测误差后，保真度分别提高到 13 量子比特的 78(1)\% 和 25 量子比特的 60(3)\%。
+在如此大的希尔伯特空间（$2^{25}$ 维）中实现如此高的制备保真度，对于准确探测动力学受限多体态演化和量子信息动力学至关重要。
 
-为了实现该模型，实验中使用了波长为 780 nm 和 480 nm 的全局激光束，通过双光子拉曼过程驱动基态-里德堡态跃迁。单格点的量子比特操作则通过 795 nm 和 480 nm 的寻址激光束实现（如图~\ref{Fig:1}b 所示）。相关原子能级如图~\ref{Fig:1}c 插图所示，中间态包括 $\ket{e} = \ket{5P_{3/2}, F=3, m_F=3}$ 和 $\ket{e'} = \ket{5P_{1/2}}$。
+接下来，我们研究引言中描述的动力学受限自旋动力学，重点关注 PXP 哈密顿量下自旋配置 $\ket{\mathbb{Z}_2}$ 和 $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ 的演化。对于 $\ket{\mathbb{Z}_2}$ 态（图~\ref{Fig:2}d），所有自旋在 PXP 约束下相干旋转，形成均匀波前。这种同步演化持续存在，直到边界效应逐渐从外边缘向内改变自旋旋转。
 
-高保真度的态制备是后续所有实验成功的关键。本文通过结合全局里德堡激发激光与位置选择性的 795 nm 寻址激光来制备 $\ket{\mathbb{Z}_2}$ 态。寻址激光使被寻址原子的基态-里德堡态跃迁发生失谐，从而创建出可激发原子与不可激发原子交替的图案（图~\ref{Fig:2}a）。如图~\ref{Fig:2}b, c 所示，该方法实现了很高的 $\ket{\mathbb{Z}_2}$ 态制备保真度：对于中心 13 个量子比特为 70(1)\%，对于整个 25 量子比特链为 49(3)\%。在修正探测误差后，13 量子比特和 25 量子比特的保真度分别提升至 78(1)\% 和 60(3)\%。在如此大的希尔伯特空间（$2^{25}$ 维）中实现如此高的制备保真度，对于精确探测动力学约束的多体态演化及量子信息动力学至关重要。
+相比之下，对于 $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ 态（图~\ref{Fig:2}f），本文观察到清晰的线性光锥结构\cite{surace2020lattice,frerot2018multispeed,Chen2019Finite,kuwahara2020strictly}。
+光锥外的自旋不受翻转的中心自旋影响，表现出与 $\ket{\mathbb{Z}_2}$ 态相似的动力学。
+在光锥内，翻转的中心自旋诱导相邻自旋演化的迟滞，产生独特的演化波前。
+这种弧形弯曲波前向外传播，由迟滞的自旋旋转驱动，这清楚地说明了 PXP 模型中的受限自旋动力学。
+实验数据与数值结果（图~\ref{Fig:2}e, g）之间的极好一致性证实了我们的里德堡量子模拟器在捕捉动力学受限系统行为方面的有效性，为进一步探索量子信息动力学铺平了道路。
 
-接下来，我们研究了前文所述的动力学约束自旋动力学，重点关注自旋构型 $\ket{\mathbb{Z}_2}$ 和 $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ 在 PXP 哈密顿量下的演化。对于 $\ket{\mathbb{Z}_2}$ 态（图~\ref{Fig:2}d），所有自旋在 PXP 约束下相干旋转，形成均匀的波前。这种同步演化一直持续，直到边界效应逐渐从外边缘向内改变自旋旋转。
+{接下来，研究了 $\ket{\mathbb{Z}_2}$ 态的演化和寿命。$\ket{\mathbb{Z}_2}$ 态的动力学是在使用 PXP 哈密顿量 \(H = \sum_i P_i \sigma^x_{i+1} P_{i+2}\)~\cite{lesanovsky2012interacting,turner2018weak,cheng2024emergent} 的正向-反向演化（\(e^{-iHt}\) 后跟 \(e^{iHt}\)）和仅正向演化（\(e^{-iHt}\)）（图~\ref{Fig:S3}）下测量的。为了表征演化，测量了里德堡态布居 \(P(\uparrow)\)（图~\ref{Fig:S3}a,b）和平均畴壁密度（图~\ref{Fig:S3}c,d）。
+图~\ref{Fig:S3}a,c 中数据的指数拟合显示了 $\ket{\mathbb{Z}_2}$ 态在正向-反向演化下的衰减率，布居的 $1/e$ 寿命约为 \SI{1.6(1)}{\micro\second}，平均畴壁密度为 \SI{1.0(3)}{\micro\second}。这种衰减限制了正文图 3f 中呈现的原始 ZZ-OTOC 数据的对比度。平均畴壁密度的仅正向演化（图~\ref{Fig:S3}d）拟合为阻尼正弦函数，产生约 \SI{1.5(1)}{\micro\second} 的 $\ket{\mathbb{Z}_2}$ 态寿命。
+{
+里德堡布居动力学（图~\ref{Fig:S3}b）使用阻尼傅里叶级数拟合，产生约 \SI{2.8(2)}{\us} 的 $1/e$ 衰减时间。
+}
+此外，在第~\ref{section:error} 节中，来自图~\ref{Fig:S3}b 的数据被拟合到误差模型以表征驱动场中的噪声。$\ket{\mathbb{Z}_2}$ 态的有限寿命导致传输过程中的整体损失，反映在正文图 4b 中测量的 Holevo 信息的全局衰减中。
+无缺陷 $\mathbb{Z}_2$ 有序系统分解为子系统，由畴壁密度的衰减（图~\ref{Fig:S3}c）和振荡对比度的降低（图~\ref{Fig:S3}d）表明，这模糊了动力学并阻碍了量子信息传播。
+虽然态制备误差可以很容易地校正，但演化过程中误差的缓解要复杂得多。上述对制备的 $\ket{\mathbb{Z}_2}$ 态的详细表征，特别是驱动演化期间的衰减率，提供了对潜在噪声源的见解（关于噪声模型的细节见第~\ref{section:error} 节），并为随后的误差缓解策略提供信息。}
 
-相比之下，对于 $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ 态（图~\ref{Fig:2}f），我们观察到了清晰的线性光锥结构\cite{surace2020lattice,frerot2018multispeed,Chen2019Finite,kuwahara2020strictly}。光锥外的自旋不受翻转的中心自旋影响，表现出与 $\ket{\mathbb{Z}_2}$ 态相似的动力学。而在光锥内部，被翻转的中心自旋导致邻近自旋的演化发生迟滞（retardation），产生了一个独特的演化波前。这一弧形弯曲的波前向外传播，由迟滞的自旋旋转驱动，清晰地展示了 PXP 模型中的受限自旋动力学。实验数据与数值模拟结果（图~\ref{Fig:2}e, g）之间的极佳吻合，证实了我们的里德堡量子模拟器在捕捉动力学约束系统行为方面的有效性，为进一步探索量子信息动力学铺平了道路。
+总之，演示了一种在大型原子阵列中制备 $\ket{\mathbb{Z}_2}$ 态的可扩展方法。通过结合全局里德堡激发和格点选择性寻址，在多达 25 个量子比特的系统中实现了高保真度态制备。态演化的详细表征提供了对量子疤痕动力学和系统噪声源的宝贵理解。这些发现为进一步探索疤痕系统中的量子信息加扰奠定了基础。
 
-\section{序时关联函数 (OTOC) 动力学}
-\label{sec:otoc}
-
-序时关联函数（Out-of-Time-Ordered Correlator, OTOC）是探测多体系统中量子信息加扰的有力工具\cite{lewis2019dynamics,swingle2018unscrambling}。然而，由于巨大的实验挑战，OTOC 测量此前仅在少数几个最先进的物理平台上得到演示\cite{mi2021information,blok2021quantum,braumuller2022probing,zhao2022probing,wang2022information,landsman2019verified,garttner2017measuring,joshi2020quantum,green2022experimental,li2017measuring,wei2018exploring,niknam2020sensitivity,chen2020detecting,pegahan2021energy,li2023improving}。在里德堡原子阵列中，本文首次通过实验利用 OTOC 研究了动力学约束下的信息加扰动力学。OTOC 定义如下，它量化了局域扰动 $\hat{W}$（称为蝴蝶算符）的算符增长如何在格点间传播：
-\begin{equation}
-\hat{F}_{ij}(t) = \bra{\psi}\hat{W}_i^\dagger(t)\hat{V}_j^\dagger \hat{W}_i(t)\hat{V}_j\ket{\psi}.
-\end{equation}
-本文的研究聚焦于 ZZ-OTOC，选取局域蝴蝶算符 $\hat{W}_i = \hat\sigma^z_c$ 和测量算符 $\hat{V}_j = \hat\sigma^z_j$，以避免破坏动力学约束的自旋旋转。$\hat{W}_i(t) = e^{i\hat{H}t}\hat{W}_i e^{-i\hat{H}t}$ 表示 $\hat{W}_i$ 的海森堡演化，$\ket{\psi}$ 为初态。对应于中心量子比特上的 $\hat\sigma^z_c$ 门（即 $\pi$ 相移）的局域扰动，在实验上是通过 795 nm 寻址激光的光频移实现的。图~\ref{Fig:3}a 展示了测量 OTOC $\hat{F}_{ij}(t)$ 的五步协议：（1）态制备；（2）正向演化；（3）局域扰动；（4）反向（时间反演）演化；（5）计算基矢测量。
-
-本文采用了两种不同的初态来研究 OTOC 动力学，包括反铁磁 $\mathbb{Z}_2$ 有序的 N\'eel 态 $\ket{\mathbb{Z}_2} = \ket{\uparrow\downarrow\uparrow\downarrow\uparrow\cdots}$（与疤痕本征态子空间有较大重叠\cite{turner2018weak}）和平凡直积态 $\ket{\mathbf{0}} = \ket{\downarrow \downarrow\downarrow\downarrow\downarrow\cdots}$（位于普通热化本征态子空间）。为了减小边界和有限尺寸效应，我们特意制备了 25 个量子比特的 $\ket{\mathbb{Z}_2}$（或 $\ket{\mathbf{0}}$）态，并在中心 13 个量子比特上进行 OTOC 实验。这种配置在演化过程中屏蔽了边界效应，能更好地近似体（bulk）PXP 动力学。此外，我们的高 $\ket{\mathbb{Z}_2}$ 态制备保真度对于准确探测 OTOC 动力学至关重要。低制备保真度会引入大量错误态，模糊预期的 OTOC 图案。
-
-在成功制备初态后，我们要解决 OTOC 测量中另一个关键且极具挑战性的步骤——在多体系统中实现 $-\hat{H}$ 下的时间反演演化。虽然反转单粒子哈密顿量相对容易，但反转多体相互作用项（如在吸引和排斥相互作用间切换）在理论和实验上都面临巨大困难。相比于谷歌 Sycamore 量子计算机\cite{mi2021information}利用数字模拟方法实现时间反演，本文的方法利用了 PXP 模型的粒子-空穴对称性（particle-hole symmetry），通过对所有量子比特施加全局 $\hat\sigma^z$ 门来实现逆哈密顿量：$(\prod_i \hat\sigma_i^z)\hat{H}_\text{PXP}(\prod_i \hat\sigma_i^z) = -\hat{H}_\text{PXP}$。在实验上，这是通过使用远失谐微波场对里德堡态诱导 $\pi$ 相移来实现的。为了弥合全里德堡哈密顿量 $\hat{H}_\text{R}$ 与理想 PXP 模型 $\hat{H}_{\text{PXP}}$ 之间的差距，我们进行了详细的基准模拟并优化了实验参数（例如引入小量全局失谐以补偿次近邻相互作用）。图~\ref{Fig:3}c 展示了实验测量的 $\ket{\mathbb{Z}_2}$ 态正向-反向演化动力学。这种新颖的数字-模拟结合（digital-analogue）协议为里德堡原子阵列中相干反转多体演化和探测信息加扰提供了一种强有力的技术手段。
-
-在实现了高保真度态制备和时间反演后，我们执行了完整的 OTOC 测量协议（图~\ref{Fig:3}d, e）。图~\ref{Fig:3}f 和 g 分别展示了 $\ket{\mathbb{Z}_2}$ 和 $\ket{\mathbf{0}}$ 初态下 ZZ-OTOC 的时空演化。测量到的 OTOC 值的整体衰减主要源于演化过程中的原子丢失和退相干。为了区分感兴趣的加扰动力学与这些无关的衰减机制\cite{landsman2019verified}，我们额外测量了 IZ-OTOC（蝴蝶算符为单位算符 $I$），并利用类似于前人工作\cite{mi2021information}的误差缓解技术对原始 ZZ-OTOC 数据进行了修正（图~\ref{Fig:3}j, k）。
-
-OTOC 演化动力学揭示了 $\ket{\mathbf{0}}$ 和 $\ket{\mathbb{Z}_2}$ 初态截然不同的行为。对于 $\ket{\mathbf{0}}$ 态，OTOC 在线性光锥内迅速衰减，未见明显的复苏。这种快速的信息加扰符合混沌量子系统中高能初态的理论预期。与此形成鲜明对比的是，$\ket{\mathbb{Z}_2}$ 态表现出较慢的蝴蝶速度（butterfly velocity），并在光锥内显现出显著的量子信息时空**“塌缩与复苏”（collapse-and-revival）**模式。
-
-波函数的塌缩与复苏此前主要在单粒子系统（如 Jaynes-Cummings 模型）中被观察到\cite{eberly1980periodic,rempe1987observation}，反映了量子相干性的周期性扩散与重聚。与多体系统中相互作用导致量子信息在指数级大的希尔伯特空间中迅速加扰的传统预期不同，我们的观察揭示了在光锥内部量子相干性的惊人保持和重聚焦。这些不寻常的加扰动力学表明，动力学约束系统允许量子信息的弹道传播和周期性恢复，这与典型的混沌和多体局域化系统均有显著不同。
-
-\section{Holevo 信息与非马尔可夫动力学}
-\label{sec:holevo}
-
-除了 OTOC，本文还引入了 Holevo 信息来研究系统中的量子信息动力学。虽然 ZZ-OTOC 成功揭示了“塌缩与复苏”现象，但 $\hat\sigma^z$ 扰动在特定条件下可能失效。如图~\ref{Fig:3}j, l 所示，在 $0.6\text{--}0.7\,\si{\micro\second}$ 和 $1.2\text{--}1.3\,\si{\micro\second}$ 期间，所有量子比特的 OTOC 值接近 1。这是因为此时受扰动的量子比特接近纯态 $\ket{\uparrow}$ 或 $\ket{\downarrow}$，使得蝴蝶算符 $\hat\sigma^z$ 无法产生有效扰动。
-
-为了获得动力学约束系统中信息传播更连续的图像，我们转向 Holevo 信息。Holevo 信息最初被提出用于界定两个分离主体间可访问信息的上限\cite{holevo1973bounds}，在此它被用于量化从微小差异的初始条件演化而来的量子态的局域可区分性。通过将子系统上的约化哈密顿量演化视为量子通道，利用 Holevo 信息可以补充 OTOC 测量，特别是在蝴蝶算符扰动失效的情况下。这种基于量子态层析（Quantum State Tomography, QST）的方法，为我们提供了更全面的量子信息动力学理解。
-
-我们的实验探索了两组不同初态下的哈密顿量演化：$\ket{\mathbb{Z}_2}$ 和 $\hat\sigma^x_{c}\ket{\mathbb{Z}_2}$。$\hat\sigma^x_{c}$ 算符作用于一维链的中心量子比特，在初态中编码了一比特的局域信息（如图~\ref{Fig:1}a 所示）。在随后的演化中，我们测量不同格点 $j$ 处的 Holevo 信息 $\mathbb{X}_j(t)$，它量化了编码在中心量子比特的信息有多少可以通过在远处格点的局域测量被提取：
-\begin{equation}
-\mathbb{X}_j(t) = S\left(\frac{\hat\rho_j(t) + \hat\rho'_j(t)}{2}\right) - \frac{S(\hat\rho_j(t)) + S(\hat\rho'_j(t))}{2},
-\end{equation}
-其中 $\hat\rho_j(t)$ 和 $\hat\rho'_j(t)$ 分别是初态为 $\ket{\mathbb{Z}_2}$ 和 $\hat\sigma^x_{c}\ket{\mathbb{Z}_2}$ 时第 $j$ 个自旋演化后的约化密度矩阵，$S(\hat\rho) = - \mathrm{Tr}(\hat\rho \log \hat\rho)$ 是冯·诺依曼熵。
-
-在 PXP 动力学约束下进行全量子态层析极具挑战性。虽然对角元可以直接从里德堡布居数测量中提取，但获取非对角元需要对目标量子比特进行自旋旋转，这一过程会受到邻近量子比特相互作用的干扰。为了旋转目标量子比特，必须确保其最近邻和次近邻量子比特既不处于里德堡态，也不与基态-里德堡态跃迁共振。为此，本文开发了一种新技术：利用 480 nm 寻址激光作用于目标量子比特周围的四个邻近格点（如图~\ref{Fig:4}a 所示）。这些 480 nm 激光首先通过中间态 $\ket{e}$ 的自发辐射将邻近格点的里德堡布居转移回基态，然后构建电磁诱导透明（EIT）条件，阻止这些邻近格点被全局激发激光激发。最后，我们施加全局激发激光，仅对被“隔离”的目标量子比特实施态层析所需的自旋旋转。
-
-图~\ref{Fig:4}b(c) 展示了实验测量（数值模拟）的 Holevo 信息时空演化，两者吻合良好。我们观察到了清晰的线性光锥结构和独特的 $\mathbb{X}_j(t)$ “塌缩与复苏”模式，这与 OTOC 结果有所不同。值得注意的是，在 ZZ-OTOC 值接近 1（即扰动失效）的时间段内，我们仍然观察到非均匀的 Holevo 信息分布。这证明了 Holevo 信息能够连续跟踪量子信息动力学。
-
-此外，本文的研究结果揭示了一种独特的信息输运行为：最初编码在某一点的局域信息，经过多体相互作用哈密顿量演化后，可以在初始位置和其他远处格点被恢复。这些动力学展示了持续的**信息回流（Information Backflow）**——即信息从环境（周围量子比特）流回系统（最初编码信息的量子比特），这是**非马尔可夫（Non-Markovian）**开放量子动力学的标志\cite{breuer2016colloquium}。这种非马尔可夫性可以通过 Holevo 信息和迹距离（trace distance）方法进行量化。观察到的非马尔可夫量子动力学强调了系统对局域编码信息的量子记忆效应及其跨越长距离传输信息的能力。
-
-\section{讨论}
-本文在强相互作用里德堡原子阵列中观察到了量子信息的“塌缩与复苏”模式。尽管这一现象通常在单粒子场景（如 Jaynes-Cummings 模型）中被观察到，但它在我们的多体相互作用系统中显现出来，提供了一幅在动力学约束下量子信息传播的全新图像。我们特别指出，这种新颖的信息加扰动力学不同于通用的混沌或多体局域化系统，并且是首次在实验上被观察到。
-
-观察到的现象背后的机制可以归因于里德堡阻塞效应引起的动力学约束自旋旋转。更具体地说，由于 Holevo 信息动力学中的自旋翻转操作，量子信息的周期性重组源于涉及疤痕子空间和热化本征态库的动力学。这使得我们观察到的“塌缩与复苏”动力学有别于此前报道的纯疤痕态波函数的振荡\cite{bernien2017probing,turner2018weak}。
-
-本文开发的实验技术对于精确测量受限自旋动力学、OTOC 和 Holevo 信息至关重要。特别是，我们演示了一种数字-模拟结合的方法来有效地反转里德堡原子系统中的多体演化。我们的平台具备的多重跃迁、位点选择性寻址能力，使我们能够实现高保真度的多体态制备，并在存在旋转约束的情况下执行全量子态层析。这些技术的紧密集成为里德堡原子量子模拟丰富了工具箱。
-
-展望未来，我们的工作开启了一系列激动人心的研究方向。例如，可以研究由多个蝴蝶算符扰动引起的传播和干涉动力学。虽然目前观察到的“塌缩与复苏”效应的幅度和持续时间受到相干性的限制，但前人研究表明，如 Floquet 工程等技术可以显著延长相干时间并修改里德堡 PXP 系统中的相互作用\cite{bluvstein2021controlling,koyluouglu2024floquet}. 基于此，结合更多的单格点操作引入精确的空间调制，可能实现对受动力学约束动态保护的量子信息传播的可控引导（steering）。这些进展有望在近期的量子技术中获得实际应用，包括鲁棒的量子存储器、新型量子态传输协议以及多体相互作用系统中的量子精密测量。
-
-\section{方法}
-\label{sec:methods}
-
-\textbf{无缺陷原子阵列的制备}：
-在实验中，原子从磁光阱（MOT）中加载，并被空间光调制器（SLM）衍射生成的 808 nm 光镊捕获。通过测量和反馈过程消除原子链中的缺陷，能够快速创建全填充的原子阵列。
-
-\textbf{实验参数}：
-一旦制备好无缺陷阵列，所有原子被光泵浦到基态。原子间距约为 \SI{7}{\micro m}，导致最近邻和次近邻相互作用分别为 $V_{i,i+1} = 2\pi \times \SI{7.3}{MHz}$ 和 $V_{i,i+2} = 2\pi \times \SI{0.11}{MHz}$。为了在 $V_{i,i+1} / V_{i,i+2} \approx 64$ 的固定比率下近似 PXP 模型，我们将基态-里德堡态驱动拉比频率 $\Omega$ 设置为 $V_{i,i+1}/6 = 2\pi \times \SI{1.21(1)}{\MHz}$，以在两种相互作用强度间取得平衡。此外，引入了小量失谐 $\Delta =2\pi\times\SI{0.22(1)}{\MHz}$ 以补偿残留的次近邻相互作用。
-
-\textbf{数值方法}：
-文中展示的数值模拟对于 13 个原子以下的链采用精确对角化（Exact Diagonalization），对于 25 个原子的链采用矩阵乘积算符（MPO）方法。模拟使用了全里德堡哈密顿量，并根据系统特性考虑了实验噪声和缺陷（详见补充材料）。
-
+\begin{figure}
+  \centering  \includegraphics[width=0.75\textwidth]{chapters/chapter_06/figure/SI_lifetime.png}  
+  \caption{
+\textbf{PXP 哈密顿量演化下的 $\ket{\mathbb{Z}_2}$ 态动力学。} 
+{
+\textbf{a} 和 \textbf{b}, 初始化量子比特在 \textbf{a}, 正向-反向演化 \((e^{-iHt}\) 后跟 \(e^{iHt})\) 和 \textbf{b}, 仅正向 \((e^{-iHt})\) 演化期间的 \(\ket{\uparrow}\)（蓝色）和 \(\ket{\downarrow}\)（红色）布居。 \textbf{a} 中的曲线代表指数拟合，
+%with a shared offset and decay rate {yielding a 1/e lifetime of \SI{1.57(6)}{\micro\second}
+而 \textbf{b} 用高达 5 阶的阻尼傅里叶级数拟合。
+%The damping rate for each order is set to the same, which yields a 1/e lifetime of \SI{2.8(2)}{\micro\second}.} 
+\textbf{c} 和 \textbf{d}, 中心 13 个量子比特在 \textbf{c}, 正向-反向演化和 \textbf{d}, 仅正向演化期间的平均畴壁密度 (DWD)。\textbf{c} 中的蓝色曲线是指数拟合，
+%with a 1/e lifetime of \SI{1.61(11)}{\micro\second}, 
+而 \textbf{d} 拟合为阻尼正弦函数。
+%yielding a lifetime of \SI{1.47(8)}{\micro\second}.
+}
+}
+  \label{Fig:S3}
+\end{figure}
 
 \end{document}
