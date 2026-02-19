@@ -1,0 +1,108 @@
+里德堡量子计算/量子模拟实验术语规范指南（中英对照）
+版本：v1.0
+来源：chapters/chapter_01..04（含各章 Decision_Records.md）与 source/en 全部 .tex
+
+1. 总则（书写与缩写）
+1) 首次出现格式：中文术语（英文全称, 缩写）或 中文术语（英文全称）
+   - 例：光镊（Optical Tweezers），空间光调制器（Spatial Light Modulator, SLM）
+   - 例：反时序关联函数（out-of-time-ordered correlator, OTOC）
+2) 后续出现：优先使用中文术语；缩写在需要强调/与图中标注一致时保留。
+3) 大小写：专名/缩写保持英文原大小写（Rydberg, MOT, SLM, AOD, PDH, ULE, OTOC, PXP）。
+4) 连字符：英文原文为 collapse-and-revival 时，统一保持连字符；中文统一“塌缩与复苏”。
+5) “寻址/定址”：全文统一使用“寻址”作为 addressing 的译法。
+6) “失谐/失调”：全文统一使用“失谐”作为 detuning 的译法。
+
+2. 核心平台与概念术语（必须统一）
+- Optical Tweezers / Optical Tweezer -> 光镊
+- Optical Dipole Trap -> 偶极阱
+- Rearrangement / Sorting -> 原子重排
+- Atom Assembly -> 原子组装（仅用于算法/流程名称；不要与“原子重排”混用）
+- Rydberg Blockade -> 里德堡阻塞（必要时写“里德堡阻塞效应”）
+- Neutral Atom -> 中性原子
+- Qubit -> 量子比特
+- Single Atom Detection -> 单原子成像（或“单原子分辨探测”；同一章节内二选一并保持一致）
+- Site-resolved / Single-site -> 单址分辨 / 单址（建议用“单址分辨”作为正式表述）
+- Addressing (laser/beam) -> 寻址（激光/光束）
+
+3. 冷却、俘获与真空相关
+- MOT (Magneto-Optical Trap) -> 磁光阱（MOT）
+- 2D-MOT / 3D-MOT -> 二维磁光阱 / 三维磁光阱
+- Optical Molasses -> 光学粘团
+- Gray Molasses -> 灰光学粘团
+- PGC (Polarization Gradient Cooling) -> 偏振梯度冷却（PGC）
+- Sisyphus Cooling -> 西西弗斯冷却
+- TOF (Time of Flight) -> 飞行时间（TOF）
+- Science Chamber -> 科学腔
+- Differential Pumping Tube -> 差分管
+
+4. 光学与电子学器件（缩写保留）
+- SLM (Spatial Light Modulator) -> 空间光调制器（SLM）
+- AOD (Acousto-Optic Deflector) -> 声光偏转器（AOD）
+  - 若为“两只一维 AOD”的实验配置：Crossed AOD configuration -> 交叉 AOD 架构（两只一维 AOD）
+- AOM (Acousto-Optic Modulator) -> 声光调制器（AOM）
+- EOM (Electro-Optic Modulator) -> 电光调制器（EOM）
+- AWG (Arbitrary Waveform Generator) -> 任意波形发生器（AWG）
+- DDS (Direct Digital Synthesis) -> 直接数字合成（DDS）
+- RF (Radio Frequency) -> 射频（RF）
+- EMCCD -> 电子倍增 CCD（EMCCD）
+- CCD -> CCD 相机
+- NA (Numerical Aperture) -> 数值孔径（NA）
+
+5. 里德堡操控与常用物理量
+- Rabi oscillation -> 拉比振荡
+- Rabi frequency -> 拉比频率（符号规范见第 8 节）
+- Detuning -> 失谐
+- AC Stark shift -> 交流斯塔克频移（也可简称“AC 斯塔克频移/光位移”，但首次建议写全）
+- DC Stark shift/effect -> 直流斯塔克频移 / 直流斯塔克效应（按语境选择）
+- Differential light shift -> 差分光频移
+- Optical pumping -> 光抽运
+- Hyperfine splitting -> 超精细分裂
+- Clock state -> 钟态
+- van der Waals interaction (vdW) -> 范德瓦尔斯相互作用（vdW）
+- Blockade radius -> 阻塞半径（必要时写“里德堡阻塞半径”）
+- PXP model / Hamiltonian -> PXP 模型 / PXP 哈密顿量
+- Pauli matrices/operators -> 泡利算符/泡利矩阵（建议统一“泡利算符”）
+- Néel state -> 尼尔态
+- |Z2> state / Z2-ordered -> \mathbb{Z}_2 态 / \mathbb{Z}_2 有序态
+- Domain wall / domain-wall density -> 畴壁 / 畴壁密度
+
+6. 信息加扰与量子信息量（OTOC/Holevo）
+- Out-of-time-ordered correlator -> 非时序关联函数（OTOC）
+  - 概念表述允许：信息加扰（OTOC）/ 信息加扰指标（OTOC）
+- ZZ-OTOC / IZ-OTOC -> ZZ-OTOC / IZ-OTOC（必要时可注“ZZ 型/IZ 型”）
+- Butterfly operator -> 蝴蝶算符
+- Light cone / linear light cone -> 光锥 / 线性光锥
+- Holevo information -> Holevo 信息（保持英文姓氏；不要写“霍列沃/霍勒沃”等音译）
+- Quantum state tomography -> 量子态层析
+- Reduced density matrix -> 约化密度矩阵
+- von Neumann entropy -> 冯·诺依曼熵
+- Shannon information/entropy -> 香农信息 / 香农熵
+- Non-Markovian (non-Markovianity) -> 非马尔可夫（性）
+- Trace distance -> 迹距离
+- EIT (electromagnetically induced transparency) -> 电磁感应透明（EIT）
+
+7. 晶格规范场论（LGT）相关（若正文涉及）
+- LGT (Lattice Gauge Theory) -> 晶格规范场论（LGT）
+- QCD -> 量子色动力学（QCD）
+- QED -> 量子电动力学（QED）
+- Schwinger model -> 施温格模型
+- Gauge invariance -> 规范不变性
+- Gauss’s law -> 高斯定律
+- Quantum link model -> 量子链接模型
+- Confinement / deconfinement -> 禁闭 / 解禁闭
+- String breaking -> 弦断裂
+- String tension -> 弦张力（必要时写“有效弦张力”）
+- Quench / quantum quench -> 淬火 / 量子淬火（建议正式用“量子淬火”）
+- Freeze-out / dynamical freeze-out -> 冻结出（freeze-out）/ 动力学冻结出（若仅指实验中“冻结动力学”，可写“动力学冻结”）
+
+8. 符号与定义（来自术语/符号约定）
+- 拉比频率：使用 Ω（不使用 ω_R）
+- 失谐量：Δ = ω_laser - ω_atom（蓝失谐为正，红失谐为负）
+- 主量子数：n（里德堡态）；有效主量子数：n*
+- 超精细量子数：F；磁量子数：m_F
+
+9. 术语一致性检查清单（写作时自检）
+1) 同一章内不要混用：寻址/定址、失谐/失调、禁闭-解禁闭/禁闭-去禁闭、重排/组装。
+2) 首次出现是否给出英文全称与缩写（如 SLM/AOD/EOM/PDH/OTOC/EIT）？
+3) “Holevo 信息”“OTOC”等是否保持统一写法（不音译、不换译）？
+4) 关键平台词是否命中统一译法：光镊、偶极阱、原子重排、里德堡阻塞、单原子成像。
