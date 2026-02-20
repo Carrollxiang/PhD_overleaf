@@ -1,15 +1,14 @@
 \documentclass[UTF8,oneside,12pt]{ctexbook}   % 小四=12pt
 
-%---------- 1. 页面几何（照抄你自己的） ----------%
+%---------- 1. 页面几何 ----------%
 \usepackage{geometry}
 \geometry{top=3cm,bottom=2.5cm,left=3cm,right=2.5cm}
 
-%---------- 2. 1.5 倍行距 ----------%
-\usepackage{setspace}
-\onehalfspacing
+\usepackage{setspace}  % 设置行距
+\onehalfspacing  % 1.5 倍行距
 
-%---------- 3. 两侧对齐微调 ----------%
-\usepackage{microtype}
+\usepackage{microtype}  % 两侧对齐微调
+\setcounter{tocdepth}{1}  % 目录只列到 section
 
 %================== 你的其他宏包照抄 ==================%
 \usepackage{subfiles}
@@ -23,6 +22,7 @@
 \usepackage{booktabs,tabularx,makecell}
 \usepackage{physics}
 \usepackage{amsfonts}
+\usepackage{todonotes}  % 侧边栏批注
 %----------------------------------------------------%
 
 \newcommand{\LL}[1]{\textcolor[RGB]{153,51,250}{#1}}
@@ -68,13 +68,13 @@ English abstract content.
 \subfile{chapters/chapter_04/04-Rydberg_control}
 
 % \chapter{量子疤痕态}
-\subfile{chapters/chapter_05/05-quantum_scar}
+\subfile{chapters/chapter_05/05-quantum_scar_polished}
 
 % \chapter{OTOC}
-\subfile{chapters/chapter_06/06-OTOC}
+\subfile{chapters/chapter_06/06-OTOC_polished}
 
 % \chapter{LGT}
-\subfile{chapters/chapter_07/07-LGT}
+\subfile{chapters/chapter_07/07-LGT_polished}
 
 % \chapter{展望}
 \subfile{chapters/chapter_08/08-Outlook}
