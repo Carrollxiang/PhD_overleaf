@@ -1,0 +1,426 @@
+% \documentclass[twocolumn, reprint, amsmath, amssymb, prb ,superscriptaddress, floatfix, sort, compress, numbers, linenumbers]{revtex4-1}
+\documentclass{nature_article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{multicol}
+\usepackage{bm}% bold math
+\usepackage[colorlinks=true,
+ linkcolor=black,
+ anchorcolor=black,
+ citecolor=black,
+ urlcolor=blue
+ ]{hyperref}
+
+% \usepackage[numbers]{natbib}
+\usepackage{verbatim} % useless
+\usepackage{braket}
+\usepackage{siunitx}
+\sisetup{mode=text}{\rmfamily}
+\usepackage{makecell} % maybe useless
+\usepackage{xcolor}
+\usepackage[switch]{lineno}
+% \usepackage{hyperref}
+% \usepackage[centerlast]{caption}
+\usepackage{ulem}
+
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bs}{\begin{split}}
+\newcommand{\es}{\end{split}}
+\newcommand{\R}[1]{\textcolor{black}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\newcommand{\YD}[1]{\textcolor[RGB]{114,192,0}{#1}}
+
+%\newcommand{\inlinecite}[1]{\mbox{\normalfont\cite{#1}}}
+\renewcommand{\figurename}{Fig.}
+
+\raggedbottom
+\begin{document}
+%\title{Emergence of many-body quantum information \textit{collapse-and-revival} in a Rydberg quantum simulator}
+
+% \setlength{\abovecaptionskip}{0pt}   % 调整图片与caption之间的上方间距
+% \setlength{\belowcaptionskip}{0pt}   % 调整图片与caption之间的下方间距
+
+\nolinenumbers
+\title{Observation of quantum information collapse-and-revival in a strongly-interacting Rydberg atom array}
+
+\author
+{De-Sheng Xiang$^{1,\ast}$, Yao-Wen Zhang$^{1,\ast}$, Hao-Xiang Liu$^{1,\ast}$, Peng Zhou$^{1,\ast}$, Dong Yuan$^{2,\ast}$, Kuan Zhang$^{1,\ast}$, Shun-Yao Zhang$^{3}$, Biao Xu$^{1}$, Lu Liu$^{1}$, Yitong Li$^{1}$, and Lin Li$^{1,\dagger}$}
+
+\maketitle
+\begin{nolinenumbers}
+\begin{affiliations}
+\item MOE Key Laboratory of Fundamental Physical Quantities Measurement,
+Hubei Key Laboratory of Gravitation and Quantum Physics, PGMF,\\
+Institute for Quantum Science and Engineering, School of Physics,\\
+Huazhong University of Science and Technology, Wuhan 430074, China\\
+\item Center for Quantum Information, IIIS, Tsinghua University, Beijing 100084, China\\
+\item Lingang Laboratory, Shanghai 200031, China\\
+\end{affiliations}
+\noindent\small\sffamily{$^\ast$ These authors contributed equally to this work.}\\
+\noindent\small{$^\dagger$ E-mail: li\_lin@hust.edu.cn}\\
+\end{nolinenumbers}
+\rmfamily
+\linenumbers
+
+\begin{abstract}
+Interactions of isolated quantum many-body systems typically scramble local information into the entire system and make it unrecoverable.
+Ergodicity-breaking systems possess the potential to exhibit fundamentally different information scrambling dynamics beyond this paradigm. For many-body localized systems with strong ergodicity breaking, local transport vanishes and information scrambles logarithmically slowly.
+Whereas in Rydberg atom arrays, local qubit flips induce dynamical retardation on surrounding qubits through the blockade effect, \R{potentially leading to unconventional %and unexplored spatio-temporal 
+quantum information scrambling behaviours}.
+Here, we present the first measurements of out-of-time-ordered correlators and Holevo information in a Rydberg atom array, enabling us to precisely track quantum information scrambling and transport dynamics. By leveraging these tools, we observe a novel spatio-temporal \textit{collapse-and-revival} behaviour of quantum information, which differs from both typical chaotic and many-body localized systems. 
+Our experiment sheds light on the unique information dynamics in many-body systems with kinetic constraints, and demonstrates an effective digital-analogue approach to coherently reverse time evolution and steer information propagation in near-term quantum devices.
+\end{abstract}
+
+\begin{figure*} [t]
+  \centering
+  \includegraphics[width=\textwidth]{figure/compressed/Protocol.png}
+  \caption{
+	\textbf{Illustrations of kinetically constrained qubit dynamics in the PXP model and its experimental realization.}
+\textbf{a},
+The blue and red curves display the evolution dynamics of $\hat\sigma^y$ \R{(the dynamics of other observables, such as $\hat\sigma^z$, are presented in Section~5.2 of the Supplementary Information)} expectation values for each qubit under the PXP Hamiltonian, starting from the initial states $\ket{\mathbb{Z}_2}$ and $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ (with the central spin being flipped), respectively.
+The initial rotation retardation near the central spin will propagate outwards in later dynamics. 
+The yellow solid lines indicate where these two evolution dynamics begin to diverge, outlining a linear light cone (the yellow-shaded area). Within the light cone spins resume constrained rotations, yet the distinguishability of spin states periodically vanishes (small dashed circles) and reappears (large dashed circles). See Supplementary Information Section~5.1 for more details on kinetically constrained qubit dynamics.
+\textbf{b}, 
+A one-dimensional, defect-free array of $^{87}$Rb atoms with approximately \SI{7}{\micro\meter} spacing between neighbouring atoms.
+The spin rotation between the states $\ket{\uparrow}$ and $\ket{\downarrow}$ is achieved by driving the ground-Rydberg state transition, via an off-resonant two-photon Raman process with 780-\SI{}{\nano\meter} and 480-\SI{}{\nano\meter} global excitation laser beams. Single-site qubit operations are realized by 795-\SI{}{\nano\meter} and 480-\SI{}{\nano\meter} addressing laser beams.
+\textbf{c}, 
+The inset shows relevant atomic levels: the ground state $\ket{\downarrow} = \ket{g} = \ket{5S_{1/2}, F=2, m_F=2}$, the Rydberg state $\ket{\uparrow}=\ket{r} = \ket{68D_{5/2}, m_J=5/2}$, and the intermediate states $\ket{e} = \ket{5P_{3/2}, F=3, m_F=3}$ and $\ket{e'} = \ket{5P_{1/2}}$.
+See Extended Data Fig.~1 and Supplementary Information Section~1 for more experimental details.
+  }
+  \label{Fig:1}
+\end{figure*}
+
+Quantum information scrambling---the spread of initial local information across the interacting many-body systems\cite{lewis2019dynamics, swingle2018unscrambling}---illuminates fundamental aspects in quantum thermalization and chaos\cite{deutsch1991quantum,srednicki1994chaos,rigol2008thermalization,sekino2008fast,hosur2016chaos,maldacena2016bound}, the black hole information paradox\cite{hayden2007black,shenker2014black}, and quantum machine learning\cite{Shen2020Information,garcia2022Quantifying}. Understanding scrambling dynamics is also practically crucial for advancing quantum technologies for quantum simulation, benchmarking, and metrology\cite{garttner2017measuring,mi2021information,choi2023preparing,li2023improving}. Recent works have revealed multiple information dynamics in quantum many-body systems, from rapid scrambling caused by chaotic non-integrable Hamiltonians\cite{lewis2019dynamics,swingle2018unscrambling} to logarithmically slow information propagation in many-body localized systems\cite{nandkishore2015many,abanin2019colloquium,lukin2019probing,schreiber2015observation,choi2016exploring,rispoli2019quantum,huang2017out,chen2017out,fan2017out,deng2017logarithmic,he2017characterizing,swingle2017slow,banuls2017dynamics}.
+Yet, the rich landscape of many-body physics, characterized by its diverse interaction forms and emergent phenomena, promises further unexplored regimes of information scrambling dynamics.
+
+An intriguing frontier in this context is the quantum information dynamics within kinetically constrained systems, such as Rydberg atom arrays\cite{kumar2018sorting,sheng2022defect,graham2022multi,barnes2022assembly,kim2022rydberg,okuno2022high,chen2023continuous,liu2023realization,singh2023mid,eckner2023realizing,ma2023high,zhao2023floquet,bluvstein2024logical,gregory2024second,pause2024supercharged,shaw2024benchmarking}.
+The strong van der Waals interaction between Rydberg atoms leads to the Rydberg blockade mechanism\cite{lukin2001dipole,urban2009observation_combined}, and constrains the local qubit flips. This essential physics can be approximately described by the PXP Hamiltonian\cite{lesanovsky2012interacting,turner2018weak}:
+\begin{equation}
+  \hat{H}_\text{PXP} =
+  \sum_i\hat{P}_i\hat\sigma^x_{i+1}\hat{P}_{i+2}.\label{Eq:PXP}
+\end{equation}
+Here, $\hat{P}_i = (1 - \hat\sigma^z_i)/2$ is the projector onto the spin-down $\ket{\downarrow}$ state at site $i$, and $\hat\sigma^{x,y,z}_i$ are Pauli matrices for the $i$-th spin. \R{Previous studies of these systems have uncovered quantum many-body scars\cite{bernien2017probing,turner2018weak,serbyn2021quantum,bluvstein2021controlling, desaules2024ergodicity}. Moreover, recent theoretical investigations\cite{yuan2022quantum} suggest that kinetically constrained many-body systems, such as those described by the PXP model, may harbor yet undiscovered mechanisms of information scrambling, opening up a new frontier for exploring unique spatio-temporal quantum information dynamics beyond the scope of many-body scars.}
+
+Figure~\ref{Fig:1}a depicts an intuitive understanding of the novel information spreading dynamics in this kinetically constrained system. In the PXP model, flipping the central spin in the antiferromagnetic N\'eel state
+$\ket{\mathbb{Z}_2}=
+ \ket{\uparrow\downarrow\uparrow\downarrow\uparrow\cdots}
+$
+encodes one bit of information. This local perturbation induces a retardation in the rotations of neighbouring spins, which then propagates ballistically, forming a linear light-cone-like wavefront. Within this light cone, spins resume their constrained rotations, yet the distinguishability of spin states periodically vanishes and reappears, as signified by differences in their $\hat\sigma^y$ expectation values (dashed circles). This behaviour deviates significantly from typical chaotic quantum systems, where spin states inside the light cone quickly become indistinguishable due to \R{scrambling}.
+\R{These kinetically constrained dynamics may lead to persistent information backflow and unusual breakdown of quantum chaos, hinting at new avenues for probing distinct information scrambling dynamics\cite{yuan2022quantum}.
+However, experimental exploration of quantum information dynamics in many-body systems presents significant challenges. Crucial tools such as out-of-time-ordered correlators (OTOCs) and Holevo information, 
+%which are crucial for this purpose, 
+demand exceptional precision in state preparation, many-body evolution control, and in-situ state measurement\cite{lewis2019dynamics,swingle2018unscrambling}.}
+
+\R{Here, we explore novel quantum information dynamics in a kinetically constrained Rydberg atom array. By developing new experimental techniques, we overcome the above-mentioned challenges and successfully measure OTOCs and Holevo information for probing information scrambling.}
+Notably, we observe the spatio-temporal \textit{collapse-and-revival} of quantum information in a many-body system, revealing unique coherence properties where locally encoded information spreads across distant sites and remains periodically accessible despite strong many-body interactions. This behaviour differs significantly from typical chaotic and many-body localized systems, offering new insights into quantum scrambling, and highlighting the potential of Rydberg atom arrays for novel quantum information processing, with dynamical quantum protection inherently provided by kinetic constraints.
+
+\textbf{}\par
+\subsection{Kinetically constrained spin dynamics}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figure/compressed/Z2.png}  
+  % \captionsetup{justification=raggedright, singlelinecheck=false}
+  \caption{
+\textbf{State preparation and kinetically constrained many-body state evolution.} 
+\textbf{a}, Under the global coherent driving, the 795-\SI{}{\nano\meter}-laser-addressed atoms (red) remain static, while the unaddressed atoms (blue) exhibit ground-Rydberg-state Rabi oscillations. 
+\textbf{b}, $\ket{\mathbb{Z}_2}$ state preparation fidelity $\mathcal{F}_{\mathbb{Z}_2}$ as a function of the system size.
+\textbf{c}, Measured site-resolved Rydberg probability $P_i(\uparrow)$ for a 25-qubit $\ket{\mathbb{Z}_2}$ state. Upper panel: Atomic fluorescence illustration of the $\ket{\mathbb{Z}_2}$ state, where red circles denote Rydberg atoms.
+\textbf{d}--\textbf{g}, Kinetically constrained many-body dynamics. 
+\textbf{d} and \textbf{f}, Measured site-resolved Rydberg state probability $P_i(\uparrow)$ as a function of evolution time from the initial state $\ket{\mathbb{Z}_2}$ and $\hat\sigma^x_c\ket{\mathbb{Z}_2}$, respectively.
+\R{A linear light cone structure is observed in the $\hat\sigma^x_c\ket{\mathbb{Z}_2}$ case (\textbf{f}), the origin of which is detailed in Section~2.3 of the Supplementary Information.}
+\textbf{e} and \textbf{g} are the corresponding results from numerical simulations.
+\R{These simulations employ the full Rydberg Hamiltonian and take into account experimental noises based on our characterization of these noise sources (see Methods and Section~4.3 of the Supplementary Information).}
+Red dashed curves in \textbf{d}--\textbf{g} illustrate the propagating wavefronts, while blue dashed lines in \textbf{f} and \textbf{g} show the linear light cones.}
+  \label{Fig:2}
+\end{figure*}
+
+\textbf{}\newline
+As shown in Fig.~\ref{Fig:1}b,c, our quantum simulator employs a linear array of up to 25 individual $^{87}$Rb atoms trapped in optical tweezers.
+The qubit states $\ket{\downarrow}$ and $\ket{\uparrow}$ are encoded in the atomic ground state $\ket{g}$ and a Rydberg state $\ket{r}$, respectively.
+The Hamiltonian governing the system reads:
+\begin{equation}
+\label{Rydberg Hamiltonian}
+  \hat{H}_\text{R}=
+  \frac{\Omega}{2}\sum_i\hat\sigma^x_i-
+  \Delta\sum_i\hat{n}_i+
+  \sum_{i<j}V_{ij}\hat{n}_i\hat{n}_j,
+\end{equation}
+where $\Omega$ is the Rabi frequency of the coherent driving between $\ket{\uparrow}$ and $\ket{\downarrow}$, $\Delta$ is the detuning of driving lasers from the ground-Rydberg transition, $\hat{n}_i = \ket{\uparrow_i}\bra{\uparrow_i}$ is the projector towards the state $\ket{\uparrow_i}$, and $V_{ij} \propto 1/R^6_{ij}$ represents the van der Waals 
+interaction between Rydberg atoms at sites $i$ and $j$ with the distance $R_{ij}$.
+In the regime where \(V_{i,i+2} \ll \Omega \ll V_{i,i+1}\), the Rydberg blockade prevents configurations with adjacent qubits both in the \(\ket{\uparrow}\) state (e.g., \(\ket{\cdots \uparrow_i \uparrow_{i+1} \cdots}\)), making the system well-approximated by the PXP model in equation (\ref{Eq:PXP}).
+
+High-fidelity state preparation is essential for the success of all subsequent experiments.
+We prepare the $\ket{\mathbb{Z}_2}$ state by using the global Rydberg excitation lasers (\SI{780}{nm} and \SI{480}{nm}) combined with site-selective 795-\SI{}{\nano\meter} addressing lasers. The latter detune the addressed atoms from the ground-Rydberg transition, creating an alternating pattern of excitable and non-excitable atoms (Fig.~\ref{Fig:2}a).
+As shown in Fig.~\ref{Fig:2}b,c, our method achieves high $\ket{\mathbb{Z}_2}$ state preparation fidelities: 70(1)\% for the 13 central qubits, and 49(3)\% for the entire 25-qubit chain. After correcting for detection errors, the fidelities improve to 78(1)\% for 13 qubits and 60(3)\% for 25 qubits.
+Achieving such high preparation fidelity in a large Hilbert space ($2^{25}$ dimensions) is critical for accurately probing kinetically constrained many-body state evolution and quantum information dynamics.
+
+Next, we investigate the kinetically constrained spin dynamics described in the introduction, focusing on the evolution of the spin configurations $\ket{\mathbb{Z}_2}$ and $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ under the PXP Hamiltonian. For the $\ket{\mathbb{Z}_2}$ state (Fig.~\ref{Fig:2}d), all spins rotate coherently under the PXP constraints, forming a uniform wavefront. This synchronized evolution persists until boundary effects gradually alter the spin rotations from the outer edge inwards.
+
+In contrast, for the $\hat\sigma^x_c \ket{\mathbb{Z}_2}$ state (Fig.~\ref{Fig:2}f), we observe a clear linear light cone structure\cite{surace2020lattice,frerot2018multispeed,Chen2019Finite,kuwahara2020strictly}.
+Spins outside the light cone remain unaffected by the flipped central spin, exhibiting dynamics similar to the $\ket{\mathbb{Z}_2}$ state. 
+Within the light cone, the flipped central spin induces retardation in the evolution of neighbouring spins, creating a distinct evolving wavefront.
+This arc-shaped bent wavefront propagates outwards, driven by the retarded spin rotations, which clearly illustrates the constrained spin dynamics in the PXP model.
+The excellent agreement between experimental data and numerical results (Fig.~\ref{Fig:2}e,g) confirms the effectiveness of our Rydberg quantum simulator in capturing the behaviour of kinetically constrained systems, paving the way for further explorations of quantum information dynamics.
+
+\textbf{}\par
+\subsection{OTOC dynamics}
+
+\textbf{}\newline
+The out-of-time-ordered correlator is a powerful tool for probing quantum information scrambling in many-body systems\cite{lewis2019dynamics,swingle2018unscrambling}. However, due to considerable experimental challenges, OTOC measurements have been demonstrated only in several state-of-the-art physical platforms\cite{
+mi2021information,blok2021quantum,braumuller2022probing,zhao2022probing,wang2022information,
+landsman2019verified,garttner2017measuring,joshi2020quantum,green2022experimental,
+li2017measuring,wei2018exploring,niknam2020sensitivity,
+chen2020detecting,pegahan2021energy,li2023improving}.
+% zhu2022observation,
+In the Rydberg atom array, we for the first time experimentally employ OTOCs to investigate the information scrambling dynamics under kinetic constraints. The OTOC is defined as follows, which quantifies how the operator growth 
+ of a local perturbation $\hat{W}$ (called the butterfly operator) spreads throughout the lattice sites:
+\begin{equation}
+\hat{F}_{ij}(t) = \bra{\psi}\hat{W}_i^\dagger(t)\hat{V}_j^\dagger \hat{W}_i(t)\hat{V}_j\ket{\psi}.
+\end{equation}
+Our study focuses on the ZZ-OTOC, with local butterfly operator $\hat{W}_i = \hat\sigma^z_c$, and measurement operator $\hat{V}_j = \hat\sigma^z_j$, in order not to violate the kinetically constrained spin rotations. $\hat{W}_i(t) = e^{i\hat{H}t}\hat{W}_i e^{-i\hat{H}t}$ represents the Heisenberg evolution of $\hat{W}_i$, and $\ket{\psi}$ is an initial state. The local perturbation, corresponding to a \(\hat\sigma^z_c\) gate (a \(\pi\)-phase shift) on the central qubit, is experimentally implemented via the light shift from a 795-\SI{}{\nano\meter} addressing laser.
+Fig.~\ref{Fig:3}a shows the five-step protocol for measuring the OTOC $\hat{F}_{ij}(t)$: (1) state preparation; (2) forward evolution; (3) local perturbation; (4) backward (time-reversed) evolution; and (5) computational basis measurements.
+
+Here, we employ two distinct initial states to study the OTOC dynamics, including the antiferromagnetic $\mathbb{Z}_2$-ordered N\'eel state $\ket{\mathbb{Z}_2} = \ket{\uparrow\downarrow\uparrow\downarrow\uparrow\cdots}$ (which has large overlap with the scarred eigenstate subspace\cite{turner2018weak}) and a trivial product state $\ket{\mathbf{0}} = \ket{\downarrow \downarrow\downarrow\downarrow\downarrow\cdots}$ (which lies in the common thermal eigenstate subspace).
+Our numerical simulations show that in a small-size spin chain (less than 10 qubits), boundary effects observed in Fig.~\ref{Fig:2} can lead to considerable deviations from the ideal PXP dynamics (Supplementary Information Section~2.3).
+To mitigate the boundary and finite-size effects, we particularly prepare a 25-qubit $\ket{\mathbb{Z}_2}$ ($\ket{\mathbf{\mathbf{0}}}$) state and perform the OTOC experiments on the central 13 qubits. This configuration shields the region of interest from boundary effects during evolution, better approximating the bulk PXP dynamics.
+Moreover, our high $\ket{\mathbb{Z}_2}$ state preparation fidelity is crucial for accurately probing OTOC dynamics. Low preparation fidelity introduces numerous error states into the spin chain, which smear the expected OTOC patterns (Supplementary Information Section~4.1).
+As a benchmark, the numerically simulated OTOC dynamics using the experimentally measured microstate combination as input (dashed lines in Fig.~\ref{Fig:3}b) show a negligible difference from the results obtained with the perfect $\ket{\mathbb{Z}_2}$ initial state (solid lines in Fig.~\ref{Fig:3}b), attesting to the accuracy of our experimental approach.
+
+
+With the initial states well prepared, we address the next crucial and notoriously difficult step in OTOC measurements---implementing the time-reversed evolution under $-\hat{H}$ in the many-body system.
+While reversing single-particle Hamiltonians is relatively easy, reversing many-body interaction terms, such as switching between attractive and repulsive interactions, presents significantly more complex theoretical and experimental challenges.
+For instance, in the quest to achieve time reversal using a digital simulation approach, Google's Sycamore quantum computer\cite{mi2021information} leverages its cutting-edge gate fidelities and large circuit depths, and employs well-designed quantum circuits to implement the process.
+
+In contrast, our approach exploits the particle-hole symmetry of the PXP model, enabling us to implement the inverse Hamiltonian through a global $\hat\sigma^z$ gate on all qubits: $(\prod_i \hat\sigma_i^z)\hat{H}_\text{PXP}(\prod_i \hat\sigma_i^z) = -\hat{H}_\text{PXP}$.
+This is experimentally realized by using a far-detuned microwave field that induces a $\pi$-phase shift on the Rydberg states.
+\R{To bridge the gap between between the full Rydberg Hamiltonian $\hat{H}_\text{R}$ and the ideal PXP model $\hat{H}_{\text{PXP}}$, we conducted detailed benchmark simulations and optimized the experimental parameters (see Section~2.2 of the Supplementary Information for more details).
+For instance, a small global detuning was introduced to compensate for next-nearest-neighbour Rydberg interactions. These optimizations allow the experimental Hamiltonian to closely approximate the PXP model and enable effective time reversal.}
+Figure~\ref{Fig:3}c shows the experimentally measured forward-and-backward evolution dynamics of the $\ket{\mathbb{Z}_2}$ state.
+This novel digital-analogue protocol generally serves as a powerful technique in Rydberg atom arrays to coherently reverse many-body evolution and probe information scrambling dynamics.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figure/compressed/OTOC.png} 
+  \caption{
+\textbf{Probing quantum information scrambling dynamics via OTOCs.
+} 
+\textbf{a}, An illustration of the OTOC measurement protocol.
+\textbf{b}, The solid and dashed lines correspond to numerically simulated OTOC dynamics of the central qubit with the perfect $\ket{\mathbb{Z}_2}$ state and the experimentally measured microstate combination (with $\mathcal{F}_{\mathbb{Z}_2}=78(1)\%$) as inputs, respectively.
+\textbf{c}, Forward-and-backward Hamiltonian evolution of the experimentally prepared $\ket{\mathbb{Z}_2}$ state.
+\R{The observed decay of the time reversal arises from both imperfection in the inversion of the Rydberg Hamiltonian evolution (see Supplementary Information Section~2.2 for details) and experimental noises (see Supplementary Information Section~4 for detailed analysis and Fig.~S17 for numerical simulations).}
+\textbf{d} and \textbf{e} illustrate the digital-analogue scheme for OTOC measurements with $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states, using $\hat{W}=\hat\sigma_c^z$ for ZZ-OTOC and $\hat{W}=\hat{I}$ for IZ-OTOC.
+\textbf{f}--\textbf{m}, Spatio-temporal OTOC dynamics. The colour bar corresponds to the values of the OTOC, $\hat{F}_{ij}(t)$. 
+\textbf{f} and \textbf{g}, Measured ZZ-OTOC for $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states, respectively. 
+\textbf{h} and \textbf{i}, Measured IZ-OTOC for $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states, respectively.
+\textbf{j} and \textbf{k}, Corrected ZZ-OTOC for $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states.
+\textbf{l} and \textbf{m}, Numerically simulated ZZ-OTOC for $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states \R{using the ideal Rydberg Hamiltonian (see Methods)}.
+The OTOC features in \textbf{j} and \textbf{k} (corrected experimental data) are slightly less pronounced than in \textbf{l} and \textbf{m} (simulations). 
+This difference arises because the simulations do not account for experimental noise stemming from imperfections in the local perturbation $\sigma^z_c$.
+%This is because the simulations, based on the ideal Rydberg Hamiltonian \R{$\hat{H}_\text{R}$}, do not account for the local perturbation imperfections in the experiments.
+These imperfections degrade the OTOC features but cannot be corrected using IZ-OTOC. For a detailed comparison between the corrected experimental data and simulations that include these imperfections, see Extended Data Fig.~2 and Fig.~S19 (Supplementary Information Section~4).}
+  \label{Fig:3}
+\end{figure*}
+
+Having achieved the high-fidelity state preparation and time reversal, we executed the complete OTOC measurement protocol (Fig.~\ref{Fig:3}d,e), demonstrating precise control over complex quantum many-body dynamics in our Rydberg atom array.
+Figure~\ref{Fig:3}f and g present the experimentally measured spatio-temporal evolution of the ZZ-OTOCs for the initial states $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$, respectively.
+The overall decay of the measured OTOC values primarily stems from atomic state losses and decoherence during the evolution (see Supplementary Information Section~4), even in the absence of quantum information scrambling.
+In order to distinguish the scrambling dynamics of interest from these extraneous decay mechanisms\cite{landsman2019verified}, we additionally measure the evolution of both $\ket{\mathbb{Z}_2}$ and $\ket{\mathbf{0}}$ states under the action of $\hat{H}$ and $-\hat{H}$ but without any butterfly operator, i.e. the IZ-OTOCs, where I stands for the identity operator.
+Based on the dynamics of the IZ-OTOCs (Fig.~\ref{Fig:3}h,i), we employ error mitigation techniques similar to those developed in previous work\cite{mi2021information} to correct the raw ZZ-OTOC data (see Supplementary Information Section~4).
+The resulting corrected OTOC dynamics (Fig.~\ref{Fig:3}j,k) align well with the numerical simulations based on ideal Rydberg Hamiltonian evolution (Fig.~\ref{Fig:3}l,m).
+
+The OTOC evolution dynamics reveal strikingly different behaviours for the $\ket{\mathbf{0}}$ and $\ket{\mathbb{Z}_2}$ initial states. For the $\ket{\mathbf{0}}$ state, the OTOCs quickly decay inside the linear light cone without discernible revivals.
+This rapid information scrambling agrees with theoretical expectations for generic high-energy initial states in chaotic quantum systems.
+In stark contrast, the $\ket{\mathbb{Z}_2}$ state exhibits a slower butterfly velocity, and remarkably a spatio-temporal \textit{collapse-and-revival} pattern of quantum information inside the linear light cone. 
+
+The \textit{collapse-and-revival} phenomenon, previously mainly observed in single-particle systems such as the Jaynes-Cummings model\cite{eberly1980periodic,rempe1987observation}, reflects the periodic dispersion and recurrence of quantum coherence. In contrast to conventional expectations for many-body systems where interactions rapidly scramble quantum information across an exponentially large Hilbert space, our observations reveal a striking preservation and refocusing of quantum coherence
+%\cite{breuer2009measure}
+inside the linear light cone. These unusual scrambling dynamics suggest that kinetically constrained systems allow for ballistic propagation and periodic recovery of quantum information, which differs significantly from both typical chaotic and many-body localized systems.
+We note that the observed \textit{collapse-and-revival}
+dynamics are related to quantum many-body scarred eigenstates of the PXP Hamiltonian, but can not be directly deduced from the oscillations of \R{scar state wavefunctions} reported in previous literature\cite{bernien2017probing,turner2018weak}.
+
+\textbf{}\par
+\subsection{Holevo information dynamics}
+
+\textbf{}\newline
+
+\R{In addition to OTOCs, we employ Holevo information to investigate quantum information dynamics in our system. While ZZ-OTOCs have successfully revealed the \textit{collapse-and-revival} phenomenon, the $\hat\sigma^z$ perturbation can become ineffective at certain conditions. This is evident in Fig.~\ref{Fig:3}j,l, where OTOC values for all qubits approach 1 during the intervals \SI{0.6}{\us}--\SI{0.7}{\us} and \SI{1.2}{\us}--\SI{1.3}{\us}. At these times, the perturbed qubit is close to a pure $\ket{\uparrow}$ or $\ket{\downarrow}$ state, rendering the butterfly operator ineffective (see Supplementary Information Section~3.2 for details).}
+
+\R{To gain a more continuous view of information propagation in kinetically constrained systems, we turn to Holevo information. Originally proposed to upper bound the accessible information between two separate agents\cite{holevo1973bounds}, Holevo information can be utilized to quantify the local distinguishability of quantum states evolving from slightly different initial conditions. By treating the reduced Hamiltonian evolution on subsystems as quantum channels, we use Holevo information to complement OTOC measurements, particularly in scenarios where butterfly operator perturbations become less effective. This approach, leveraging quantum state tomography, provides a more comprehensive understanding of quantum information dynamics in our system.}
+
+Our experiment explores two sets of Hamiltonian evolution applied to different initial states: \(\ket{\mathbb{Z}_2}\) and \(\hat\sigma^x_{c}\ket{\mathbb{Z}_2}\). The \(\hat\sigma^x_{c}\) operator acts on the central qubit in the one-dimensional chain, encoding one bit of local information in the initial states, as illustrated in Fig.~\ref{Fig:1}a.
+During subsequent Hamiltonian evolution, we measure the Holevo information $\mathbb{X}_j(t)$ at different sites \(j\), which quantifies how much information encoded on the central qubit can be retrieved through local measurements at distant sites:
+\begin{equation}
+\mathbb{X}_j(t) = S\left(\frac{\hat\rho_j(t) + \hat\rho'_j(t)}{2}\right) - \frac{S(\hat\rho_j(t)) + S(\hat\rho'_j(t))}{2},
+\end{equation}
+where $\hat\rho_j(t)$ and $\hat\rho'_j(t)$ are reduced density matrices of the $j$-th spin after Hamiltonian evolution for the initial states $\ket{\mathbb{Z}_2}$ and $\hat\sigma^x_{c}\ket{\mathbb{Z}_2}$, respectively, and $S(\hat\rho) = - \mathrm{Tr}(\hat\rho \log \hat\rho)$ is the von Neumann entropy.
+The experimental measurement procedure is shown in Fig.~\ref{Fig:4}a, which includes: (1) preparation of initial states $\ket{\mathbb{Z}_2}$ and $\hat\sigma^x_{c}\ket{\mathbb{Z}_2}$; (2) Hamiltonian evolution over time $t$; (3) quantum state tomography on the qubit $j$ to obtain $\hat\rho_j(t)$ and $\hat\rho'_j(t)$.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figure/compressed/Holevo.png}  
+  % \captionsetup{justification=raggedright, singlelinecheck=false}
+  \caption{
+	\textbf{Probing quantum information transport dynamics via Holevo information.
+ } 
+\textbf{a}, 
+    Illustration of the Holevo information measurement protocol. In order to measure the off-diagonal elements of the reduced density matrices, the 480-\SI{}{\nano\meter} addressing lasers first transfer Rydberg populations at the neighbouring sites to the ground state $\ket{g}$, and then split the $\ket{r}$ state into two dressed states $\ket{+}=(\ket{r}+\ket{e})/\sqrt{2}$ and $\ket{-}=(\ket{r}-\ket{e})/\sqrt{2}$, thus shielding these sites from spin rotation under global driving. See Supplementary Information Section~3.2 for further details on quantum state tomography under spin rotation constraints.
+\textbf{b} and \textbf{c}, 
+    Experimentally measured and numerically simulated spatio-temporal dynamics of the Holevo information, respectively.
+    The colour bar corresponds to the values of the Holevo information $\mathbb{X}_{j}(t)$. \R{The numerical simulation utilizes the Rydberg Hamiltonian $\hat{H}_\text{R}$ and considers various experimental imperfections based on the precise characterization of our system (see Methods and Supplementary Information Section~4.3).}
+  }
+  \label{Fig:4}
+\end{figure}
+
+Performing full quantum state tomography under the PXP kinetic constraints is highly challenging. While the diagonal elements of $\hat\rho_j(t)$ and $\hat\rho'_j(t)$ can be directly extracted from Rydberg population measurements (Fig.~\ref{Fig:2}d,f), obtaining the off-diagonal elements is significantly more difficult. This requires spin rotations on the target qubit, a process complicated by the interactions with neighbouring qubits.
+In order to rotate the target qubit, its nearest and next-nearest qubits should be neither in the Rydberg state nor resonant with the ground-Rydberg transition.
+To this end, we developed a new approach in which we apply 480-\SI{}{\nano\meter} Rydberg addressing lasers to the four neighbouring sites, as shown in Fig.~\ref{Fig:4}a.
+The 480-\SI{}{\nano\meter} lasers will first transfer the Rydberg populations in these neighbouring sites to the ground state via spontaneous emission from the intermediate state $\ket{e}$. Then, these addressing lasers create an electromagnetically induced transparency (EIT) condition, preventing the neighbouring sites from being excited by the ground-Rydberg excitation lasers.
+Finally, we apply the global excitation lasers to implement the spin rotations needed in state tomography onto the target qubit.
+
+Figure~\ref{Fig:4}b(c) shows the experimentally measured (numerically simulated) spatio-temporal evolution of the Holevo information, which are in good agreement. We observe a clear linear light cone structure and a distinct \textit{collapse-and-revival} pattern of $\mathbb{X}_j(t)$, differing from the OTOC results in Fig.~\ref{Fig:3}j,l. Notably, during the time intervals when the ZZ-OTOC values of all qubits approach 1---indicating ineffective perturbations---we still observe non-uniform Holevo information values. In contrast to OTOCs, Holevo information allows for continuous tracking of quantum information dynamics.
+
+We also mention that the observed \textit{collapse-and-revival} of Holevo information are related, but not equivalent to the oscillation of the scar state wavefunction under Hamiltonian evolution\cite{bernien2017probing,turner2018weak}, because the $\hat\sigma^x_{c}$ operation flips the central spin, and thus involves both the scarred subspace and the thermal eigenstate bath into the $\mathbb{X}_j(t)$ dynamics. We attribute the observed \textit{collapse-and-revival} pattern to the general kinetically constrained spin rotations in the PXP model. As illustrated in Fig.~\ref{Fig:1}a (and Supplementary Information Section~5.2), the Rydberg blockade effect leads to retarded rotations of spins near the central flipped spin, which then propagate outwards and form the linear light cone structure. Within the light cone, spins continue their constrained rotations, and the distinguishability of the reduced density matrices $\hat\rho_j(t)$ and $\hat\rho'_j(t)$ periodically vanishes and reappears, manifesting as the \textit{collapse-and-revival} behaviour in the Holevo information.
+
+Furthermore, our results reveal a unique information transport behaviour: The local information initially encoded at one site can be recovered at both the initial and other distant sites after the evolution under a many-body interacting Hamiltonian. These dynamics demonstrate persistent information backflow from the environment (surrounding qubits) to the system (qubits hosting encoded information), a hallmark of non-Markovian open quantum dynamics\cite{breuer2016colloquium}. This non-Markovianity can be quantified using the Holevo information and the trace distance approach (see Supplementary Information Section~3.3).
+The observed non-Markovian quantum dynamics underscore the system's quantum memory effects for locally encoded information and its ability to transport the information across distant sites.
+
+\textbf{}\par
+\subsection{Discussions}
+
+\textbf{}\newline
+Our work reveals the emergence of quantum information \textit{collapse-and-revival} in a strongly-interacting Rydberg atom array. 
+While typically observed in single-particle scenarios\cite{rempe1987observation}, this phenomenon manifests in our many-body interacting system, offering a different picture of how quantum information propagates under kinetic constraints. We particularly mention that such novel information scrambling dynamics are distinct from those in generic chaotic or many-body localized systems, and are experimentally observed for the first time. This work unveils a new realm of quantum information dynamics for further exploration.
+
+The underlying mechanism for the observed phenomena can be attributed to the kinetically constrained spin rotations induced by the Rydberg blockade effect. More specifically, due to the spin-flip in Holevo information dynamics, the periodic reassembly of quantum information emerges from dynamics involving both the scarred subspace and the thermal eigenstate bath.
+\R{This distinguishes our observed \textit{collapse-and-revival} dynamics from the previously reported oscillations of scar state wavefunctions\cite{bernien2017probing,turner2018weak}.
+Moreover, as our analysis in the Supplementary Information Section~5.3 reveals, the presence of scar states does not necessarily coincide with quantum information collapse-and-revival, highlighting the unique nature of our observations.}
+
+The experimental techniques developed in this work are indispensable for the precise measurement of constrained spin dynamics, OTOCs, and Holevo information. Notably, we demonstrated a digital-analogue approach to effectively reverse the many-body evolution in Rydberg atom systems. The multi-transition, site-selective addressability of our platform allows us to achieve high-fidelity many-body state preparation, as well as perform full quantum state tomography, even in the presence of rotation constraints. These techniques enrich the toolbox for Rydberg atom quantum simulations and are poised for application in future experiments.
+
+Our work opens up a range of exciting research directions and potential applications. For instance, one could investigate the propagation and interference dynamics caused by multiple butterfly operator perturbations, which will reveal novel collective behaviours arising from the interplay between kinetic constraints and quantum correlations in many-body systems\cite{surace2020lattice}.
+While the magnitude and persistence of the \textit{collapse-and-revival} effect observed here are currently limited by coherence, previous studies have suggested that techniques such as Floquet engineering can significantly extend coherence time and modify the interactions in Rydberg PXP systems\cite{bluvstein2021controlling,koyluouglu2024floquet}. Building on this, incorporating more single-site operations to introduce precise spatial modulation could enable controlled steering of quantum information propagation, which is dynamically protected by kinetic constraints. These advances hold promise for practical applications in near-term quantum technologies, including robust quantum memory, novel quantum state transfer protocols and quantum metrology in many-body interacting systems\cite{dooley2021robust,dong2023disorder}.
+
+\nolinenumbers
+
+\bibliographystyle{naturemag}
+\bibliography{refs}
+
+\clearpage
+\newpage
+
+
+\linenumbers
+
+\noindent\textbf{\large{Methods}}
+\textbf{}\newline
+\textbf{Experimental methods}\newline
+\R{\textbf{Preparation of the defect-free atom array.}}
+In our experiment, atoms are loaded from a magneto-optical trap and captured by optical tweezers formed by focusing 808-\SI{}{nm} laser beams diffracted through a spatial light modulator (SLM). A measurement and feedback process eliminates defects in the atom chain, enabling the rapid creation of fully filled arrays.
+\newline
+\R{\textbf{Experimental parameters.}}
+Once the defect-free array is prepared, all atoms are optically pumped into the ground state. The interatomic spacing is $\sim$ \SI{7}{\micro m}, resulting in nearest-neighbour and next-nearest-neighbour interactions of $V_{i,i+1} = 2\pi \times \SI{7.3}{MHz}$ and $V_{i,i+2} = 2\pi \times \SI{0.11}{MHz}$, respectively. To closely approximate the PXP model despite the fixed ratio of 64 between the vdW interactions $V_{i,i+1} / V_{i,i+2}$, the ground-Rydberg driving Rabi frequency $\Omega$ is set to $V_{i,i+1}/6 = 2\pi \times \SI{1.21(1)}{\MHz}$ during the state evolution, striking a balance between the two interaction strengths. In addition, a small detuning $\Delta =2\pi\times\SI{0.22(1)}{\MHz}$ is introduced to compensate the residual next-nearest-neighbour interactions $V_{i,i+2}$.
+\R{Under these experimental parameters, the experimental Rydberg Hamiltonian is well approximated by the PXP model, with numerical simulations showing negligible deviations (see Supplementary Information Section~2.2 for details).}
+\newline
+\R{\textbf{High-fidelity $\ket{\mathbb{Z}_2}$ state preparation.}}
+The 795-\SI{}{\nano\meter} and 480-\SI{}{\nano\meter} addressing laser beams are generated via SLM diffraction and focused onto the atoms through high numerical aperture objectives, enabling selective addressing by adjusting the SLM phase pattern. The 795-\SI{}{\nano\meter} addressing beams off-resonantly couple the $\ket{5S_{1/2}}$ ground state to the $\ket{5P_{1/2}}$ state, inducing a light shift on the addressed atoms. During $\ket{\mathbb{Z}_2}$ state preparation, the addressed atoms experience a light shift of $2\pi \times \SI{12.2(3)}{MHz}$, sufficient to shield the atom from Rydberg excitation.
+\R{Combine with the high-fidelity global $\pi$-pulse, we achieved the high-fidelity preparation up to a 25-atom array (Fig.~2b in main text).}
+\newline
+\R{\textbf{ZZ-OTOC evolution.}
+A crucial step in measuring the OTOC is the implementation of time reversal for the many-body Hamiltonian. Leveraging the fact that our Rydberg Hamiltonian is well approximated by the PXP model, we developed a time-reversal protocol by exploiting the particle-hole symmetry of the PXP Hamiltonian. We employ a far-detuned \SI{200}{\ns}-long microwave field to implement a global $\hat\sigma^z$ gate, and realize the forward-and-backward Hamiltonian evolution of the experimentally prepared $\ket{\mathbb{Z}_2}$ state, as shown in Fig.~3c of the main text. Between the forward and backward evolution process, we introduced a local $\hat\sigma^z_c$ gate as the butterfly operator (see Supplementary Information Section~3.1 for details).
+% local perturbations as part of the ZZ-OTOC dynamics 
+To implement the local $\hat\sigma^z_c$ gate, a light shift of approximately $2\pi\times\SI{5}{\MHz}$ is applied to the central qubit, allowing a $\pi$-phase shift to be achieved within about $\SI{110}{\ns}$.}
+\newline
+\R{\textbf{Full quantum state tomography.}
+To perform full quantum state tomography under the PXP kinetic constraints, we utilize 480-nm addressing lasers to transfer the Rydberg population of the four neighbouring atoms (as shown in Fig.~4a of the main text) surrounding the target qubit back to the ground state.}
+The 480-\SI{}{\nano\meter} addressing lasers are resonant with the $\ket{e}$-$\ket{r}$ transition, with a Rabi frequency of $\Omega_{480} \sim 2\pi \times \SI{20}{\MHz}$. These lasers enable rapid Rydberg-to-ground state transfer and create an EIT condition that prevents neighbouring qubits from participating in the ground-Rydberg transitions driven by the global excitation lasers.
+\newline
+\R{\textbf{Numerical simulations}}
+\newline
+\R{\textbf{Numerical methods.}
+In the numerical simulations presented in the main text and Supplementary Information, we employ exact diagonalization for atom chains with up to 13 atoms. For the chain with 25 atoms, we utilize the Matrix Product Operator (MPO) method. Details of these approaches can be found in Supplementary Information Section~2.1: ``Effective Hamiltonian and Numerical Simulation Methods."}
+\newline
+\R{\textbf{Numerical results.}
+In all numerical simulations presented in the main text, we use the full Rydberg Hamiltonian $\hat{H}_{\text{R}}$ [Eq.~(\ref{Rydberg Hamiltonian})] with parameters used in our experiments, including a Rabi frequency of $\Omega=2\pi\times\SI{1.21}{\MHz}$, Rydberg interaction $V_{i,j}=V_{i,i+1}/|i-j|^6 $ where $V_{i,i+1} = 2\pi \times\SI{7.2}{\MHz}$, a small detuning of $\Delta = 2\pi \times \SI{0.22}{\MHz}\approx 2 V_{i,i+2}$.
+In the numerical results shown in Fig.~2e, 2g and 4c, we incorporate experimental noises and imperfections based on the characterization of our system, as detailed in Supplementary Information Section~4: Error Analysis and Mitigation. In Fig.~3l and 3m, we utilize the ideal Rydberg Hamiltonian without experimental noises or imperfections to demonstrate our effective error mitigation method.
+In Extended Data Fig.~2, we simulate both the PXP and Rydberg Hamiltonians, considering only the imperfections arising from local perturbations, which cannot be mitigated (see Supplementary Information Section~4.4).}
+
+\clearpage
+\newpage
+\setcounter{figure}{0}
+\newcounter{EDfig}
+\renewcommand{\figurename}{Extended Data Fig.}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figure_SI/compressed/Extended_Fig_1.png}  
+  \caption{
+    \textbf{Experimental setup and atomic level diagram.} 
+    \textbf{a}, Schematic of the essential elements in the experimental setup. The 808-nm static tweezer traps are generated by SLM, while the atom-shuttling tweezers are controlled by two acousto-optic deflectors (AODs). The 480-\SI{}{\nano\meter} addressing laser beams are generated by another SLM. A commercial objective (G Plan Apo 50$\times$, Mitutoyo, NA = 0.5) focuses the 808-nm tweezer beams and the 480-\SI{}{\nano\meter} addressing beams, while collecting the 795-\SI{}{\nano\meter} atomic fluorescence for imaging on an electron-multiplying CCD (EMCCD) camera. Counter-propagating 780-\SI{}{\nano\meter} and 480-\SI{}{\nano\meter} Raman beams enable coherent ground-Rydberg manipulation. The 795-\SI{}{\nano\meter} addressing laser for local perturbation \(\hat\sigma_c^z\) and the laser array responsible for producing the alternating light shifts for $\ket{\mathbb{Z}_2}$ state preparation are targeted at separate areas of the same SLM. These distinct regions show different holograms, enabling varied addressing laser patterns. This spatial multiplexing technique allows for sub-microsecond switching between the \(\ket{\mathbb{Z}_2}\) state preparation and local perturbation laser configurations. The 795-\SI{}{\nano\meter} addressing laser beams are focused onto the atoms through a home-made objective (NA = 0.4). A microwave horn near the chamber generates MW pulses for Rydberg state manipulation (phase gate) and detection. The inset shows the atomic array.
+    \textbf{b}, Level diagram showing the atomic levels of $^{87}$Rb involved in the experiment. Our Rydberg excitation scheme employs a two-photon Raman transition from the ground state \(\ket{\downarrow} = \ket{5S_{1/2}, F=2, m_F=2}\) to the Rydberg state \(\ket{\uparrow} = \ket{68D_{5/2}, m_J=5/2}\). The transition is driven by a \(\hat\sigma^+\)-polarized 780-\SI{}{\nano\meter} laser, which couples the ground state to the intermediate state \(\ket{e}=\ket{5P_{3/2}, F=3, m_F=3}\), and a \(\hat\sigma^+\)-polarized 480-\SI{}{\nano\meter} laser, which connects the intermediate state to the Rydberg state. Both lasers are detuned from the intermediate state by \(\Delta = 2\pi\times\SI{1.16}{\giga\hertz}\). A microwave field, red-detuned by $2\pi\times\SI{2.2}{\giga\hertz}$ from the \(\ket{\uparrow}\) to \(\ket{69P_{3/2}, m_J=3/2}\) transition, generates AC-Stark shifts on the Rydberg states and provides the phase gate for reversing the PXP Hamiltonian. For local single-qubit control, 795-\SI{}{\nano\meter} addressing beams, blue-detuned by $2\pi\times\SI{15}{\giga\hertz}$ from the \(\ket{\downarrow}\)-\(\ket{5P_{1/2}}\) transition, and 480-\SI{}{\nano\meter} addressing beams, resonant with the \(\ket{\uparrow}\)-\(\ket{e}\) transition, are employed.
+    }
+  \label{Fig:extended_1}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=1\textwidth]{figure_SI/Extended_Fig_Mitigated_exp_data.png}
+\caption{\textbf{Mitigated ZZ-OTOC results for $\ket{\mathbb{Z}_2}$ state.} 
+Blue points represent mitigated experimental ZZ-OTOC data for the $\ket{\mathbb{Z}_2}$ state, corrected based on IZ-OTOC results.
+Light blue curves represent the simulated ZZ-OTOC dynamics under the PXP Hamiltonian [equation~(\ref{Eq:PXP})], accounting for experimental noise stemming from imperfections in the local perturbation $\sigma^z_c$.
+Dark blue curves show the simulated ZZ-OTOC dynamics under the Rydberg Hamiltonian [equation~(\ref{Rydberg Hamiltonian})], also incorporating imperfections in local perturbation $\sigma^z_c$.
+The imperfections in the local perturbation make the OTOC patterns less distinct, which cannot be mitigated using IZ-OTOCs. 
+Therefore, these imperfections are incorporated in the numerical simulations using Monte Carlo methods (see Supplementary Information section~4).
+}
+\label{Mitigated_data}
+\end{figure*}
+
+\nolinenumbers
+
+\vspace*{1\baselineskip}
+
+\noindent
+\textbf{\large Data availability}
+
+\noindent
+Data that support the figures within this paper are available from the corresponding author upon reasonable request.
+
+\vspace*{1\baselineskip}
+
+\noindent
+\textbf{\large Code availability}
+
+\noindent
+The code used in this study is available from the corresponding author upon reasonable request. 
+
+\vspace*{1\baselineskip}
+
+\noindent
+\textbf{\large Acknowledgments}
+
+\noindent
+The authors thank Dong-Ling Deng for his valuable inputs to this work. The authors acknowledge insightful discussions with Weibin Li, Yijia Zhou, Yue Chang, Tao Shi, Xiong-Jun Liu, Long Zhang, and Yiqiu Ma. The authors thank Ren Liao, Zerui Song, Jianhao Yu, and Hui-Feng Xie for experimental assistance. D.-S.X. thanks Pei-Yuan Cai for the helpful advice on numerical simulation speedup. The simulations in this work are completed in the HPC Platform of Huazhong University of Science and Technology. This work was supported by the National Key Research and Development Program of China (Grant No.~2021YFA1402003), the National Natural Science Foundation of China (Grant Nos.~12374329 and U21A6006), and the National Science and Technology Major Project of the Ministry of Science and Technology of China (Grant No.~2023ZD0300901). D.Y. acknowledges support from the National Natural Science Foundation of China (Grant No.~123B2072).
+%, and 1237041587
+
+\vspace*{1\baselineskip}
+
+\noindent
+\textbf{\large Author contributions}
+
+\noindent
+All authors contributed substantially to this work.
+
+\vspace*{1\baselineskip}
+
+\noindent
+\textbf{\large Competing interests}
+
+\noindent
+The authors declare no competing interests.
+
+\end{document}
