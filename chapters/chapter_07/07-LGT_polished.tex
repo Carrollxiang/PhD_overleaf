@@ -4,7 +4,7 @@
 \section{引言}
 
 理解规范场论的非平衡动力学仍是高能物理的核心挑战之一~\cite{Calzetta_Hu_2008,gross_50_2023}。在实验上，从重离子碰撞到轻子与强子对撞，许多关键过程都发生在远离平衡态的强相互作用演化之中；然而，这类演化通常难以进行严格的从头计算（\textit{ab initio}）处理~\cite{bauer_quantum_2023-1}。量子模拟为这一问题提供了资源可控的替代路径~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025}。近年来，多个物理平台已经在实验上观测到规范场论的代表性现象~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025,schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,datla_statistical_2025,gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024,zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}，其中包括弦断裂~\cite{gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024}与假真空衰变~\cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。本章基于可编程里德堡原子阵列，研究（1+1）维 $U(1)$ 晶格规范场论（lattice gauge theory, LGT）中的实时散射与动力学冻结。
-\todo[inline, color=blue!20]{AI: 请优化这段关于 FPGA 触发时序的英文表述}
+\todo[inline, color=blue!20]{这些引用需要放到第一章中，用作背景介绍啥的}
 
 通过时空哈密顿量工程，本文实现了动力学禁闭—解禁闭相变，并在量子淬火过程中观测到弦破碎与对称性恢复。借助单址分辨读出，本文在不同参数区域追踪了类介子激发的传播与散射。进一步地，本文引入双重淬火协议并观测到动力学冻结（freeze-out）：在散射后对哈密顿量进行淬火时，尽管系统被注入大量能量，其后续演化（低阶关联与纠缠增长）均被显著抑制，体系在很长时间内近似停留在一个高度关联的状态。该现象与重离子碰撞中常用的 freeze-out 图像在物理直觉上相呼应~\cite{Berges_QCD_2021}。总体而言，本章建立了一种以高时空分辨率探测非微扰规范动力学的实验路径~\cite{CarmenBanuls_Review_2020}，为研究远离平衡态的规范场论现象提供了可控平台。
 
