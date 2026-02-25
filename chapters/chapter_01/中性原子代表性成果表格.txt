@@ -1,0 +1,49 @@
+\begin{table}[h]
+    \centering
+    \caption{Placeholder Caption}
+    \label{tab:placeholder_label}
+    \begin{tabular}{lllll}
+        \toprule
+        年份 & 领衔作者/团队 & 核心成就 & 发表期刊 & DOI \\
+        \midrule
+        2001 & G. Reymond & 首次实现单原子光镊俘获 & Nature & 10.1038/35082512 \\
+        2008 & M. Saffman & 首次观测到基态-里德堡拉比振荡 & PRL & 10.1103/PhysRevLett.100.113003 \\
+        2009 & Philippe Grangier & 首次观测到单原子的里德堡阻塞 & Nature Physics & 10.1038/nphys1183 \\
+        2010 & M. Saffman & 首次演示中性原子受控非门（CNOT） & PRA & 10.1103/PhysRevA.82.030306 \\
+        2012 & T. Peyronel (Lukin) & 利用强相互作用原子实现单光子的量子非线性光学 & Nature & 10.1038/nature11361 \\
+        2013 & W. Chen (Lukin) & 演示受单存储光子控制的全光开关与晶体管 & Science & 10.1126/science.1238169 \\
+        2013 & O. Firstenberg (Lukin) & 在量子非线性介质中观测到光子的吸引相互作用 & Nature & 10.1038/nature12512 \\
+        2014 & Adam Kaufman & 演示隧道耦合光镊中两粒子的量子干涉（HOM效应） & Science & 10.1126/science.345.6194.306 \\
+        2015 & Adam Kaufman & 通过局部自旋交换实现两个可移动原子的纠缠 & Nature & 10.1038/nature14871 \\
+        2016 & Y. Wang (Weiss) & 在3D中性原子阵列中演示基于目标相位移动的单比特门 & Science & 10.1126/science.aad9813 \\
+        2016 & H. Labuhn (Browaeys) & 实现可调控二维里德堡单原子阵列并模拟量子伊辛模型 & Nature & 10.1038/nature18274 \\
+        2016 & D. Barredo (Browaeys) & 重构技术突破： 首次实现无缺陷任意二维原子阵列的自动组装 & Science & 10.1126/science.aah3778 \\
+        2016 & Manuel Endres (Lukin) & 重构技术突破： 实现无缺陷一维冷原子链的逐个原子组装 & Science & 10.1126/science.aah3752 \\
+        2016 & Y. Wang & 3D中性原子阵列中的单比特逻辑门 & Science & 10.1126/science.aad9813 \\
+        2017 & Hannes Bernien & 51原子模拟器及“量子多体伤疤”观测 & Nature & 10.1038/nature24622 \\
+        2018 & D. Barredo & 原子到原子组装的三维合成原子结构 & Nature & 10.1038/s41586-018-0450-2 \\
+        2018 & David Weiss & 3D光格中原子的确定性排序（麦克斯韦妖实验） & Nature & 10.1038/s41586-018-0458-7 \\
+        2019 & S. de Léséleuc & 观测受对称性保护的拓扑相 & Science & 10.1126/science.aav9105 \\
+        2019 & A. Keesling & 量子Kibble-Zurek机制的精确测量 & Nature & 10.1038/s41586-019-1070-1 \\
+        2019 & Matthew Norcia & 秒级相干时间的光镊原子钟实现 & Science & 10.1126/science.aay0644 \\
+        2020 & Aaron Young & 具备半分钟级相干时间的高稳定光镊钟 & Nature & 10.1038/s41586-020-2827-z \\
+        2021 & S. Ebadi & 256原子可编程量子模拟器及量子相探索 & Nature & 10.1038/s41586-021-03582-4 \\
+        2021 & Pascal Scholl & 数百个原子规模的二维反铁磁模拟 & Nature & 10.1038/s41586-021-03585-1 \\
+        2021 & G. Semeghini & 在Kagome晶格观测到拓扑自旋液体证据 & Science & 10.1126/science.abi8794 \\
+        2022 & T. M. Graham & 首个中性原子量子计算机多比特算法演示 & Nature & 10.1038/s41586-022-04603-6 \\
+        2022 & D. Bluvstein & 基于相干搬运原子阵列的可重构量子处理器 & Nature & 10.1038/s41586-022-04592-6 \\
+        2022 & Aaron Young & 2D量子行走的可编程哈伯德模型模拟 & Science & 10.1126/science.abo0608 \\
+        2023 & Shuo Ma & 镱原子擦除转换实现高保真度门 & Nature & 10.1038/s41586-023-06481-y \\
+        2023 & Pascal Scholl & 在里德堡量子模拟器中演示擦除纠错 & Nature & 10.1038/s41586-023-06516-4 \\
+        2023 & K. Singh & 利用辅助原子阵列进行中路纠错 & Science & 10.1126/science.ade0648 \\
+        2024 & D. Bluvstein & 48个逻辑比特的操作与逻辑层纠缠门演示 & Nature & 10.1038/s41586-023-06927-3 \\
+        2024 & Ran Finkelstein & 结合原子钟与量子计算的通用操作 & Nature & 10.1038/s41586-024-08005-8 \\
+        2025 & H. Manetsch & 6,100个高度相干比特的超大规模阵列实现 & Nature & 10.1038/s41586-025-09641-4 \\
+        2025 & Aaron Holman & 基于元表面（Metasurface）的大规模原子俘获 & Nature & 10.1038/s41586-025-09848-5 \\
+        2025 & N. Chiu & 3,000个相干比特系统的连续运行模式演示 & Nature & 10.1038/s41586-025-09596-6 \\
+        2025 & 潘建伟团队 & 100公里光纤跨度的单原子节点DI-QKD演示 & Science & 10.1126/science.aec6243 \\
+        2025 & C. Chen & 偶极XY模型模拟器中的元激发能谱测量 & Science & 10.1126/science.adn0618 \\
+        2025 & Muqing Xu & 极低温深冷环境下的中性原子哈伯德模拟器 & Nature & 10.1038/s41586-025-09543-5 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
