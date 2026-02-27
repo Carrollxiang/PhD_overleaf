@@ -1,0 +1,99 @@
+% 1. 替换为华科博士学位论文模板
+\documentclass[type=doctor]{hustthesis} 
+
+%========== 论文信息配置 (hustsetup) ==========
+\hustsetup { 
+  info =
+  {
+    title = { 基于里德堡原子阵列的量子多体动力学研究 }, % 从原 \title 迁移
+    title* = { Research on Quantum Many-Body Dynamics Based on Rydberg Atom Arrays }, % 需补充英文标题
+    degree = { academic }, 
+    degree* = { Physics }, 
+    author = { 项德生 },
+    author* = { Desheng Xiang },
+    student-id = { 你的学号 },
+    clc = { O413 }, % 中图分类号（示例）
+    major = { 物理学 },
+    major* = { Physics },
+    supervisor = { 指导老师\quad{} 教授 },
+    supervisor* = { Prof.~ Supervisor },
+    date = { 2025-02-28 }, % 或直接删除此行由系统根据编译日期生成
+    % committee = { 张三 & 教授 & 华中科技大学 , 李四 & 教授 & 武汉大学 }, % 答辩时填写
+  },
+}
+
+%========== 宏包引入 ==========
+% 注意：原有的 geometry 和 setspace 已经被注释/删除，因为学校模板通常已严格规定了页边距和行距
+\usepackage{subfiles}
+% \usepackage{hyperref} % hustthesis 模板内部通常已经加载了 hyperref，若报错可保持注释
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{siunitx}
+\usepackage[backend=biber,style=numeric]{biblatex} % 模板和原文件都使用 biblatex
+\usepackage{booktabs,tabularx,makecell}
+\usepackage{physics}
+\usepackage{amsfonts}
+\usepackage{todonotes}
+
+% 引入你的参考文献库
+\addbibresource{preamble/references.bib} 
+
+%========== 自定义命令 ==========
+\newcommand{\LL}[1]{\textcolor[RGB]{153,51,250}{#1}}
+\newcommand{\XDS}[1]{\textcolor[RGB]{250,250,250}{#1}}
+\renewcommand\theadfont{\bfseries}
+
+\begin{document}
+
+% 自动生成符合学校规范的各类封面页和标题页
+\maketitle 
+
+\frontmatter
+
+%========== 摘要部分 ==========
+% 使用模板专用的 abstract 环境
+\begin{abstract}
+  中文摘要内容。
+  \keywords 关键词1；关键词2；关键词3
+\end{abstract}
+
+\begin{abstract*}
+  English abstract content.
+  \keywords* keyword1, keyword2, keyword3
+\end{abstract*}
+
+% 生成目录
+\tableofcontents
+
+\mainmatter
+
+%========== 正文章节包含 ==========
+% 保留原有的 subfile 结构
+\subfile{chapters/chapter_01/01-introduction}
+\subfile{chapters/chapter_02/02-theory}
+\subfile{chapters/chapter_03/03-setup}
+\subfile{chapters/chapter_04/04-Rydberg_control}
+\subfile{chapters/chapter_05/05-quantum_scar}
+\subfile{chapters/chapter_06/06-OTOC}
+\subfile{chapters/chapter_07/07-LGT}
+\subfile{chapters/chapter_08/08-Outlook}
+
+\backmatter
+
+%========== 致谢部分 ==========
+% 替换为模板专用的 acknowledgements 环境
+\begin{acknowledgements} 
+  感谢所有老师与同学。
+\end{acknowledgements}
+
+%========== 参考文献 ==========
+\printbibliography
+
+\appendix
+
+\chapter{附录}
+% 可在此处添加附录内容或通过 \subfile 引入
+
+\end{document}
