@@ -75,6 +75,14 @@
 
 微波操控利用磁偶极跃迁直接驱动基态超精细能级之间的翻转。由于微波波长远大于原子阵列尺寸，它提供了一种高均匀性的全局操控手段。我们利用微波拉比振荡标定系统参数，并通过 Ramsey 干涉实验评估了基态量子比特的相干时间 $T_2^*$，这为后续的磁场噪声分析提供了关键指标。
 
+微波由低相噪的微波源产生，通过微波波导连接到微波开关上，微波开关上有一个TTL通道用来对微波信号进行时序控制，可以调控微波脉冲的发生时间以及脉冲宽度，精确度可以达到ns量级。之后微波信号经过一个大功率的线性微波功率放大器对信号进行等比例放大，放大后的微波信号再通过微波波导连接到一个矩体喇叭天线上，喇叭天线再将微波辐射耦合到真空室内的原子阵列。
+
+全局微波操作首先是可以进行$\ket{0}$和$\ket{1}$之间的拉比振荡，将原子首先制备到$\ket{0}$或$\ket{1}$上，之后入射一个微波脉冲，然后测量处于$\ket{0}$或$\ket{1}$上的原子占比随着脉冲宽度的变化关系。扫描拉比振荡，可以精确确定微波的一些重要参数，比如微波共振频率、微波拉比频率、微波强度分布均匀性等等。良好的拉比振荡是对于原子阵列中所有格点都能以接近$100\%$的态转移效率在$\ket{0}$和$\ket{1}$之间振荡。
+
+量子比特的相干时间是衡量其环境隔离度与操控保真度的核心指标。我们采用Ramsey干涉实验评估基态量子比特的退相干时间 $T_2^*$。实验序列为：$(\pi/2) - \tau - (\pi/2)$。第一个 $\pi/2$ 脉冲将原子制备到叠加态 $(|0\rangle + |1\rangle)/\sqrt{2}$；在自由演化时间 $\tau$ 内，量子比特相位会累积；第二个 $\pi/2$ 脉冲将相位差转换为布居数差异。改变 $\tau$ 并扫描第二个脉冲的相位$\phi$，得到布居的振荡信号：$P(\tau,\phi)=\frac{1}{2}[1-\exp(-(\tau/T_2^*)^{\alpha}) \cos(2\pi\delta\tau+\phi)]$，这里$\delta$是微波相对原子能级的失谐，$\alpha\approx1\;\mathrm{or}\;2$取决于退相干的类型。
+
+（还差一张好看的拉比振荡和Ramsey振荡的图）
+
 % [PLACEHOLDER: 科学内容填充]
 % 1. 微波天线设计与系统架构简述。
 % 2. 拉比振荡数据展示：Pi 脉冲时间的测定。
@@ -115,7 +123,66 @@
 \subsection{激发方案与激光系统}
 \label{subsec:excitation_scheme}
 
-我们采用梯形能级方案，通过中间态 $5P_{3/2}$ 将基态原子激发至 $nS$ 或 $nD$ 里德堡态。为了抑制中间态的自发辐射噪声，激光频率保持较大的单光子失谐 $\Delta$。本小节将推导该三能级系统下的有效拉比频率 $\Omega_{\text{eff}}$ 和双光子失谐量 $\delta$，并介绍用于维持激光频率稳定性的超稳腔（ULE Cavity）锁定系统。
+我们采用梯形能级方案，通过中间态 $5P_{3/2}$ 将基态原子激发至 $nS$ 或 $nD$ 里德堡态。为了抑制中间态的自发辐射噪声，激光频率保持较大的单光子失谐 $\Delta$。本小节将推导该三能级系统下的有效拉比频率 $\Omega_{\text{eff}}$ 和双光子失谐量 $\delta$。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.2\textwidth]{chapters/chapter_04/figure/Rydberg_excitation.png}
+  \caption{里德堡激发能级方案}
+  \label{ch4_new:Rydberg_excitation}
+\end{figure}
+
+考虑三个能级：$\ket{g}$、$\ket{e}$和$\ket{r}$，分别表示基态、$5P_{3/2}$激发态以及里德堡态，三能级下的哈密顿量可以写为：
+\begin{align}
+\hat{H}=
+\begin{pmatrix} \frac{\delta}{2} & \frac{\Omega_1}{2} & 0 \\ 
+\frac{\Omega_1^*}{2} & -\Delta &\frac{\Omega_2}{2}  \\
+0 & \frac{\Omega_2^*}{2}  & -\frac{\delta}{2}
+\end{pmatrix}
+\end{align}
+这里$\Delta$和$\delta$分别是单光子失谐和双光子失谐，$\Omega_1$和$\Omega_2$和分别是$\ket{g}\leftrightarrow\ket{e}$以及$\ket{e}\leftrightarrow\ket{r}$之间的拉比频率，且满足$\Delta\gg\Omega_1,\Omega_2\gg\delta$。这个哈密顿量可以分为三个部分：$\hat{H}=\hat{H}_0+\hat{V}+\hat{H}_2$，这里（设$\hbar=1$）：
+\begin{align}
+\hat{H}_0=
+\begin{pmatrix} 0 & 0 & 0 \\ 
+0 & -\Delta & 0  \\
+0 & 0  & 0
+\end{pmatrix}, 
+\hat{V}=
+\begin{pmatrix} 0 & \frac{\Omega_1}{2} & 0 \\ 
+\frac{\Omega_1^*}{2} & 0 &\frac{\Omega_2}{2}  \\
+0 & \frac{\Omega_2^*}{2}  & 0
+\end{pmatrix},
+\hat{H}_2=
+\begin{pmatrix} \frac{\delta}{2} & 0 & 0 \\ 
+0 & 0 & 0  \\
+0 & 0  & -\frac{\delta}{2}
+\end{pmatrix}.
+\end{align}
+在二阶微扰下，只考虑$\ket{g}$和$\ket{r}$之间的二能级系统，其等效哈密顿量为：$\hat{H}_{\mathrm{eff}}=\hat{P}_{gr}[\hat{H}_2+\hat{V}(E_0-\hat{H}_0)^{-1}\hat{V}]\hat{P}_{gr}$，这里$\hat{P}_{gr}=\ket{g}\bra{g}+\ket{r}\bra{r}$是投影算符，$E_0=0$为$\ket{g},\ket{r}$在$\hat{H}_0$下的本征能量。简单推导一下，即可得到：
+
+\begin{align}
+\hat{H}_{\mathrm{eff}}=
+\begin{pmatrix}
+\frac{\delta}{2}+\frac{|\Omega_1|^2}{4\Delta} & \frac{\Omega_1\Omega_2}{4\Delta} \\
+\frac{\Omega_1^*\Omega_2^*}{4\Delta}  & -\frac{\delta}{2}+\frac{|\Omega_2|^2}{4\Delta}
+\end{pmatrix}.
+\end{align}
+从以上公式得到等效拉比频率为$\Omega_{\text{eff}}=\frac{\Omega_1\Omega_2}{2\Delta}$。同时，如果要实现$\ket{g}\to\ket{r}$的高效耦合，需要让等效的双光子失谐为0，也就是满足$\delta=\frac{|\Omega_2|^2-|\Omega_1|^2}{4\Delta}$。
+
+此外，还需要考虑到中间激发态$\ket{e}$自发辐射带来的影响。考虑到一阶微扰后的本征态为：$\ket{\psi^{(1)}}=\ket{\psi_0}+(E_0-\hat{H}_0)^{-1}\hat{V}\ket{\psi_0}$。当$\ket{\psi_0}=\ket{g}$时，$\ket{g^{(1)}}=\ket{g}+\frac{\Omega_1^*}{2\Delta}\ket{e}$；当$\ket{\psi_0}=\ket{r}$时，$\ket{r^{(1)}}=\ket{r}+\frac{\Omega_2}{2\Delta}\ket{e}$。因此，一阶微扰后的$\ket{g^{(1)}}$和$\ket{r^{(1)}}$的自发辐射速率可以分别近似为：$\Gamma_g=\frac{|\Omega_1|^2}{4\Delta^2}\Gamma$以及$\Gamma_r=\frac{|\Omega_2|^2}{4\Delta^2}\Gamma$，这里$\Gamma=2\pi*6\mathrm{MHz}$是$5P_{3/2}$的自发辐射速率。当驱动一个从基态$\ket{g}$到里德堡态$\ket{r}$的$\pi$脉冲，可以近似得到损失率为：
+\begin{align}
+P_{loss}=1-\exp[-\int_0^{\frac{\pi}{\Omega_{\text{eff}}}}(\Gamma_g\cos^2(\frac{\Omega_{\text{eff}} t}{2})+\Gamma_r\sin^2(\frac{\Omega_{\text{eff}} t}{2}))]\approx \frac{\pi\Gamma}{4\Delta}(\frac{\Omega_1}{\Omega_2}+\frac{\Omega_2}{\Omega_1}),
+\end{align}
+选择$\Omega_1\approx \Omega_2$，可以看到原子损失率大致正比于$\frac{\Gamma}{\Delta}$。为了减小中间态损失，单光子失谐$\Delta$应该要足够大，实验中我们让失谐增大到$\Delta/2\pi=1\mathrm{GHz}$左右，这样中间态导致的损失可以小于$1\%$。
+
+实验上，我们采用Toptica的带倍频腔的480nm激光器，型号是TA SHG pro，它是由一个960nm的外腔半导体激光器搭配一个锥形半导体激光放大器以及一个二次谐波倍频腔构成的，480出光功率最高可以达到500mW左右。960nm的外腔半导体激光器可以通过之前所述的PDH稳频方法锁定在超稳腔的腔模上，之后可以通过电光调制器和声光调制器进行精确的激光移频，从而得到我们所需的激光频率。而780nm里德堡激发光则可以根据与MOT同源的光进行频率锁定，之后通过激光移频即可得到。780nm和480nm激光通过对射的方式入射到原子上，可以减少多普勒频移带来的双光子失谐。同时为了确定性地激发到某个特定的里德堡磁子能级，还需要将780nm和480nm激发光沿着量子化轴方向入射以确保激发光偏振是纯的$\sigma^+$或者$\sigma^-$偏振，同时增大偏置磁场将磁子能级劈开，以避免无关磁子能级的干扰。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.2\textwidth]{chapters/chapter_04/figure/480_laser.png}
+  \caption{480nm激光器}
+  \label{ch4_new:480_laser}
+\end{figure}
 
 % [PLACEHOLDER: 科学内容填充]
 % 1. 能级选择：5S -> 5P -> nS/nD，画出能级图。
@@ -124,10 +191,10 @@
 %    - 780 nm：基于 MOT 同源光的移频锁定。
 %    - 480 nm：基于 ULE 腔的 PDH 锁定。
 
-\subsection{480 nm 激光的频率寻找流程}
-\label{subsec:freq_search}
+% \subsection{480 nm 激光的频率寻找流程}
+% \label{subsec:freq_search}
 
-里德堡态的能级极其密集且易受环境电场影响，准确找到目标量子数 $n$ 的跃迁频率是实验的一大挑战。我们总结出一套高效的“由粗到细”频率寻找流程：首先利用 MOT 荧光耗散谱确定大致范围，随后利用光镊中的展宽谱进一步定位，最后在自由空间中扫描出傅里叶极限线宽的拉比谱。这一流程极大地提高了实验调试的效率。
+% 里德堡态的能级极其密集且易受环境电场影响，准确找到目标量子数 $n$ 的跃迁频率是实验的一大挑战。我们总结出一套高效的“由粗到细”频率寻找流程：首先利用 MOT 荧光耗散谱确定大致范围，随后利用光镊中的展宽谱进一步定位，最后在自由空间中扫描出傅里叶极限线宽的拉比谱。这一流程极大地提高了实验调试的效率。
 
 % [PLACEHOLDER: 科学内容填充]
 % 1. 步骤 1：MOT 耗散谱 (Coarse)。利用高功率和梯度磁场下的原子高激发率。

@@ -1,0 +1,135 @@
+%%
+%% This is file `hustthesis-m.def',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% hustthesis.dtx  (with options: `def-m')
+%% 
+%%     Copyright (C) 2013-2014 by Xu Cheng <xucheng@me.com>
+%%                   2014-     by hust-latex <https://github.com/hust-latex>
+%%                   2024-     by HUANG Yuxi <hustthesis@hyxi.dev>
+%% 
+%%     This work may be distributed and/or modified under the
+%%     conditions of the LaTeX Project Public License, either
+%%     version 1.3c of this license or (at your option) any later
+%%     version. This version of this license is in
+%%        https://www.latex-project.org/lppl/lppl-1-3c.txt
+%%     and the latest version of this license is in
+%%        https://www.latex-project.org/lppl.txt
+%%     and version 1.3c or later is part of all distributions of LaTeX
+%%     version 2008 or later.
+%% 
+%%     This work has the LPPL maintenance status "maintained".
+%% 
+%%     The Current Maintainer of this work is HUANG Yuxi <hustthesis@hyxi.dev>.
+%% 
+
+\ProvidesExplFile{hustthesis-m.def}
+  {2025-02-28}{2.0.0} %
+  {Definition file for the hustthesis class in master thesis}
+
+\tl_const:Nn \c__hust_name_school_zh_tl { 华中科技大学 }
+\tl_const:Nn \c__hust_name_school_en_tl { Huazhong~ University~ of~ Science~
+  and~ Technology }
+\clist_map_inline:nn
+  {
+    { ideo_comma       } { ^^^^3001 },
+    { ideo_full_stop   } { ^^^^3002 },
+    { fwid_comma       } { ^^^^ff0c },
+    { fwid_full_stop   } { ^^^^ff0e },
+    { fwid_colon       } { ^^^^ff1a },
+    { fwid_semicolon   } { ^^^^ff1b },
+    { fwid_left_paren  } { ^^^^ff08 },
+    { fwid_right_paren } { ^^^^ff09 }
+  }
+  { \__hust_define_punct:nn #1 }
+\fp_const:Nn \c__hust_line_spread_fp { 1.5 }
+\tl_const:Nn \c__hust_emptybox_tl { \usym{2610} }
+\tl_const:Nn \c__hust_checkbox_tl { \usym{2611} }
+\clist_map_inline:nn
+  {
+    { degree_font } { \bfseries \songti },
+    { date } { 答\hfill 辩\hfill 日\hfill 期 },
+    { clc } { 分类号 },
+    { student_id } { 学号 },
+    { school_id } { 学校代码 },
+    { secret } { 密级 },
+  }
+  { \__hust_define_name:nn #1 }
+\tl_const:Nn \c__hust_school_id_tl { 10487 }
+\tl_const:Nn \c__hust_address_tl
+  {
+    Huazhong~ University~ of~ Science~ and~ Technology\\
+    Wuhan~ 430074,~ P.~ R.~ China
+  }
+\clist_map_inline:nn
+  {
+    { type }
+      { A~ Dissertation~ Submitted~ in~ Partial~ Fulfillment~ of~
+      the~
+      Requirements~ for~ }
+      { 硕士学位论文 },
+    { academic } { the~ Master~ Degree~ in } { 学术型 },
+    { professional } { the~ Professional~ Master~ Degree~ in }  { 专业型 },
+    { author } { Candidate } { 学\hfill 位\hfill 申\hfill 请\hfill 人 },
+    { major } { Major } { 学\hfill 科\hfill 专\hfill 业 },
+    { supervisor } { Supervisor } { 指\hfill 导\hfill 老\hfill 师 },
+  }
+  { \__hust_define_name:nnn #1 }
+\tl_const:Nn \c__hust_orig_decl_title_tl { 独创性声明 }
+\tl_const:Nn \c__hust_orig_decl_text_tl
+  {
+    本人声明所呈交的学位论文是我个人在导师指导下进行的研究工作及取得的研
+    究成果。尽我所知，除文中已经标明引用的内容外，本论文不包含任何其他个人或
+    集体已经发表或撰写过的研究成果。对本文的研究做出贡献的个人和集体，均已在
+    文中以明确方式标明。本人完全意识到本声明的法律结果由本人承担。
+  }
+\clist_const:Nn \c__hust_orig_decl_sign_clist
+  {
+    学位论文作者签名：\hspace{2em}\mbox{},
+    日期：\hspace{2em}年\hspace{1.5em}月\hspace{1.5em}日
+  }
+\tl_const:Nn \c__hust_auth_decl_title_tl { 学位论文版权使用授权书 }
+\tl_const:Nn \c__hust_auth_decl_text_tl
+  {
+    本学位论文作者完全了解学校有关保留、使用学位论文的规定，即：学校有权
+    保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。
+    本人授权华中科技大学可以将本学位论文的全部或部分内容编入有关数据库进行检
+    索，可以采用影印、缩印或扫描等复制手段保存和汇编本学位论文。
+  }
+\clist_const:Nn \c__hust_auth_decl_secr_clist
+  {
+    本论文属于,
+    保\hspace{1em}密□，在\underline{\hspace{3em}}年解密后适用本授权书。,
+    不保密□。,
+    （请在以上方框内打“√”）
+  }
+\clist_const:Nn \c__hust_auth_decl_sign_clist
+  {
+    学位论文作者签名：\hfill{} 指导教师签名：\hspace*{5em} \mbox{},
+    日期：\hspace*{2em}年\hspace*{1.5em}月\hspace*{1.5em}日 \hfill{}
+    日期：\hspace*{2em}年\hspace*{1.5em}月\hspace*{1.5em}日\hspace*{1em} \mbox{}
+  }
+\clist_map_inline:nn
+  {
+    { abstract } { Abstract } { 摘\hspace{1em}要 },
+    { keywords } { Key~ words: } { 关键词： },
+  }
+  { \__hust_define_name:nnn #1 }
+\tl_const:Nn \c__hust_sep_keywords_zh_tl { ； }
+\tl_const:Nn \c__hust_sep_keywords_en_tl { , }
+\tl_const:Nn \c__hust_header_tl { 华中科技大学硕士学位论文 }
+
+%% 
+%%     This work consists of the files hustthesis.dtx
+%%               and the derived files hustthesis.ins,
+%%                                     hustthesis.cls,
+%%                                     hustthesis-doc.sty,
+%%                                     hustthesis-m.def,
+%%                                     hustthesis-d.def,
+%%                                     hustthesis.cbx,
+%%                                     hustthesis.bbx.
+%% 
+%%
+%% End of file `hustthesis-m.def'.

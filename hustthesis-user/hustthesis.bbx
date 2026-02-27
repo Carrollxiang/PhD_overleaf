@@ -1,0 +1,332 @@
+%%
+%% This is file `hustthesis.bbx',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% hustthesis.dtx  (with options: `bbx')
+%% 
+%%     Copyright (C) 2013-2014 by Xu Cheng <xucheng@me.com>
+%%                   2014-     by hust-latex <https://github.com/hust-latex>
+%%                   2024-     by HUANG Yuxi <hustthesis@hyxi.dev>
+%% 
+%%     This work may be distributed and/or modified under the
+%%     conditions of the LaTeX Project Public License, either
+%%     version 1.3c of this license or (at your option) any later
+%%     version. This version of this license is in
+%%        https://www.latex-project.org/lppl/lppl-1-3c.txt
+%%     and the latest version of this license is in
+%%        https://www.latex-project.org/lppl.txt
+%%     and version 1.3c or later is part of all distributions of LaTeX
+%%     version 2008 or later.
+%% 
+%%     This work has the LPPL maintenance status "maintained".
+%% 
+%%     The Current Maintainer of this work is HUANG Yuxi <hustthesis@hyxi.dev>.
+%% 
+
+\ProvidesFile{hustthesis.bbx}[Bibliography style for the hustthesis class]
+
+
+\RequireBibliographyStyle{gb7714-2015}
+\ExecuteBibliographyOptions
+  {
+    isbn = false,
+    url = false,
+    doi = false,
+    gbnamefmt = givenahead,
+    gbtype = false,
+    gbpunctin = false,
+    maxbibnames = 6,
+    minbibnames = 6,
+  }
+\renewcommand{\finentrypunct}{}
+\newcommand\HUST@bib@zhedition[1]{（#1）}
+\newcommand\HUST@bib@enedition[1]{(#1)}
+\DeclareFieldFormat{edition}{\bibtitlefont%源来自biblatex.DEF
+    \testCJKfirst{userd}%
+    \iftoggle{ifCJKforgbt}%
+      {\ifinteger{#1}
+        {%
+          \ifnumgreater{#1}{1}{\printtext{
+            %#1\str@edition
+            \HUST@bib@zhedition{第\zhnumber{#1}版}
+          }}{}
+        }%
+        %{#1\isdot}}%
+        {\HUST@bib@zhedition{#1}}
+        \addspace
+      }%
+      {\ifinteger{#1}%
+        {\ifnumgreater{#1}{1}{
+           %\mkbibordedition{#1}~\bibstring{edition}
+           \HUST@bib@enedition{\mkbibordedition{#1}~\bibstring{edition}}
+          }{}
+        }%
+        %{#1\isdot}}%
+        {\HUST@bib@enedition{#1}\isdot}
+      }
+}
+\DeclareBibliographyDriver{book}{%源来自standard.bbx文件
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/editor+others/translator+others}%
+  \ifnameundef{namea}{}{\setunit{\labelnamepunct}\newblock}%这一段用于去除作者不存在时多出的标点
+  \if false
+  \usebibmacro{maintitle+title}%
+  \iftoggle{bbx:gbstrict}{}{%
+    \newunit
+    \printlist{language}%
+    \newunit\newblock%
+    \usebibmacro{byauthor}%
+    \newunit\newblock
+  }%
+  \usebibmacro{byeditor+others}%
+  \newunit
+  \fi
+  \printfield[titlecase]{title}%
+  \printfield{edition}%
+  \newunit\newblock%%
+  \iftoggle{bbx:gbstrict}{}{%
+  \iffieldundef{maintitle}%
+  {%\printfield{volume}%
+  \printfield{part}}%
+  {}%
+  \newunit%
+  \printfield{volumes}%
+  \newunit\newblock%
+  \usebibmacro{series+number}}%
+  \newunit\newblock%
+  %\printfield{note}%
+  %\newunit\newblock%
+  \usebibmacro{publisher+location+date}%
+  %\newunit\newblock %这里标点去掉
+  \usebibmacro{chapter+pages}%
+    \iffieldundef{url}{}{%当没有网址时也不输出
+    \usebibmacro{modifydate}}%带括号的修改或更新日期，
+  \usebibmacro{doi+eprint+url}%从下面移动到上面来，因为gbt2015的url需直接放在页码后面。
+  \if false
+  \newunit\newblock%
+  \printfield{pagetotal}%
+  \fi
+  \newunit\newblock%
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  %\usebibmacro{doi+eprint+url}%
+  %\newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \newunit\newblock
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \usebibmacro{annotation}\usebibmacro{finentry}
+}
+\newbibmacro*{HUSTinbook_publisher+location+date}{\bibpubfont%
+  \iftoggle{bbx:gbpub}%
+    {\testCJKfirst{userd}%
+      \ifboolexpr{ test {\iflistundef{location}} and test {\iflistundef{publisher}} }%
+        {\iffieldequalstr{entrysubtype}{standard}{}
+          {\iftoggle{ifCJKforgbt}{\printtext{\gbleftbracket\str@noaddress}\space :\space\str@nopublisher\gbrightbracket}
+              {\printtext{\gbleftbracket S.l.\space :\space s.n.\adddot\gbrightbracket}}}
+        }%
+        {
+          \iflistundef{location}{%\adddot
+            \iffieldequalstr{entrysubtype}{standard}{}%%从gbt7714-2015标准第19页看到，标准存在出版项时输出，没有时完全省略。
+            {\iftoggle{ifCJKforgbt}{\printtext{\gbleftbracket\str@noaddress\gbrightbracket}\addcolon\addspace}%
+                {\printtext{\gbleftbracket S.l.\adddot\gbrightbracket}\publocpunct}}
+          }%  \bibstring{noaddress}
+          {\printlist{location}\publocpunct}%%\addcolon\addspace%
+          \iflistundef{publisher}{%
+            \iffieldequalstr{entrysubtype}{standard}{}%
+            {\iftoggle{ifCJKforgbt}{\printtext{\gbleftbracket\str@nopublisher\gbrightbracket}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}%
+            {\printtext{\mkbibbrackets{s.n.}}\setunit{\adddot\addspace}\setunit*{\addcomma\addspace}}}}%
+            {\printlist{publisher}}
+        }%
+      \pubdatadelim%\addcomma\addspace%
+      \usebibmacro{date}%%\newunit %去掉这个标点
+    }%
+    {\printlist{location}%
+      \iflistundef{publisher}
+        {\locnopubdelim}
+        %{\setunit*{\publocpunct}}%
+        {\locnopubdelim}
+      \printlist{publisher}%
+      \pubdatadelim%
+      \usebibmacro{date}%%\newunit
+    }%
+}
+\renewbibmacro*{inbook:parent}{%
+  \usebibmacro{bybookauthor}%
+    \ifnameundef{bookauthor}{%
+    \ifnameundef{editor}{}{\newunit}%
+    }{\newunit}%替换下一句
+    %\newunit\newblock
+  \iffieldundef{series}{}
+    {\usebibmacro{series+number}\setunit{\addcolon\addspace}}%为处理一些存在series的情况而增加
+    \usebibmacro{maintitle+booktitle}%
+  \iffieldundef{volume}{}{\setunit{\addcolon\addspace}\printfield{volume}}%
+  \iffieldundef{number}{}{\setunit{\addcolon\addspace}\printfield{number}}%增加卷和册信息
+    \newunit\newblock%
+  %  \usebibmacro{byeditor+others}%
+  %  \newunit\newblock
+    \printfield{edition}%
+    \newunit
+    \iftoggle{bbx:gbstrict}{}{%
+  %  \iffieldundef{maintitle}
+  %    {\printfield{volume}%
+  %     \printfield{part}}
+  %    {}%
+  %  \newunit
+  %  \printfield{volumes}%
+  %  \newunit\newblock
+  %  \usebibmacro{series+number}
+    }%
+    \newunit\newblock
+    %\printfield{note}%
+    %\newunit\newblock
+    %\usebibmacro{publisher+location+date}
+    \usebibmacro{HUSTinbook_publisher+location+date}%
+}
+\DeclareFieldFormat[book]{title}{#1}
+\renewbibmacro*{patenttitle}{%原输出来自biblatex.def文件
+  \ifboolexpr{%
+    test{\iffieldundef{title}}%
+    and%
+    test{\iffieldundef{subtitle}}%
+  }%
+  {}%
+  { \printtext[title]{\bibtitlefont%
+      \printfield[titlecase]{title}%
+      \newunit
+      \ifboolexpr{test {\iffieldundef{subtitle}}}%这里增加了对子标题的判断，解决不判断多一个点的问题
+        {}%
+        {\setunit{\subtitlepunct}\printfield[titlecase]{subtitle}}%
+      \iffieldundef{titleaddon}{}%判断一下titleaddon，否则直接加可能多一个空格
+        {\setunit{\subtitlepunct}\printfield{titleaddon}}%
+      \if false
+      \setunit{\subtitlepunct}\printfield{number}%写专利号
+      \iftoggle{bbx:gbtype}{\printfield[gbtypeflag]{usera}}{}%
+      %\iffieldundef{booktitle}{\newunit}{}%当title是析出时，不要标点
+      %\newunit
+      \fi
+      \iflistundef{location}
+        {}
+        %{\setunit*{\addspace}%
+        {\setunit*{\subtitlepunct}
+        \printtext{%[parens]
+          \printlist[][-\value{listtotal}]{location}}}%
+      \setunit{\addcomma\space}\printfield{number}%写专利号
+      \setunit{\addspace}\printfield[gbtypeflag]{usera}
+    }%
+  }%
+  \setunit{\subtitlepunct}%
+}
+\DeclareBibliographyDriver{patent}{%源来自standard.BBX
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author}%
+  \ifnameundef{author}{}{\setunit{\labelnamepunct}\newblock}%这一段用于去除作者不存在时多出的标点
+  %\usebibmacro{title}%
+  \usebibmacro{patenttitle}%给出专利专用的标题输出
+  \iftoggle{bbx:gbstrict}{}{%
+    \newunit%
+    \printlist{language}%
+    \newunit\newblock
+    \usebibmacro{byauthor}
+  }%
+  \newunit\newblock
+  \if false
+  \printfield{type}%
+  \setunit*{\addspace}%
+  %\printfield{number}%已放到patenttitle中处理
+  \iflistundef{location}
+    {}
+    {\setunit*{\addspace}%
+    \printtext{%[parens]
+      \printlist[][-\value{listtotal}]{location}}}%
+  \newunit\newblock
+  \usebibmacro{byholder}%
+  \newunit\newblock
+  \fi
+  \printfield{note}%
+  \newunit\newblock
+  %\usebibmacro{newsdate}%
+  \usebibmacro{date}%
+  %\newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \newunit\newblock
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+    \usebibmacro{related}}
+    {}%
+  \usebibmacro{annotation}\usebibmacro{finentry}
+}
+\DeclareBibliographyDriver{thesis}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/editor+others/translator+others}%
+  \ifnameundef{namea}{}{\setunit{\labelnamepunct}\newblock}%这一段用于去除作者不存在时多出的标点
+  %\usebibmacro{title}%
+  \printfield[titlecase]{title}%
+  \printfield[gbtypeflag]{type}
+  \iftoggle{bbx:gbstrict}{}{%
+  \newunit%
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}}%
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%增加的译者信息
+  \newunit\newblock
+  \iftoggle{bbx:gbfieldtype}{%
+    \printfield{type}%
+    \setunit*{\addspace}}{}%
+  \printfield{number}%
+  \newunit\newblock
+  \printfield{version}%
+  \newunit
+  \printfield{note}%
+  \newunit\newblock
+  \usebibmacro{institution+location+date}%
+  %\newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \iffieldundef{url}{}{%当没有网址时也不输出修改或更新日期
+    \usebibmacro{modifydate}}%修改或更新日期为带括号的时间
+  \usebibmacro{doi+eprint+url}%
+  \newunit
+  \printfield{pagetotal}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isrn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \newunit\newblock
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \usebibmacro{annotation}\usebibmacro{finentry}
+}
+%% 
+%%     This work consists of the files hustthesis.dtx
+%%               and the derived files hustthesis.ins,
+%%                                     hustthesis.cls,
+%%                                     hustthesis-doc.sty,
+%%                                     hustthesis-m.def,
+%%                                     hustthesis-d.def,
+%%                                     hustthesis.cbx,
+%%                                     hustthesis.bbx.
+%% 
+%%
+%% End of file `hustthesis.bbx'.
