@@ -1,30 +1,6 @@
 % chapters/02-theory.tex
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-% 章节内容...
-
-%**第2章 理论基础**
-%
-%*   **2.1 铷-87 原子的物理性质**
-%    *   2.1.1 精细与超精细结构
-%    *   2.1.2 塞曼效应与磁囚禁基础
-%*   **2.2 原子与光的相互作用**
-%    *   2.2.1 两能级近似与光学布洛赫方程
-%    *   2.2.2 光偶极力与光镊原理
-%*   **2.3 激光冷却与俘获理论**
-%    *   2.3.1 多普勒冷却与磁光阱（MOT）
-%    *   2.3.2 亚多普勒冷却机制（PGC）
-%    *   2.3.3 碰撞阻塞效应与光辅助碰撞（单原子装载）
-%*   **2.4 光场整形与寻址原理**
-%    *   2.4.1 全息光镊生成：GS 算法与 SLM
-%    *   2.4.2 动态原子输运：AOD 偏转原理
-%*   **2.5 里德堡原子物理**
-%    *   2.5.1 里德堡态的基本性质与标度律
-%    *   **2.5.2 外电场中的原子：斯塔克效应与场电离 (新增)**
-%        *   直流斯塔克频移 (DC Stark Shift) 与极化率
-%        *   斯塔克图 (Stark Map) 与能级交叉
-%        *   场电离机制与阈值公式
-%    *   2.5.3 里德堡阻塞效应与范德瓦尔斯相互作用
 
 \chapter{理论}
 
@@ -35,8 +11,8 @@
 
 由于电子自旋 $\mathbf{S}$ ($S=1/2$) 与轨道角动量 $\mathbf{L}$ ($L=1$ 对于 P 态) 的自旋-轨道耦合作用 ($H_{SO} \propto \mathbf{L}\cdot\mathbf{S}$)，$5P$ 态分裂为 $5P_{1/2}$ 和 $5P_{3/2}$ 两个精细能级。
 \begin{itemize}
-    \item \textbf{D1 线} ($5^2S_{1/2} \rightarrow 5^2P_{1/2}$): 波长约为 $795\,\text{nm}$ (794.979 nm)，自然线宽 $\Gamma \approx 2\pi \times 5.75\,\text{MHz}$。
-    \item \textbf{D2 线} ($5^2S_{1/2} \rightarrow 5^2P_{3/2}$): 波长约为 $780\,\text{nm}$ (780.241 nm)，自然线宽 $\Gamma \approx 2\pi \times 6.07\,\text{MHz}$ [6]。本实验中的激光冷却、光镊成像主要使用此跃迁。
+    \item \textbf{D1 线} ($5^2S_{1/2} \rightarrow 5^2P_{1/2}$): 波长约为 $795\,\text{nm}$ (\SI{794.979}{\nm})，自然线宽 $\Gamma \approx 2\pi \times 5.75\,\text{MHz}$。
+    \item \textbf{D2 线} ($5^2S_{1/2} \rightarrow 5^2P_{3/2}$): 波长约为 $780\,\text{nm}$ (\SI{780.241}{\nm})，自然线宽 $\Gamma \approx 2\pi \times 6.07\,\text{MHz}$ 。本实验中的激光冷却、光镊成像主要使用此跃迁。
 \end{itemize}
 
 进一步考虑原子核自旋 $\mathbf{I}$ (对于 $^{87}\text{Rb}$，$I=3/2$) 与电子总角动量 $\mathbf{J}$ 的磁偶极相互作用，能级发生超精细分裂 (Hyperfine Splitting)，分裂出的子能级由总角动量量子数 $F = |J-I|, \dots, J+I$ 标记。
@@ -57,28 +33,38 @@
 
 
 \section{光与原子的相干相互作用} 
-在量子模拟实验中，无论是冷却、囚禁，还是量子比特的门操作，其核心本质都是电磁场与原子内部能级的相互作用。理解这一过程的动力学演化，是构建整个实验体系的第一步。
+在量子模拟实验中，无论是冷却、囚禁，还是量子比特的门操作，其核心本质都是激光/电磁场与原子内部能级的相互作用。理解这一过程的动力学演化，是构建整个实验体系的第一步。
 
 \subsection{两能级近似与光学布洛赫方程}
-处理中性原子（如碱金属原子 $^{87}\text{Rb}$ 或碱土金属原子 $^{88}\text{Sr}$）与激光场的相互作用时，通常采用半经典近似（Semi-classical approximation）。在此框架下，原子的内部自由度被量子化描述，而高强度的激光场则被视为经典的电磁波。
+处理中性原子与激光场的相互作用时，通常采用半经典近似（Semi-classical approximation）。在此框架下，原子的内部自由度被量子化描述，而高强度的激光场则被视为经典的电磁波。
 
 考虑一个理想的二能级原子系统，其基态为 $|g\rangle$，激发态为 $|e\rangle$，本征能量分别为 $E_g$ 和 $E_e$，能级间隔为 $\hbar\omega_0 = E_e - E_g$。原子受到一束频率为 $\omega_L$、偏振为 $\hat{\epsilon}$ 的单色激光场作用，其电场形式可表示为：
 
-$$\mathbf{E}(t) = \mathbf{E}_0 \cos(\omega_L t + \phi) = \frac{1}{2} \mathbf{E}_0 (e^{-i(\omega_L t + \phi)} + e^{i(\omega_L t + \phi)})$$
+\begin{equation}
+\mathbf{E}(t) = \mathbf{E}_0 \cos(\omega_L t + \phi) = \frac{1}{2} \mathbf{E}_0 (e^{-i(\omega_L t + \phi)} + e^{i(\omega_L t + \phi)})
+\end{equation}
 系统的总哈密顿量 $H$ 由原子自由哈密顿量 $H_0$ 和相互作用哈密顿量 $H_{\text{int}}$ 组成。选取基态能量为零点，则 $H_0 = \hbar\omega_0 |e\rangle\langle e|$。在偶极近似（Dipole Approximation）下，原子尺寸远小于光波波长，相互作用项由电偶极矩算符 $\mathbf{d} = -e\mathbf{r}$ 与电场的耦合决定：
 
-$$H_{\text{int}} = -\mathbf{d} \cdot \mathbf{E}(t)$$
+\begin{equation}
+H_{\text{int}} = -\mathbf{d} \cdot \mathbf{E}(t)
+\end{equation}
+
 由于原子本征态具有确定的宇称（Parity），偶极算符的对角元为零（$\langle g|\mathbf{d}|g\rangle = \langle e|\mathbf{d}|e\rangle = 0$），非对角元描述了能级间的跃迁耦合。定义跃迁偶极矩 $\mu_{eg} = \langle e|\mathbf{d} \cdot \hat{\epsilon}|g\rangle$，则哈密顿量可写为：
 
-$$H = \hbar\omega_0 |e\rangle\langle e| - \mu_{eg} E_0 \cos(\omega_L t + \phi) (|e\rangle\langle g| + |g\rangle\langle e|)$$
+\begin{equation}
+H = \hbar\omega_0 |e\rangle\langle e| - \mu_{eg} E_0 \cos(\omega_L t + \phi) (|e\rangle\langle g| + |g\rangle\langle e|)
+\end{equation}
 此时引入拉比频率（Rabi Frequency） $\Omega \equiv \frac{\mu_{eg} E_0}{\hbar}$，它表征了光场驱动原子在两个能级间跃迁的耦合强度。
 
 \subsection{旋波近似 (Rotating Wave Approximation) 与相互作用绘景}
-为了求解含时薛定谔方程，我们需要消除哈密顿量中的快速振荡项。首先将电场的余弦项展开为指数形式，此时哈密顿量包含两类频率成分：一类是频率为 $\omega_L - \omega_0$ 的近共振项（detuning term），另一类是频率为 $\omega_L + \omega_0$ 的反向旋转项（counter-rotating term）。
+为了求解含时薛定谔方程，需要消除哈密顿量中的快速振荡项。首先将电场的余弦项展开为指数形式，此时哈密顿量包含两类频率成分：一类是频率为 $\omega_L - \omega_0$ 的近共振项（detuning term），另一类是频率为 $\omega_L + \omega_0$ 的反向旋转项（counter-rotating term）。
 当激光频率接近原子共振频率（$|\omega_L - \omega_0| \ll \omega_L + \omega_0$）且驱动强度远小于跃迁频率（$\Omega \ll \omega_0$）时，反向旋转项对系统演化的平均贡献趋于零，可以被忽略。这就是著名的旋波近似（RWA）。
-为了消除哈密顿量的显式时间依赖性，我们将系统转换到一个以激光频率 $\omega_L$ 旋转的参考系中（Rotating Frame）。通过幺正变换 $U(t) = e^{i\omega_L t |e\rangle\langle e|}$，在RWA近似下，系统的有效哈密顿量简化为非含时形式：
+为了消除哈密顿量的显式时间依赖性，将系统转换到一个以激光频率 $\omega_L$ 旋转的参考系中（Rotating Frame）。通过幺正变换 $U(t) = e^{i\omega_L t |e\rangle\langle e|}$，在RWA近似下，系统的有效哈密顿量简化为非含时形式：
 
-$$H_{\text{RWA}} = -\frac{\hbar}{2} \begin{pmatrix} 0 & \Omega \\ \Omega^* & -2\Delta \end{pmatrix}$$
+\begin{equation}
+H_{\text{RWA}} = -\frac{\hbar}{2} \begin{pmatrix} 0 & \Omega \\ \Omega^* & -2\Delta \end{pmatrix}
+\end{equation}
+
 其中，失谐量定义为 $\Delta = \omega_L - \omega_0$。该哈密顿量的本征值和本征态描述了原子在光场驱动下的相干演化。当 $\Delta = 0$ 时，系统处于共振驱动，原子在基态和激发态之间以频率 $\Omega$ 进行周期性的全布居数翻转，即拉比振荡（Rabi Oscillation）。当存在非零失谐时，振荡频率变为广义拉比频率 $\Omega_{\text{eff}} = \sqrt{\Omega^2 + \Delta^2}$，且最大激发几率被抑制为 $\Omega^2 / \Omega_{\text{eff}}^2$ 8。
 这一物理图像是理解单量子比特门操作的基础。例如，通过控制激光脉冲的持续时间 $\tau$ 使得 $\Omega \tau = \pi$，即可实现基态到激发态的翻转（$\pi$ 脉冲），对应于量子逻辑门中的 Pauli-X 操作；而控制相位 $\phi$ 则可实现绕不同轴的旋转。
 
@@ -86,51 +72,69 @@ $$H_{\text{RWA}} = -\frac{\hbar}{2} \begin{pmatrix} 0 & \Omega \\ \Omega^* & -2\
 在真实的量子模拟实验中，原子不仅受到相干光场的驱动，还会通过自发辐射（Spontaneous Emission）与真空电磁场发生不可逆的相互作用，导致量子态的退相干。单纯的波函数描述无法涵盖这一非幺正过程，因此必须引入密度矩阵算符 $\rho = \sum_i P_i |\psi_i\rangle\langle\psi_i|$ 来描述系统的混合态性质。
 密度矩阵的演化遵循刘维尔-冯·诺依曼方程（Liouville-von Neumann equation），并需加入描述耗散过程的林德布拉德（Lindblad）项 $\mathcal{L}(\rho)$：
 
-$$\frac{d\rho}{dt} = -\frac{i}{\hbar} + \mathcal{L}(\rho)$$
+\begin{equation}
+\frac{d\rho}{dt} = -\frac{i}{\hbar} + \mathcal{L}(\rho)
+\end{equation}
 对于二能级原子，耗散项由自发辐射速率 $\Gamma$（自然线宽）主导。展开该方程可得到著名的光学布洛赫方程（Optical Bloch Equations, OBE）：
 
-$$\begin{aligned} \frac{d\rho_{ee}}{dt} &= -\Gamma \rho_{ee} + \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{gg}}{dt} &= \Gamma \rho_{ee} - \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{ge}}{dt} &= -\left(\frac{\Gamma}{2} + i\Delta\right)\rho_{ge} + \frac{i\Omega}{2}(\rho_{ee} - \rho_{gg}) \end{aligned}$$
-OBE 方程组揭示了原子动力学的两个关键时间尺度：布居数弛豫时间 $T_1 = 1/\Gamma$ 和偶极相干弛豫时间 $T_2 = 2/\Gamma$。在稳态条件下（$d\rho/dt = 0$），我们可以求解激发态布居数 $\rho_{ee}$，进而得到光子散射速率 $R_{\text{sc}} = \Gamma \rho_{ee}$：
+\begin{equation}
+\begin{aligned} \frac{d\rho_{ee}}{dt} &= -\Gamma \rho_{ee} + \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{gg}}{dt} &= \Gamma \rho_{ee} - \frac{i\Omega}{2}(\rho_{ge} - \rho_{eg}) \\ \frac{d\rho_{ge}}{dt} &= -\left(\frac{\Gamma}{2} + i\Delta\right)\rho_{ge} + \frac{i\Omega}{2}(\rho_{ee} - \rho_{gg}) \end{aligned}
+\end{equation}
+OBE 方程组揭示了原子动力学的两个关键时间尺度：布居数弛豫时间 $T_1 = 1/\Gamma$ 和偶极相干弛豫时间 $T_2 = 2/\Gamma$。在稳态条件下（$d\rho/dt = 0$），可以求解激发态布居数 $\rho_{ee}$，进而得到光子散射速率 $R_{\text{sc}} = \Gamma \rho_{ee}$：
 
-$$R_{\text{sc}} = \frac{\Gamma}{2} \frac{s_0}{1 + s_0 + (2\Delta/\Gamma)^2}$$
+\begin{equation}
+R_{\text{sc}} = \frac{\Gamma}{2} \frac{s_0}{1 + s_0 + (2\Delta/\Gamma)^2}
+\end{equation}
 其中 $s_0 = 2\Omega^2/\Gamma^2 = I/I_{\text{sat}}$ 为共振饱和参数，$I_{\text{sat}}$ 为饱和光强。这一公式不仅解释了共振荧光光谱的洛伦兹线型，也是设计原子探测方案和评估退相干误差的理论依据。在量子模拟中，为了保持量子态的长寿命，通常需要使原子处于“暗态”或远失谐光阱中，以极力压制 $R_{\text{sc}}$。
 
 \subsection{光偶极力与光镊原理}
 光镊利用光场诱导的原子偶极矩与光场本身的相互作用势（AC Stark Shift）来囚禁原子。对于基态原子，偶极势 $U_{\text{dip}}(\mathbf{r})$ 与局域光强 $I(\mathbf{r})$ 成正比：
 
-$$U_{\text{dip}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\omega_0^3} \left( \frac{\Gamma}{\Delta} \right) I(\mathbf{r})$$
+\begin{equation}
+U_{\text{dip}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\omega_0^3} \left( \frac{\Gamma}{\Delta} \right) I(\mathbf{r})
+\end{equation}
 其中 $\Delta = \omega_L - \omega_0$ 为激光失谐量。
 红失谐陷阱 ($\Delta < 0$)：$U_{\text{dip}} < 0$，势能最小值位于光强最大处（焦点），原子被吸引至光束中心。这是最常用的光镊形式。
 蓝失谐陷阱 ($\Delta > 0$)：$U_{\text{dip}} > 0$，原子被排斥出光强高处，通常用于构建空心光束阱或瓶子阱（Bottle Beam Trap），优势在于囚禁区域光强接近零，相干性更好。
 与偶极势伴随的是光子散射率 $\Gamma_{\text{sc}}$，它会导致原子的加热和量子态退相干：
 
-$$\Gamma_{\text{sc}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\hbar\omega_0^3} \left( \frac{\Gamma}{\Delta} \right)^2 I(\mathbf{r})$$
-关键设计原则：对比两式可知，$U_{\text{dip}} \propto I/\Delta$ 而 $\Gamma_{\text{sc}} \propto I/\Delta^2$。为了在获得足够阱深（通常 ~1 mK 以抵抗热运动）的同时最小化散射率，实验上必须选择极大的失谐量 $\Delta$，并相应提高激光功率 $I$。例如，对于 780 nm 的 Rb 原子，常使用 808 nm 或 840 nm 的高功率激光进行囚禁。
+\begin{equation}
+\Gamma_{\text{sc}}(\mathbf{r}) \approx \frac{3\pi c^2}{2\hbar\omega_0^3} \left( \frac{\Gamma}{\Delta} \right)^2 I(\mathbf{r})
+\end{equation}
+
+设计原则：对比两式可知，$U_{\text{dip}} \propto I/\Delta$ 而 $\Gamma_{\text{sc}} \propto I/\Delta^2$。为了在获得足够阱深（通常 $\sim$\SI{1}{\milli\K}以抵抗热运动）的同时最小化散射率，实验上必须选择极大的失谐量 $\Delta$，并相应提高激光功率 $I$。
 
 \section{激光冷却与俘获理论}
-将原子从室温下的热运动状态（速度约几百米每秒）减速并囚禁至微开尔文量级（速度约几厘米每秒），是进行精密量子操控的前置条件。这一过程依赖于光子动量传递产生的辐射压力。
-
-
+将原子从室温下的热运动状态（速度约几百米每秒）减速并囚禁至 $\sim$\SI{}{\micro\K}量级（速度约几厘米每秒），是进行精密量子操控的前置条件。这一过程依赖于光子动量传递产生的辐射压力。
 
 \subsection{多普勒冷却与磁光阱（MOT）}
-多普勒冷却机制：当原子在两束对向传播的激光场中运动时，若激光频率略低于原子共振频率（红失谐，$\delta < 0$），由于多普勒效应，原子会更倾向于吸收迎面而来的光子。吸收光子会获得一个反向的动量反冲 $\hbar k$，而随后的自发辐射是各向同性的，平均动量改变量为零。这一过程产生了速度依赖的阻尼力 $\mathbf{F} \approx -\alpha \mathbf{v}$，将原子像在粘稠液体中一样“冷却”下来，故称为“光学黏团”（Optical Molasses）。
+\subsubsection{多普勒冷却机制}
+当原子在两束对向传播的激光场中运动时，若激光频率略低于原子共振频率（红失谐，$\delta < 0$），由于多普勒效应，原子会更倾向于吸收迎面而来的光子。吸收光子会获得一个反向的动量反冲 $\hbar k$，而随后的自发辐射是各向同性的，平均动量改变量为零。这一过程产生了速度依赖的阻尼力 $\mathbf{F} \approx -\alpha \mathbf{v}$，将原子像在粘稠液体中一样“冷却”下来，故称为“光学粘团”（Optical Molasses）。
 多普勒冷却存在一个理论极限温度，即多普勒温度 $T_D$，由加热效应（光子反冲引起的随机游走）与冷却速率的平衡决定：
 
-$$T_D = \frac{\hbar\Gamma}{2k_B}$$
-对于 $^{87}\text{Rb}$ 原子，$T_D \approx 146 \, \mu\text{K}$。
-磁光阱 (MOT) 的囚禁力：单纯的多普勒冷却只能减速原子，无法限制其空间位置。磁光阱通过引入四极磁场（Quadrupole Magnetic Field，梯度为 $dB/dz$），利用塞曼效应（Zeeman Effect）将原子的内部能级与空间位置关联起来。在非均匀磁场中，原子的跃迁频率随位置发生变化。配合圆偏振光的选择定则（$\sigma^+ / \sigma^-$），使得偏离中心的原子优先吸收将其推回中心的光子，产生位置依赖的回复力 $\mathbf{F} \approx -k \mathbf{r}$。因此，MOT 同时提供了冷却和囚禁功能，是制备冷原子团的标准起始步骤。
+\begin{equation}
+T_D = \frac{\hbar\Gamma}{2k_B}
+\end{equation}
+
+对于 $^{87}\text{Rb}$ 原子，$T_D \approx \SI{146}{\micro\K}$。
+
+\subsubsection{磁光阱 (MOT) 的囚禁力}
+单纯的多普勒冷却只能减速原子，无法限制其空间位置。磁光阱通过引入四极磁场（Quadrupole Magnetic Field，梯度为 $dB/dz$），利用塞曼效应（Zeeman Effect）将原子的内部能级与空间位置关联起来。在非均匀磁场中，原子的跃迁频率随位置发生变化。配合圆偏振光的选择定则（$\sigma^+ / \sigma^-$），使得偏离中心的原子优先吸收将其推回中心的光子，产生位置依赖的回复力 $\mathbf{F} \approx -k \mathbf{r}$。因此，MOT 同时提供了冷却和囚禁功能，是制备冷原子团的标准起始步骤。
 
 
 \subsection{亚多普勒冷却机制（PGC）}
 实验发现，在 MOT 阶段之后，通过精细调节光场，可以获得远低于多普勒极限 $T_D$ 的温度（约 $10-20 \, \mu\text{K}$）。这种机制被称为亚多普勒冷却，其核心物理图像是西西弗斯冷却（Sisyphus Cooling）或偏振梯度冷却。
-在三维空间中，多束激光的干涉会形成复杂的偏振梯度（例如 lin $\perp$ lin 配置）。这导致原子的塞曼子能级（Zeeman sublevels）产生空间调制的交流斯塔克位移（Light Shift）。
+在三维空间中，多束激光的干涉会形成复杂的偏振梯度（例如 lin $\perp$ lin 配置）。这导致原子的塞曼子能级（Zeeman sublevels）产生空间调制的交流斯塔克位移（AC Stark Light Shift）。
 物理图像：运动的原子在光场势能面上“爬坡”，将动能转化为势能。
 光泵浦效应：当原子运动到势能最高点附近时，光泵浦过程倾向于将其抽运到能量较低的子能级（势能谷底）。
 能量耗散：原子周而复始地进行“爬坡-被泵浦回谷底”的过程，如同希腊神话中的西西弗斯，不断消耗动能。
 Cohen-Tannoudji 等人的理论指出，PGC 的极限温度不再受限于 $\Gamma$，而是受限于光子反冲能量，即反冲极限（Recoil Limit） $T_R$：
 
-$$T_R = \frac{\hbar^2 k^2}{2mk_B}$$
-对于 $^{87}\text{Rb}$，$T_R \approx 360 \, \text{nK}$。在实际操作中，通常在 MOT 加载完成后，关闭磁场，增大激光失谐量并降低光强，进行 5-10 ms 的 PGC 过程，将原子团温度降低至 $30 \mu\text{K}$ 左右，这对后续单原子在微观光镊中的高效装载至关重要。
+\begin{equation}
+T_R = \frac{\hbar^2 k^2}{2mk_B}
+\end{equation}
+
+对于 $^{87}\text{Rb}$，$T_R \approx \SI{360}{\nano\K}$。在实际操作中，通常在 MOT 加载完成后，关闭磁场，增大激光失谐量并降低光强，进行 5-\SI{10}{\ms} 的 PGC 过程，将原子团温度降低至 \SI{30}{\micro\K} 左右，这对后续单原子在微观光镊中的高效装载至关重要。
 
 \subsection{碰撞阻塞效应与光辅助碰撞}
 
@@ -138,7 +142,14 @@ $$T_R = \frac{\hbar^2 k^2}{2mk_B}$$
 
 \subsubsection{光致碰撞}
 
-当光镊的束腰半径极小（通常 $w_0 < 1 \, \mu\text{m}$）时，势阱的有效体积非常小。如果在 MOT 加载过程中，第二个原子进入了已经存在一个原子的光镊，两个原子在近共振冷却光的辅助下会发生强烈的光致碰撞（Light-assisted Collision）。
+当光镊的束腰半径极小（通常 $w_0 < \SI{1}{\um}$）时，势阱的有效体积非常小。如果在 MOT 加载过程中，第二个原子进入了已经存在一个原子的光镊，两个原子在近共振冷却光的辅助下会发生强烈的光致碰撞（Light-assisted Collision）。
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.6\linewidth]{chapters/chapter_02/figure/model of light-assisted collisions.png}
+    \caption{光辅助碰撞的一维模型示意图}
+    \label{ch2:fig:model_of_lac}
+\end{figure}
 
 在半经典模型中，该碰撞过程可通过两个原子在不同分子势能面上的跃迁来描述。设两个基态原子间的相互作用势为 $U_g(R)$，在长程条件下（核间距 $R$ 较大时）由范德瓦尔斯力主导，近似为 $U_g(R) \approx -C_6/R^6$。当其中一个原子被激发时，形成的第一激发态分子势（例如 $S+P$ 态）的长程渐近线为：
 \begin{equation}
@@ -156,13 +167,14 @@ R_c = \left( \frac{C_3}{\hbar |\Delta|} \right)^{1/3}
 P_{LZ} = \exp\left[ -\frac{2\pi\Omega^2}{3v|\Delta|} \left( \frac{C_3}{\hbar|\Delta|} \right)^{1/3} \right]
 \end{equation}
 其中，$v$ 为原子的相对径向速度，$\Omega$ 为与光强相关的拉比频率。
-\todo{需要补一张能级图}
+
+
 
 \textbf{碰撞释放的能量推导}：发生非弹性碰撞时，原子对在 $R_c$ 处被激发，由于处于吸引势面上，两个原子会相互加速靠近并向势阱深处滑落，直至在更近的距离 $R_s$ 处发生自发辐射回到基态。该过程释放的内能转化为原子对的动能 $E_r$，其大小等于 $R_c$ 与 $R_s$ 处的势能差：
 \begin{equation}
 E_r = U_e(R_c) - U_e(R_s) \approx \frac{C_3}{R_s^3} - \hbar|\Delta|
 \end{equation}
-由于自发辐射发生的位置 $R_s$ 通常极小（$R_s \ll R_c$），其对应的能量高达 $10^{-3} \sim 10^{-2} \, \text{K}$ 量级。这个由于红失谐光诱导的、释放量巨大且不受控的能量 $E_r$，远大于典型光镊的势阱深度 $U_0$（~1 mK）。结果是，只要发生此类碰撞，两原子均会克服势阱限制，发生双双损失（2-0 损失）。
+由于自发辐射发生的位置 $R_s$ 通常极小（$R_s \ll R_c$），其对应的能量高达 $10^{-3} \sim 10^{-2} \SI{}{\K}$ 量级。这个由于红失谐光诱导的、释放量巨大且不受控的能量 $E_r$，远大于典型光镊的势阱深度 $U_0$（~\SI{1}{\milli\K}）。结果是，只要发生此类碰撞，两原子均会克服势阱限制，发生双双损失（2-0 损失）。
 
 \subsubsection{动力学速率方程与装载极限}
 
@@ -184,13 +196,25 @@ P_1 \approx \frac{1}{1 + 0 + 1} = 0.5
 \end{equation}
 
 \subsection{光辅助碰撞的高阶机制}
-\label{subsec:advanced_collisions}
+\label{ch2:sec:advanced_collisions}
 
-前文所述的红失谐光辅助碰撞虽然实现了单原子的亚泊松装载，但其 50\% 的装载率极限限制了大规模阵列的填充效率。为了进一步提升装载率，我们引入了基于 D1 线 ($5S_{1/2} \rightarrow 5P_{1/2}$) 的 $\Lambda$-增强型灰光学黏团 ($\Lambda$-enhanced gray molasses, $\Lambda$-GM) 技术。该技术利用两束相干光（冷却光与回泵光）在 $\Lambda$ 型能级系统中形成相干暗态 (Coherent Dark State)。当原子处于暗态时，它不再散射光子，从而极大地抑制了由光散射引起的加热和二体碰撞损失。同时，由于偏振梯度的存在，处于亮态的原子在运动过程中会通过西西弗斯冷却机制被冷却并泵浦回暗态。这种机制允许我们在光镊中对原子进行极其高效的冷却，同时蓝失谐的 D1 光场诱导的碰撞能够有效地将 $N>1$ 的原子对减少为 $N=1$，最终实现 $>80\%$ 的亚泊松装载率。
+% $\Lambda$-增强型gray molasses的原理可以如下描述。两个基态$\ket{g_1}$和$\ket{g_2}$之间通过中间激发态$\ket{e}$进行拉曼耦合，单光子失谐为$\Delta$，双光子失谐对于速度为0的原子为0。$\ket{g_1}\to\ket{e}$和$\ket{g_2}\to\ket{e}$的拉比频率为$\Omega_1,\Omega_2$。在$\Delta\gg\Omega_1,\Omega_2$时可以等效为$\ket{g_1}$和$\ket{g_2}$之间的二能级系统：
+% \begin{align}
+% \hat{H}=
+% \begin{pmatrix} \frac{|\Omega_1|^2}{4\Delta} & \frac{\Omega_1^*\Omega_2}{4\Delta} \\ \frac{\Omega_1\Omega_2^*}{4\Delta} & \frac{|\Omega_2|^2}{4\Delta} \end{pmatrix}
+% \end{align}
+% 该体系存在一个暗态：$\ket{D}=\frac{\Omega_2\ket{g_1}-\Omega_1\ket{g_2}}{\sqrt{|\Omega_1|^2+|\Omega_2|^2}}$，暗态不与光场有任何耦合，其能量为0。对于速度为v的原子，由于多普勒效应的存在，双光子失谐将不再是0，而是$\delta=\frac{v}{c}\nu_{12}$，$\nu_{12}$表示$\ket{g_1}$和$\ket{g_2}$之间的共振频率。此时哈密顿量变为：
+% \begin{align}
+% \hat{H}=
+% \begin{pmatrix} \frac{|\Omega_1|^2}{4\Delta} & \frac{\Omega_1^*\Omega_2}{4\Delta} \\ \frac{\Omega_1\Omega_2^*}{4\Delta} & \frac{|\Omega_2|^2}{4\Delta}+\delta \end{pmatrix}
+% \end{align}
+% 在此情况下，暗态将不再存在。在$\delta\ll\frac{|\Omega_1|^2}{4\Delta},\frac{|\Omega_2|^2}{4\Delta}$的情况下，近似到一阶，对应暗态的那个能量分支与原子速度v的关系为：$E_{dark}=\frac{|\Omega_1|^2}{|\Omega_1|^2+|\Omega_2|^2}\delta$，而亮态的能量为$E_{bright}=\frac{|\Omega_1|^2+|\Omega_2|^2}{4\Delta}+\frac{|\Omega_2|^2}{|\Omega_1|^2+|\Omega_2|^2}\delta$。在$\Delta>0$时，亮态的能量高于暗态，原子在光场中运动过程中总是会从亮态被抽运到暗态，自发辐射的光子能量多于吸收的光子能量，相当于原子损失了内态能量。之后热运动又会导致原子从暗态逐渐爬坡转化到亮态，这个过程中原子会被减速，从而实现冷却效果。
+
+前文所述的红失谐光辅助碰撞虽然实现了单原子的亚泊松装载，但其 50\% 的装载率极限限制了大规模阵列的填充效率。为了进一步提升装载率，引入了基于 D1 线 ($5S_{1/2} \rightarrow 5P_{1/2}$) 的 $\Lambda$-增强型灰光学粘团 ($\Lambda$-enhanced gray molasses, $\Lambda$-GM) 技术。该技术利用两束相干光（冷却光与回泵光）在 $\Lambda$ 型能级系统中形成相干暗态 (Coherent Dark State)。当原子处于暗态时，它不再散射光子，从而极大地抑制了由光散射引起的加热和二体碰撞损失。同时，由于偏振梯度的存在，处于亮态的原子在运动过程中会通过西西弗斯冷却机制被冷却并泵浦回暗态。这种机制允许在光镊中对原子进行极其高效的冷却，同时蓝失谐的 D1 光场诱导的碰撞能够有效地将 $N>1$ 的原子对减少为 $N=1$，最终实现 $>70\%$ 的亚泊松装载率。
 
 \subsubsection{兰姆-迪克（Lamb-Dicke）区中的量子化冷却模型}
 
-在自由空间中，灰光学黏团（Gray Molasses, GM）通常被描述为经典原子在空间周期性变化的偏振梯度中运动的西西弗斯冷却冷却。然而，当原子被囚禁在光镊中时，由于其被限制的运动尺度远小于冷却光的波长，自由空间模型便不再适用，必须引入兰姆-迪克（Lamb-Dicke, LD）机制下的量子化运动模型。
+在自由空间中，灰光学粘团（Gray Molasses, GM）通常被描述为经典原子在空间周期性变化的偏振梯度中运动的西西弗斯冷却冷却。然而，当原子被囚禁在光镊中时，由于其被限制的运动尺度远小于冷却光的波长，自由空间模型便不再适用，必须引入兰姆-迪克（Lamb-Dicke, LD）机制下的量子化运动模型。
 
 首先定义光镊中原子的兰姆-迪克参数 $\eta_{LD}$，它表征了原子反冲能量与光镊囚禁频率能量的比值：
 \begin{equation}
@@ -207,25 +231,37 @@ e^{ik\hat{z}} \approx 1 + ik\hat{z} = 1 + i\eta_{LD}(\hat{a} + \hat{a}^\dagger)
 H_{AF} \approx \Omega \hat{\sigma}_+ + \eta_{LD} \Omega \hat{\sigma}_+(\hat{a} + \hat{a}^\dagger) + h.c.
 \end{equation}
 
+
+
 这一哈密顿量揭示了光镊中 $\Lambda$-GM 的两步核心冷却物理图像：
+
 1. 零阶项（内态耦合与缀饰态形成）：$\Omega \hat{\sigma}_+$ 项仅耦合原子的内态而不改变其运动量子数 $n$。在双光子拉曼共振（单光子蓝失谐 $\Delta > 0$）条件下，基态能级被相干叠加，形成暗态 $|D, n\rangle$ 和亮态 $|B, n\rangle$。由于光场为蓝失谐，亮态会因交流斯塔克效应（AC Stark effect）产生向上的能级移动 $\Delta E$，而暗态不受影响。
-2. 一阶项（运动态耦合与声子耗散）：由于 $\eta_{LD} \Omega \hat{\sigma}_+ \hat{a}$ 耦合项的存在，相邻运动能级的暗态与亮态之间形成了相干拉曼跃迁机制。冷却循环表现为：处于暗态的原子 $|D, n\rangle$ 通过该耦合项跃迁至减少了一个运动量子的亮态 $|B, n-1\rangle$；随后，原子通过自发辐射过程迅速从亮态衰变回处于相同运动能级的暗态 $|D, n-1\rangle$，完成一个冷却循环并带走一个运动量子。
+
+2. 一阶项（运动态耦合与声子耗散）：由于 $\eta_{LD} \Omega \hat{\sigma}_+ \hat{a}$ 耦合项的存在，相邻运动能级的暗态与亮态之间形成了相干拉曼跃迁机制。冷却循环表现为：处于暗态的原子 $|D, n\rangle$ 通过该耦合项跃迁至减少了一个运动量子的亮态 $|B, n-1\rangle$；随后，原子通过自发辐射过程迅速从亮态衰变回处于相同运动能级的暗态 $|D, n-1\rangle$，完成一个冷却循环并带走一个运动声子。
+
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.6\linewidth]{chapters/chapter_02/figure/model of Lambda GM.png}
+    \caption{灰光学粘团的冷却过程示意图}
+    \label{ch2:fig:model_of_lambda_GM}
+\end{figure}
 
 这种从 $|D, n\rangle$ 到 $|B, n-1\rangle$ 的拉曼转移过程在共振时效率最高，因此达到最优冷却效果的物理条件为：亮态的交流斯塔克频移等于光镊的囚禁频率，即 $\Delta E = \hbar\omega$。
 
 \subsubsection{蓝失谐光辅助碰撞（LAC）的增强装载机制}
 
 $\Lambda$-GM 不仅仅是一种高效的冷却手段，其蓝失谐的特性还完美契合了光镊中的单原子增强装载机制。
-在 $\Lambda$-GM 冷却与装载过程中，蓝失谐的冷却光会在原子对之间诱导出非弹性的光辅助碰撞（Light-Assisted Collisions, LAC）。当光镊中捕获了两个基态原子时，蓝失谐光场（相对于原子共振线失谐量为 $\Delta$）会将基态原子对激发至排斥型的分子势能面上。
+在 $\Lambda$-GM 冷却与装载过程中，蓝失谐的冷却光会在原子对之间诱导出非弹性的光辅助碰撞。当光镊中捕获了两个基态原子时，蓝失谐光场（相对于原子共振线失谐量为 $\Delta$）会将基态原子对激发至排斥型的分子势能面上。
 
 碰撞后，由于分子势的排斥作用，原子对在分离时会精确获得大小为 $\hbar\Delta$ 的动能。通过精心调节冷却光的单光子蓝失谐量 $\Delta$ 以及光镊的阱深，可以使得单次碰撞所释放的能量刚好足以将一个原子踢出光镊，而剩余能量不足以使得第二个原子逃逸。这种能量可控的“单步”碰撞损耗（区别于红失谐碰撞中不可控的巨大能量释放导致两个原子同时逃逸），精确地将 $N>1$ 的原子态转化为 $N=1$ 的单原子态，从而突破了泊松分布下 50\% 的装载极限，使得光镊的单原子装载率得以实现亚泊松分布（可达到 70\% 乃至更高）。
 
-\section{静态光镊与动态输运}
-\label{sec:light_shaping}
-为了实现数字化（Digital）的量子模拟，我们需要对单个原子进行独立的寻址和控制。基于强聚焦远失谐光束的微观光镊（Optical Tweezer）阵列是目前最主流的技术方案。
+\section{静态光镊阵列与动态重排光镊}
+\label{ch2:sec:light_shaping}
+为了实现数字化（Digital）的量子模拟，需要对单个原子进行独立的寻址和控制。基于强聚焦远失谐光束的微观光镊（Optical Tweezer）阵列是目前最主流的技术方案。
 
-\subsection{静态光镊生成}
-
+\subsection{静态光镊阵列生成}
+\label{ch2:sec:hologram}
 空间光调制器 (SLM) 是一种能够对光束波前进行像素级相位调制的器件。在全息光镊系统中，SLM 通常放置于光学系统的后焦面（傅里叶面）。根据标量衍射理论，当入射激光经过 SLM 调制后，经由高数值孔径透镜的傅里叶变换作用，可以在前焦面（原子平面/捕获面）生成任意几何构型的光阱阵列。
 
 假设入射到 SLM 平面的光场具有均匀或高斯振幅分布 $A_{\text{in}}(x,y)$，SLM 像素级加载的相位全息图为 $\phi(x,y)$，则透镜焦平面处的复振幅分布 $U(u,v)$ 可表示为 SLM 平面光场的傅里叶变换：
@@ -246,7 +282,7 @@ $\Lambda$-GM 不仅仅是一种高效的冷却手段，其蓝失谐的特性还�
     \end{equation}
 \end{itemize}
 
-尽管标准 GS 算法具有较高的整体衍射效率，但在生成高对称性或任意排列的点阵光镊时，阵列中各个光阱的强度均匀性通常较差。为了提高阵列中各个光镊强度的均匀性，我们采用了加权 GS 算法 (Weighted GS, WGS)。该算法引入了一个与目标光阱对应的动态权重系数 $w_m$。
+尽管标准 GS 算法具有较高的整体衍射效率，但在生成高对称性或任意排列的点阵光镊时，阵列中各个光阱的强度均匀性通常较差。为了提高阵列中各个光镊强度的均匀性，采用了加权 GS 算法 (Weighted GS, WGS)。该算法引入了一个与目标光阱对应的动态权重系数 $w_m$。
 
 设 $M$ 个目标光阱的索引为 $m = 1, 2, \dots, M$，在第 $k$ 次迭代后，焦平面上第 $m$ 个光阱处的实际计算振幅记为 $A_m^{(k)} = |U^{(k)}(u_m, v_m)|$。WGS 算法在焦平面约束步骤中，不再使用统一的目标振幅，而是引入反馈增益来动态调整目标振幅权重：
 \begin{equation}
@@ -257,7 +293,7 @@ $\Lambda$-GM 不仅仅是一种高效的冷却手段，其蓝失谐的特性还�
 通过这一动态权重更新机制，更新后的焦平面光阱目标振幅变为 $w_m^{(k)} A_{\text{target}, m}$。该反馈机制能够根据每次迭代后各点强度的偏差，人为地放大较暗光阱的权重并抑制较亮光阱的权重。WGS 算法经过数十次迭代后，不仅能高保真地生成任意几何形状的光镊阵列，还能通过权重的自适应调节有效补偿光学系统的像差和非均匀性，使得光阱强度的不均匀度（Uniformity）显著降低。
 
 
-\subsection{全息光镊生成中的非理想效应：像素串扰与零级光干涉}
+\subsection{光镊阵列生成中的非理想效应：像素串扰与零级光干涉}
 尽管加权 GS (WGS) 算法可以在理论和数值计算上生成高度均匀的光镊阵列，但在实际光路中，空间光调制器 (SLM) 的物理特性会引入标量衍射模型无法覆盖的非理想效应。在生成例如 $10 \times 10$ 等间距正方形阵列这类高对称性点阵时，实验中常会观察到显著的背景散斑与光斑间的互调串扰。这种现象主要源于 SLM 硬件的两个固有缺陷：零级光干涉 (Zero-order spot) 与像素串扰 (Pixel crosstalk)。
 
 \begin{itemize}
@@ -272,22 +308,22 @@ $\Lambda$-GM 不仅仅是一种高效的冷却手段，其蓝失谐的特性还�
 
 由于这些非理想效应主要根源于当前 SLM 器件的底层物理结构，理想的标量衍射理论难以对其进行精确的解析建模与预补偿。因此，在不引入极其复杂的系统级硬件级联（如多重空间滤波系统）或耗时的原位闭环反馈校准的情况下，此类互调和串扰现象在当前的实验配置下仍然是一个难以彻底消除的系统性限制。
 
-\subsection{动态原子输运}
+\subsection{动态重排光镊}
 声光偏转器 (AOD) 提供了对光镊位置的快速、动态控制，是实现原子重排 (Atom Rearrangement) 的核心器件。AOD 基于声光效应，当射频信号 (RF) 加载到晶体上时，会在晶体内形成移动的折射率光栅。根据布拉格衍射方程，一级衍射光的偏转角度 $\theta$ 与 RF 频率 $f$ 成正比：
 \begin{equation}
 \Delta \theta = \frac{\lambda}{v_s} \Delta f
 \end{equation}
-其中 $\lambda$ 为光波长，$v_s$ 为晶体中的声速。通过改变驱动频率 $f$，可以精确控制光镊在焦平面的位置；通过改变 RF 功率，可以控制光镊的深度。利用多频 RF 信号驱动 (Multi-tone driving)，AOD 可以同时产生多个移动光镊，实现并行化的原子输运。
+其中 $\lambda$ 为光波长，$v_s$ 为晶体中的声速。通过改变驱动频率 $f$，可以精确控制光镊在焦平面的位置；通过改变 RF 功率，可以控制光镊的深度。利用多频 RF 信号驱动 (Multi-tone driving)，AOD 可以同时产生多个移动光镊，实现并行化的原子移动。
 
 \subsection{AOD中多音信号干涉失真}
 在生成大规模原子阵列时，需要向 AOD 输入包含 $N$ 个频率分量的多音信号 $V(t) = \sum_{n=1}^{N} A_n \cos(\omega_n t + \phi_n)$。由于各分量在电压域进行相干叠加，若各频率的初始相位 $\phi_n$ 分配不当，会导致信号产生极高的峰均功率比 (PAPR)。当瞬时电压峰值超过射频功率放大器 (PA) 的线性动态范围（通常由 1 dB 压缩点 $P_{1dB}$ 定义）时，放大器进入增益饱和状态，导致波形发生限幅 (Clipping) 或非线性失真。
 
-这种电子学端的失真会直接耦合到光学端：由于 AOD 的衍射效率与射频功率呈 $\eta \propto \sin^2(\sqrt{P_{RF}})$ 的非线性关系，功率的剧烈波动会引起光镊强度的瞬时“闪烁” (Flicker) ~\cite{endres2016atom}。对于陷俘原子而言，这种 MHz 级别的强度噪声会诱发参量加热 (Parametric Heating)，显著降低原子的寿命，甚至导致原子从势阱中丢失。此外，非线性响应还会产生三阶互调产物 (IM3)，在目标频率 $f_1, f_2$ 之外产生 $2f_1-f_2$ 等频率的“幽灵势阱”，干扰原子的精确排布 ~\cite{lu2025astigmatism}。
+这种电子学端的失真会直接耦合到光学端：由于 AOD 的衍射效率与射频功率呈 $\eta \propto \sin^2(\sqrt{P_{RF}})$ 的非线性关系，功率的剧烈波动会引起光镊强度的瞬时“闪烁” (Flicker) ~\cite{endres2016atom}。对于陷俘原子而言，这种 \SI{}{\MHz} 级别的强度噪声会诱发参量加热 (Parametric Heating)，显著降低原子的寿命，甚至导致原子从势阱中丢失。此外，非线性响应还会产生三阶互调产物 (IM3)，在目标频率 $f_1, f_2$ 之外产生 $2f_1-f_2$ 等频率的“幽灵势阱”，干扰原子的精确排布 ~\cite{lu2025astigmatism}。
 
 为了抑制此类效应，实验中通常引入施罗德相位 (Schroeder Phase) 算法，通过确定性的相位分配 $\phi_k = \pi k^2 / N$ 来尽可能错开各波峰，从而最小化 PAPR 并抑制互调失真。
 
 \subsection{AOD瞬态柱透镜效应}
-当 AOD 处于移动光镊的快速扫频状态（即频率啁啾，Frequency Chirp）时，晶体响应的有限性会引入显著的空间像差。由于超声波以有限速度 $v_s$ 在晶体中传播（在 $TeO_2$ 中通常约为 650 m/s），当驱动频率随时间连续变化 $\frac{df}{dt}$ 时，在任意瞬间，充满 AOD 入射口径内的声波波阵面对应着不同的瞬时频率~\cite{guo2025acousto}。
+当 AOD 处于移动光镊的快速扫频状态（即频率啁啾，Frequency Chirp）时，晶体响应的有限性会引入显著的空间像差。由于超声波以有限速度 $v_s$ 在晶体中传播（在 $TeO_2$ 中通常约为 \SI{650}{\m\per\s}），当驱动频率随时间连续变化 $\frac{df}{dt}$ 时，在任意瞬间，充满 AOD 入射口径内的声波波阵面对应着不同的瞬时频率~\cite{guo2025acousto}。
 
 这种空间上的频率梯度导致入射光束的不同部分受到不同角度的偏转，从而使波前产生曲率，使 AOD 等效为一个具有随动焦距的柱透镜 (Cylindrical Lens)。根据 Kaplan 等人的经典推导，该声光透镜的有效焦距 $F_{AOL}$ 可表示为：
 \begin{equation}
@@ -298,169 +334,23 @@ F_{AOL} = \frac{v_s^2}{\lambda \left( \frac{df}{dt} \right)}
 在实验表现上，原本对称的圆形高斯光斑在扫频方向上会被拉伸或压缩，转变为椭圆光斑，这种像散 (Astigmatism) 会导致光镊的中心强度下降和势阱深度减弱~\cite{guo2025acousto}。更为严重的是，柱透镜效应会导致光镊焦点在轴向（z轴）产生位移，位移量 $\delta_0 \approx -F_M^2 / F_{AOL}$（其中 $F_M$ 为显微物镜焦距），使原子在移动过程中“沉入”或“飘出”既定的焦平面，引发成像失焦和原子丢失~\cite{lu2025astigmatism}。
 
 
-
-% \section{里德堡原子物理}
-
-% 里德堡原子是指最外层电子被激发到高主量子数（Principal Quantum Number, $n \gg 1$）状态的原子。在这种状态下，价电子距离原子核极远，原子表现出夸张的物理性质，这正是利用其进行量子模拟的核心所在。
-% \subsection{里德堡态的基本性质与标度律}
-% 对于碱金属原子，核心电子层（Core electrons）并未完全屏蔽原子核的电荷。当里德堡电子的角动量量子数 $l$ 较小时，其波函数有一定概率穿透到原子实内部，感受到比单纯库仑势更强的吸引力。这导致能级相较于氢原子发生下移。修正后的能量公式引入了量子亏损（Quantum Defect） $\delta_{nlj}$：
-
-% $$E_{n,l,j} = -\frac{Ry}{(n - \delta_{nlj})^2} = -\frac{Ry}{(n^*)^2}$$
-% 其中 $Ry \approx 13.6 \, \text{eV}$ 是里德堡常数，$n^* = n - \delta_{nlj}$ 是有效主量子数。量子亏损 $\delta$ 主要取决于角动量 $l$，对于 $^{87}\text{Rb}$，$S$ 态的 $\delta \approx 3.13$，$P$ 态的 $\delta \approx 2.64$。准确计算里德堡态的波函数和能级是选取实验工作波长和计算相互作用强度的前提。
-
-% 里德堡原子的许多物理属性随有效主量子数 $n^*$ 呈现显著的幂律依赖关系。下表总结了对量子模拟至关重要的几个标度律：
-
-% \begin{table}[ht]
-% \centering
-% \caption{里德堡原子主要标度律（示例）}
-% \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}l
-%                              >{\centering\arraybackslash}l
-%                              >{\centering\arraybackslash}l
-%                              >{\raggedright\arraybackslash}X}
-% \toprule
-% \thead{物理属性} & \thead{符号} & \thead{标度关系} & \thead{物理机制与实验意义} \\
-% \midrule
-% 轨道半径
-%   & $\langle r \rangle$
-%   & $\propto (n^*)^2$
-%   & 电子轨道巨大。$n=100$ 时半径约为 $1\,\mu\mathrm{m}$，使得原子极易被极化。\\
-
-% 结合能
-%   & $E_n$
-%   & $\propto (n^*)^{-2}$
-%   & 相邻能级间隔 $\Delta E \propto (n^*)^{-3}$。高 $n$ 态能级非常密集，需使用窄线宽激光激发。\\
-
-% 辐射寿命
-%   & $\tau$
-%   & $\propto (n^*)^3$
-%   & 低 $l$ 态寿命受限于与基态的重叠积分（随 $n$ 减小）。$n \sim 60$ 时寿命达 $100\,\mu\mathrm{s}$，加上黑体辐射诱导跃迁后仍很长，允许进行复杂的量子操作。\\
-
-% 极化率
-%   & $\alpha$
-%   & $\propto (n^*)^7$
-%   & 极化率极高，对外部电场极其敏感。微小的杂散电场都会导致巨大的能级移动（DC Stark Shift），需精密电场补偿。\\
-
-% 范德瓦尔斯系数
-%   & $C_6$
-%   & $\propto (n^{*})^{11}$
-%   & 相互作用强度随 $n$ 剧烈增强。这是实现快速两比特门和强关联物理模拟的关键。\\
-% \bottomrule
-% \end{tabularx}
-% \end{table}
-
-
-
-% \subsection{里德堡阻塞效应与范德瓦尔斯相互作用}
-% \label{subsec:rydberg_blockade}
-
-% 里德堡原子间强长程相互作用是实现量子模拟的关键。对于两个处于高主量子数 $nS$ 态的原子，由于宇称守恒，它们之间的一阶偶极相互作用为零。主要的相互作用来源于二阶微扰，表现为范德瓦尔斯 (van der Waals) 形式：
-% \begin{equation}
-% V_{\text{vdW}}(R) = -\frac{C_6}{R^6}
-% \end{equation}
-% 其中 $R$ 是原子间距，$C_6$ 是范德瓦尔斯系数，其大小随主量子数剧烈增加 ($C_6 \propto n^{11}$) [23]。对于 $n \approx 60$ 的 $^{87}\text{Rb}$ 原子，在数微米的距离下，相互作用强度可达数 MHz 至数十 MHz。
-
-% 考虑两个相距 $R$ 的里德堡原子，其相互作用势可以通过多极展开（Multipole Expansion）得到。主导项通常是偶极-偶极相互作用项 $V_{dd}$：
-
-% $$V_{dd} = \frac{1}{4\pi\epsilon_0 R^3} \left[ \mathbf{d}_1 \cdot \mathbf{d}_2 - 3(\mathbf{d}_1 \cdot \mathbf{n})(\mathbf{d}_2 \cdot \mathbf{n}) \right]$$
-% 其中 $\mathbf{d}_i$ 是第 $i$ 个原子的偶极算符，$\mathbf{n}$ 是连接两原子的单位向量。
-
-% \textbf{范德瓦尔斯相互作用 (van der Waals Interaction)}
-% 当两个原子处于相同的本征态（例如 $|nS, nS\rangle$）且无外场时，由于宇称守恒，一阶偶极耦合矩阵元为零（$\langle nS|\mathbf{d}|nS\rangle = 0$）。此时，相互作用来源于二阶微扰效应：
-
-% $$V_{vdW} = - \sum_k \frac{|\langle \psi_k | V_{dd} | \psi_{initial} \rangle|^2}{E_k - E_{initial}} \approx \frac{C_6}{R^6}$$
-% 这里的 $C_6 \propto n^{11}$。这种 $1/R^6$ 的相互作用形式随距离衰减极快，但在短距离下非常强。对于 $n=60$ 的 Rb 原子，在 $10 \, \mu\text{m}$ 距离下，相互作用强度可达几 MHz 至几十 MHz。这种相互作用是各向同性的（对于 S 态），常用于实现伊辛（Ising）型自旋模型。
-
-% \textbf{共振偶极-偶极相互作用}
-% 如果制备原子对处于不同的宇称态（如 $|nS, nP\rangle$），或者通过电场调节能级使得 $|nS, nS\rangle \leftrightarrow |nP, n'P\rangle$ 发生能量共振（弗斯特共振），则一阶微扰项不为零。此时相互作用表现为长程的 $1/R^3$ 形式：
-
-% $$V_{dip} = \frac{C_3}{R^3}$$
-% 这种相互作用具有各向异性，依赖于原子间轴与量子化轴的夹角，适用于模拟 XY 自旋模型、拓扑模型以及能量输运过程。
-
-
-% \textbf{里德堡阻塞 (Rydberg Blockade)}：
-% 考虑两个原子被激光驱动到里德堡态 $|r\rangle$，拉比频率为 $\Omega$。当原子间距 $R$ 小于某一临界距离——阻塞半径 $R_b$ 时，相互作用引起的能级频移 $V_{\text{vdW}}(R)$ 将远大于激发谱宽 (即 $V \gg \hbar\Omega, \hbar\gamma$)。此时，双激发态 $|rr\rangle$ 偏离共振，激光无法同时激发两个原子。
-% 阻塞半径定义为：
-% \begin{equation}
-% R_b = \left( \frac{|C_6|}{\hbar\Omega} \right)^{1/6}
-% \end{equation}
-
-% \subsection{外电场中的原子：斯塔克效应与场电离}
-% 里德堡原子由于电子轨道半径巨大（$\langle r \rangle \propto n^{*2}$），其价电子束缚能极低，且对外电场具有极高的敏感度。外加静电场不仅会引起能级的移动（斯塔克效应），在强场下还会改变电子的势能面结构，导致原子电离。理解这一机制是实现里德堡态选择性场电离探测（State-selective Field Ionization, SFI）的理论基础。
-
-% 由于极高的极化率（$\alpha \propto n^7$），里德堡原子展现出巨大的直流斯塔克效应（DC Stark Effect）。在弱场下，能级移动遵循二次方关系 $\Delta E = -\frac{1}{2}\alpha \mathcal{E}^2$。随着电场增强，不同角动量态的能级发生交叉，形成斯塔克图（Stark Map）。
-% 这一效应在实验中有双重意义：
-% 环境噪声：必须将实验腔体内的背景杂散电场控制在 $\text{mV/cm}$ 量级，否则会破坏共振条件。
-% 相互作用调控：通过施加精确控制的电场，可以调节原子能级，使其接近弗斯特共振（Förster Resonance），从而将相互作用从短程的范德瓦尔斯型切换为长程的偶极-偶极型，或大幅增强相互作用强度。
-
-% \subsubsection{直流斯塔克频移 (DC Stark Shift) 与极化率}
-
-% 当施加一个沿 $z$ 轴方向的静电场 $\mathbf{F} = F \hat{z}$ 时，系统的总哈密顿量 $H$ 为原子自由哈密顿量 $H_0$ 与斯塔克相互作用项 $H_{Stark}$ 之和：
-% $$ H = H_0 + H_{Stark} = H_0 + e F \hat{z} $$
-% 在球坐标系下，斯塔克项耦合了具有不同轨道角动量 $l$ 的态。根据选择定则，非零矩阵元 $\langle n', l', j', m_j' | e F \hat{z} | n, l, j, m_j \rangle$ 仅存在于 $\Delta l = \pm 1$ 且 $\Delta m_j = 0$ 的态之间。
-
-% \subsubsection{二次斯塔克位移 (Quadratic Stark Effect)}：对于碱金属原子（如 $^{87}\text{Rb}$）的低角动量态（如 $S, P, D$ 态），由于量子亏损 $\delta_l$ 的存在，能级是非简并的。在弱场下，电场的作用表现为二阶微扰，能级位移 $\Delta E$ 与电场强度的平方成正比：
-%     $$ \Delta E = -\frac{1}{2} \alpha F^2 $$
-% 其中 $\alpha$ 为标量极化率，其随主量子数表现出极强的标度律 $\alpha \propto n^{*7}$。这解释了为何里德堡态对杂散电场极其敏感，实验中必须通过电极进行精密的杂散场补偿。
-
-
-% \subsubsection{斯塔克图 (Stark Map) 与能级交叉}
-
-% 斯塔克图与能级混合：随着电场强度增加，斯塔克位移可能超过原子本身的精细结构分裂或相邻 $l$ 态的能级间隔。此时微扰论不再适用，必须通过对角化总哈密顿量矩阵来求解本征值。由此得到的能级随电场变化的曲线称为斯塔克图 (Stark Map)。在强场区，不同 $l$ 的流形（Manifold）相互交叉并发生强烈的混合，形成避免交叉（Avoided Crossing），这使得电子波函数由单纯的 $l$ 态转变为抛物线坐标系下的斯塔克态。
-
-% \subsubsection{场电离机制与阈值公式}
-
-
-% 外加电场下的里德堡原子电离速率理论模型在高效里德堡探测中，理解原子能级在外界电场下的演化及电离速率是定量分析的核心。本节通过抛物线坐标表象描述里德堡原子的Stark效应，并给出弱场近似下的电离率解析表达式，最后建立实际脉冲场下的电离动力学模型。
-
-% \textbf{抛物线坐标表象与Stark态}
-
-% 由于外加电场打破了原子的旋转对称性，球坐标表象下的量子数 $l$ 不再是好量子数。为实现变量分离，引入抛物线坐标 $(\xi, \eta, \phi)$ ：
-% \begin{equation}
-% \xi = r + z, \quad \eta = r - z, \quad \phi = \arctan(y/x)
-% \end{equation}
-% 在此坐标系下，单电子哈密顿量可分解为两个独立的一维方程，分别对应束缚运动（$\xi$ 方向）和逃逸路径（$\eta$ 方向） 。系统由新的量子数 $(n, n_1, n_2, m)$ 描述，满足：
-% \begin{equation}
-% n = n_1 + n_2 + |m| + 1
-% \end{equation}
-% 其中 $n_1, n_2$ 为抛物线量子数。利用微扰论可得Stark能级的二阶展开式 ：
-% \begin{equation}
-% W_{n,n_1,n_2,m} = -\frac{1}{2n^2} + \frac{3}{2}Fn(n_1-n_2) - \frac{F^2}{16}n^4[17n^2 - 3(n_1-n_2)^2 - 9m^2 + 19]
-% \end{equation}
-% 该式揭示了同一 $n$ 壳层分裂出的Stark流形。红态（Red states，$n_2 > n_1$）能量随场强增加而下降，其电子云分布靠近势垒鞍点，更易发生电离；蓝态（Blue states，$n_1 > n_2$）则相对稳定 。
-
-% \textbf{弱场电离速率（Damburg-Kolosov 公式）}
-
-% 在弱电场下，电离表现为电子穿透 $\eta$ 方向势垒的量子隧穿过程。通过对不同空间区域的波函数进行渐近匹配（Asymptotic Matching） ，可忽略冗杂的匹配过程，直接给出 Damburg-Kolosov 理论下的单位时间电离概率 $\Gamma$ ：
-% \begin{equation}
-% \Gamma = \frac{(4R)^{2n_2 + |m| + 1}}{n^3 n_2! (n_2 + |m|)!} \exp
-% \end{equation}
-% 其中参数 $R = (-2E)^{3/2}/F$，指数项中的校正函数为：
-% \begin{equation}
-% f(n_1, n_2, m) = 34 n_2^2 + 34 n_2 |m| + 46 n_2 + 7 m^2 + 23 |m| + \frac{53}{3}
-% \end{equation}
-% 该公式在极低场强下趋于零，而在实验场强附近表现出极高的灵敏度：场强 10\% 的波动通常会导致电离速率发生 3-4 个数量级的跳变 。这为里德堡态的态选择性探测（SFI）提供了物理基础。
-
-% \textbf{实际脉冲场电离过程}
-
-% 动力学在实验探测中，电离电场 $F(t)$ 通常随时间快速变化。原子的瞬时存活概率取决于电离率在时间轴上的累积效应 。在时刻 $T$ 仍未电离的存活概率 $P_{surv}$ 表达为：
-% \begin{equation}
-% P_{surv}(T) = \exp\left( -\int_0^T \Gamma(F(t)) dt \right)
-% \end{equation}
-% 由于 $\Gamma$ 对 $F$ 的非线性依赖，电离过程往往集中在极窄的时间窗口内。为简化计算，可将时变电场近似为一系列方形脉冲 。非电离判据：若脉冲峰值场强下的静电离速率满足 $\Gamma(F_{max}) \leq -\frac{\ln(P_s)}{T}$（其中 $P_s$ 为定义的探测阈值），则原子在变化电场中保持存活。电离判据：若存在时间间隔 $\Delta t$ 使得 $\Gamma(F_{min}) \geq -\frac{\ln(1-P_s)}{\Delta t}$，则认为原子已完全电离产生探测信号。这种动力学模型允许我们通过调节电场上升斜率（Slew Rate），在绝热路径（Adiabatic）与斜率路径（Diabatic）之间进行切换，从而优化里德堡原子的探测效率与态分辨本领 。
-
-
 \section{里德堡原子的物理性质}
 
-里德堡原子（Rydberg atoms）是指原子的最外层电子被激发到主量子数 $n$ 极高的激发态（通常 $n > 10$）的原子 。处于里德堡态的原子，由于其价电子远离带正电的原子实，展现出了一系列夸张且极端的物理性质，包括巨大的电偶极矩、极长的相干寿命以及对环境电磁场极高的敏感性 。在碱金属原子中，里德堡电子的运动轨迹在远距离处表现为氢原子式的库仑运动，但在近核区，由于电子会穿透带负电的电子壳层并与原子实发生极化作用，其实际感受到的电势偏离了理想的 $1/r$ 形式 。这种偏差导致了能级的显著移动，通过量子亏损（Quantum Defect）这一核心参数，可以对碱金属原子的里德堡能级进行精确修正，从而为后续讨论相互作用及外场效应奠定理论基础 。
+里德堡原子（Rydberg atoms）是指原子的最外层电子被激发到主量子数 $n$ 极高的激发态（通常 $n > 30$）的原子 。处于里德堡态的原子，由于其价电子远离带正电的原子实，展现出了一系列夸张且极端的物理性质，包括巨大的电偶极矩、极长的相干寿命以及对环境电磁场极高的敏感性 。在碱金属原子中，里德堡电子的运动轨迹在远距离处表现为氢原子式的库仑运动，但在近核区，由于电子会穿透带负电的电子壳层并与原子实发生极化作用，其实际感受到的电势偏离了理想的 $1/r$ 形式 。这种偏差导致了能级的显著移动，通过量子亏损（Quantum Defect）这一核心参数，可以对碱金属原子的里德堡能级进行精确修正，从而为后续讨论相互作用及外场效应奠定理论基础 。
 
 \subsection{里德堡态的能级结构与量子亏损理论}
 
 \textbf{量子亏损与里德堡-里兹公式}
 
 碱金属原子的能级结构可以通过里德堡-里兹（Rydberg-Ritz）公式得到精确描述 。对于主量子数为 $n$、角动量量子数为 $l$、总角动量量子数为 $j$ 的态，其结合能 $E_{n,l,j}$ 表示为：
-$$E_{n,l,j} = -\frac{Ry^*}{(n - \delta_{nlj})^2} = -\frac{Ry^*}{(n^*)^2}$$
+\begin{equation}
+E_{n,l,j} = -\frac{Ry^*}{(n - \delta_{nlj})^2} = -\frac{Ry^*}{(n^*)^2}
+\end{equation}
+
 在此公式中，$Ry^*$ 是考虑了有限核质量修正后的里德堡常数，$Ry^* = Ry_\infty \cdot M / (M + m_e)$，其中 $m_e$ 为电子质量，$M$ 为原子核质量 。$n^* = n - \delta_{nlj}$ 被定义为有效主量子数，而 $\delta_{nlj}$ 即为量子亏损 。量子亏损反映了原子实内部复杂的相互作用。当 $l$ 较小时（如 $S, P$ 态），电子的椭圆轨道具有极高的偏心率，使其频繁穿透原子实内部，直接感受到未被完全屏蔽的核电荷吸引，从而导致结合能增加，能级下移 。随着 $l$ 的增加，离心势垒 $l(l+1)/2r^2$ 将电子排斥在核心区域外，量子亏损迅速减小。通常对于 $l > 3$ 的态（如 $F$ 态及以上），其量子亏损几乎可以忽略不计，物理性质趋近于理想氢原子 。量子亏损随 $n$ 的变化通常很小，可以通过里兹展式进行高精度拟合：
-$$\delta_{nlj} = \delta_0 + \frac{\delta_2}{(n - \delta_0)^2} + \frac{\delta_4}{(n - \delta_0)^4} + \dots$$
+\begin{equation}
+\delta_{nlj} = \delta_0 + \frac{\delta_2}{(n - \delta_0)^2} + \frac{\delta_4}{(n - \delta_0)^4} + \dots
+\end{equation}
 这一展式表明，量子亏损主要由低能级的短程物理决定，而与高 $n$ 激发态的宏观尺度关系较弱 。下表列出了实验中常用的 $^{87}\text{Rb}$ 和 $^{133}\text{Cs}$ 原子的部分量子亏损参数，这些数据是进行相互作用强度计算和光谱识别的前提。
 
 \begin{table}[ht]
@@ -476,9 +366,6 @@ $$\delta_{nlj} = \delta_0 + \frac{\delta_2}{(n - \delta_0)^2} + \frac{\delta_4}{
 $^{87}\text{Rb}$ & $nS_{1/2}$ & 3.1311 & 极高的核心穿透率 \\
 $^{87}\text{Rb}$ & $nP_{3/2}$ & 2.6416 & 显著的核心极化效应 \\
 $^{87}\text{Rb}$ & $nD_{5/2}$ & 1.3464 & 离心力平衡核心吸引 \\
-$^{133}\text{Cs}$ & $nS_{1/2}$ & 4.0493 & 极大的原子核电荷影响 \\
-$^{133}\text{Cs}$ & $nP_{3/2}$ & 3.5590 & 能级下移效应显著 \\
-
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -488,8 +375,12 @@ $^{133}\text{Cs}$ & $nP_{3/2}$ & 3.5590 & 能级下移效应显著 \\
 
 \textbf{径向波函数与电子云分布}
 
-里德堡原子的量子力学描述核心在于其径向波函数 $R_{nl}(r)$ 的求解。在 $r \gg r_c$（$r_c$ 为原子实半径）的区域，电子处于几乎纯粹的库仑势中。通过数值求解径向薛定谔方程：$$\left[ -\frac{1}{2\mu} \left( \frac{d^2}{dr^2} + \frac{2}{r}\frac{d}{dr} \right) + \frac{l(l+1)}{2\mu r^2} + V(r) \right] R_{nl}(r) = E_{n,l} R_{nl}(r)$$
-其中 $\mu$ 为约化质量，$V(r)$ 为包含了原子实极化项的有效势能 。由于 $n$ 很大，里德堡电子的平均轨道半径 $\langle r \rangle \approx \frac{1}{2} [3(n^*)^2 - l(l+1)]$ 呈现出随 $(n^*)^2$ 增长的趋势 。这意味着当 $n=100$ 时，原子的物理尺寸可达 $1 \, \mu\text{m}$ 左右，这与生物细胞或光学微腔的尺度相当 。如此广阔的电子云分布导致了极大的跃迁偶极矩阵元，因为 $\langle n'l' | r | nl \rangle$ 与轨道的径向延展直接相关，其标度关系通常为 $\propto (n^*)^2$ 。这种巨大的偶极矩正是里德堡原子能够产生强长程相互作用的微观根源。
+里德堡原子的量子力学描述核心在于其径向波函数 $R_{nl}(r)$ 的求解。在 $r \gg r_c$（$r_c$ 为原子实半径）的区域，电子处于几乎纯粹的库仑势中。通过数值求解径向薛定谔方程：
+\begin{equation}
+\left[ -\frac{1}{2\mu} \left( \frac{d^2}{dr^2} + \frac{2}{r}\frac{d}{dr} \right) + \frac{l(l+1)}{2\mu r^2} + V(r) \right] R_{nl}(r) = E_{n,l} R_{nl}(r)
+\end{equation}
+
+其中 $\mu$ 为约化质量，$V(r)$ 为包含了原子实极化项的有效势能 。由于 $n$ 很大，里德堡电子的平均轨道半径 $\langle r \rangle \approx \frac{1}{2} [3(n^*)^2 - l(l+1)]$ 呈现出随 $(n^*)^2$ 增长的趋势 。这意味着当 $n=100$ 时，原子的物理尺寸可达 \SI{1}{\um} 左右，这与生物细胞或光学微腔的尺度相当 。如此广阔的电子云分布导致了极大的跃迁偶极矩阵元，因为 $\langle n'l' | r | nl \rangle$ 与轨道的径向延展直接相关，其标度关系通常为 $\propto (n^*)^2$ 。这种巨大的偶极矩正是里德堡原子能够产生强长程相互作用的微观根源。
 
 \subsection{里德堡原子的标度律与物理意义}
 
@@ -529,49 +420,32 @@ $^{133}\text{Cs}$ & $nP_{3/2}$ & 3.5590 & 能级下移效应显著 \\
 
 里德堡原子的自发辐射寿命是量子信息实验中最重要的时钟限制之一。由于高激发态电子的波函数与基态波函数之间的空间重叠极小，导致跃迁速率显著下降 。
 
-2.5.3.1 自发辐射寿命的微观机制根据爱因斯坦 A 系数理论，从态 $|nl\rangle$ 向所有可能低能态 $|n'l'\rangle$ 的自发辐射速率 $\Gamma_0$ 为：$$\Gamma_0 = \frac{1}{\tau_0} = \sum_{n'l' < nl} A(nl \to n'l')$$
+\subsubsection{自发辐射寿命的微观机制}
+
+根据爱因斯坦 A 系数理论\todo{需要增加引用}，从态 $|nl\rangle$ 向所有可能低能态 $|n'l'\rangle$ 的自发辐射速率 $\Gamma_0$ 为：
+\begin{equation}
+\Gamma_0 = \frac{1}{\tau_0} = \sum_{n'l' < nl} A(nl \to n'l')
+\end{equation}
+
 其中 $A(nl \to n'l') \propto \omega^3 |\langle n'l' | r | nl \rangle|^2$ 。
 对于低角动量态（如 $S, P, D$），主要的衰变路径是直接跳回到基态。尽管跃迁频率 $\omega$ 很大，但由于里德堡态巨大的径向广度与基态紧凑结构的重叠积分极低，衰变速率被抑制，表现为 $\tau_0 \propto (n^*)^3$ 。例如，$n \approx 60$ 的 $^{87}\text{Rb}$ 原子 $S$ 态寿命可超过 $100 \, \mu\text{s}$，远长于常规原子激发态的纳秒级寿命 。而对于圆轨道态（Circular states, $l = n-1$），由于受限于选择定则 $\Delta l = \pm 1$，电子只能逐级向相邻能级（$n \to n-1$）跃迁。虽然波函数重叠较大，但由于跃迁频率 $\omega \propto n^{-3}$ 极低，导致 $\omega^3 \propto n^{-9}$，综合效应使得圆轨道态寿命遵循更长的标度律 $\tau \propto (n^*)^5$ 。
 
-\textbf{黑体辐射 (BBR) 对有效寿命的削减}
+\subsubsection{黑体辐射 (BBR) 对有效寿命的削减}
 
-在有限温度的实验室环境下，原子并不处于绝对真空，而是浸没在环境物体的黑体辐射场中 。由于相邻里德堡能级的间隔（GHz至THz）恰好落在室温（300 K）黑体辐射的光谱能量峰值附近，BBR 会诱导原子在临近里德堡态之间发生受激吸收和辐射过程 。BBR 诱导的去群速率 $\Gamma_{BBR}$ 由下式给出：$$\Gamma_{BBR} = \sum_{n' \neq n} A(nl \to n'l') \bar{n}_\omega$$
+在有限温度的实验室环境下，原子并不处于绝对真空，而是浸没在环境物体的黑体辐射场中 。由于相邻里德堡能级的间隔（GHz至THz）恰好落在室温（300 K）黑体辐射的光谱能量峰值附近，BBR 会诱导原子在临近里德堡态之间发生受激吸收和辐射过程 。BBR 诱导的去群速率 $\Gamma_{BBR}$ 由下式给出：
+\begin{equation}
+\Gamma_{BBR} = \sum_{n' \neq n} A(nl \to n'l') \bar{n}_\omega
+\end{equation}
 其中 $\bar{n}_\omega =^{-1}$ 为普朗克分布下的平均光子数 。
 在室温下，$\Gamma_{BBR}$ 通常与 $T \cdot (n^*)^2$ 成正比。随着 $n$ 的增加，虽然自发辐射速率 $\Gamma_0$ 减小，但 BBR 诱导的转移速率却相对增加，成为限制有效寿命的主要因素 。研究表明，在 $n=70$ 的 Rb 原子中，室温 BBR 可使有效寿命缩短一半左右，并将原子群体重新分布到临近的流形中，产生背景噪声 。
 
-\textbf{Beterov-Ryabtsev 寿命模型}
+\subsubsection{Beterov-Ryabtsev 寿命模型}
 
-为了精确预测实验中的寿命，I. I. Beterov 等人（2009）开发了一套基于准经典近似的计算模型，系统地给出了 $n \leq 80$ 范围内所有碱金属原子的寿命数据 。该模型综合考虑了零温自发辐射速率与不同温度（77 K, 300 K, 600 K）下的 BBR 修正。有效寿命 $\tau_{eff}$ 与各部分速率的关系满足：$$\frac{1}{\tau_{eff}} = \frac{1}{\tau_0} + \Gamma_{BBR}(T)$$
+为了精确预测实验中的寿命，I. I. Beterov 等人\todo{需要增加引用}开发了一套基于准经典近似的计算模型，系统地给出了 $n \leq 80$ 范围内所有碱金属原子的寿命数据 。该模型综合考虑了零温自发辐射速率与不同温度（77 K, 300 K, 600 K）下的 BBR 修正。有效寿命 $\tau_{eff}$ 与各部分速率的关系满足：
+\begin{equation}
+\frac{1}{\tau_{eff}} = \frac{1}{\tau_0} + \Gamma_{BBR}(T)
+\end{equation}
 通过实验测量不同 $n$ 态的场电离信号随时间的衰减，可以验证该模型的准确性。实验发现，在低原子密度下（避免原子间碰撞去激发），测量值与 Beterov 模型的预测符合得非常好 。
-
-% \subsection{外电场中的里德堡原子：斯塔克效应}
-
-% 里德堡原子最显著的特征之一是其对外部电场极度的敏感性 。这种敏感性源于电子云的巨大空间延展，使得微弱的电场就能在原子核和电子之间产生可观的势能差 。
-
-% \textbf{直流斯塔克频移与极化率计算}
-
-% 当施加静态电场 $\mathbf{F}$ 时，原子的哈密顿量增加一项 $H_S = e\mathbf{F} \cdot \mathbf{r} = eFz$（假设电场沿 $z$ 轴） 。根据二阶微扰理论，能级移动为：
-% $$\Delta E = -\frac{1}{2} \alpha_0 F^2 - \frac{1}{2} \alpha_2 F^2 \frac{3m_j^2 - j(j+1)}{j(2j-1)}$$
-% 这里的 $\alpha_0$ 和 $\alpha_2$ 分别是标量极化率和张量极化率 。对于 $j=1/2$ 的态（如 $S$ 态），张量部分为零，斯塔克移位表现为所有 $m_j$ 能级的同步移动 。但对于 $D$ 态或更高角动量态，不同 $m_j$ 分量会发生分裂，形成多重谱线结构 。里德堡原子的静态极化率 $\alpha$ 随 $n^*$ 的 7 次幂增长。这种极端的标度律可以通过二阶求和项直观理解：$$\alpha \approx \sum_{n'} \frac{|\langle n|d|n'\rangle|^2}{E_{n'} - E_n} \propto \frac{(n^2)^2}{n^{-3}} = n^7$$
-% 其中跃迁偶极矩 $d \propto n^2$，能级间隔 $\Delta E \propto n^{-3}$ 。在实际量子模拟器中，这意味着即便是真空室壁上的累积电荷产生的数 $\text{mV/cm}$ 杂散电场，也会导致 MHz 级的斯塔克频移，因此精密电场补偿是实验成败的关键 。
-
-% \textbf{斯塔克图与能级避越 (Avoided Crossings)}
-
-% 斯塔克图（Stark Map）详尽描述了原子的各能级随电场强度变化的轨迹 。在图中，氢原子的流形由于 $l$ 简并，表现为线性的斯塔克分裂。而碱金属原子由于量子亏损的存在，低 $l$ 态（如 $S, P, D$）在零场下与这些简并流形分离 。随着电场的增加，这些低 $l$ 态会逐渐靠近并穿入主量子数相同的氢原子流形。由于原子实对电子波函数的非库仑微扰作用，不同宇称的态会发生混合，导致在能级本该交叉的地方出现“避越”（Avoided Crossing） 。避越间隙（Splitting gap）的大小直接取决于原子的量子亏损值和态之间的耦合矩阵元 。这一物理现象在利用电场调节弗斯特共振（Förster Resonance）时具有核心地位，因为避越点附近的波函数是不同里德堡态的混合叠加 。
-
-% \subsection{场电离过程的动力学}
-
-% 描述里德堡原子的场电离（Field Ionization）不仅是一种探测手段，更是一个深奥的量子动力学过程 。
-
-% \textbf{经典电离模型}
-
-% 从经典力学角度看，外电场 $F$ 与核的库仑电势叠加后，在 $z > 0$ 方向形成了一个势垒峰值，即鞍点（Saddle point） 。其电势能为 $V(z) = -1/z - Fz$（原子单位）。鞍点的高度为 $V_{crit} = -2\sqrt{F}$。当电子能量 $E$ 超过此高度时，电子便可脱离束缚 。结合结合能 $E = -1/2(n^*)^2$，可以推导出经典的临界电离场强：
-% $$F_{crit} \approx \frac{1}{16(n^*)^4} \, \text{a.u.}$$
-% 这意味着对于 $n=30$ 的原子，电离场强约为 $1000 \, \text{V/cm}$ 左右，这在实验室内极易实现 。
-
-% \textbf{量子隧穿与绝热/非绝热演化}
-
-% 量子效应使得原子在场强低于经典阈值时就可能通过隧穿效应发生电离。对于给定的抛物线坐标量子数 $(n, n_1, n_2, m)$，电离速率 $\Gamma$ 可以通过解析公式估算，其表现出对电场强度的指数依赖关系 。在脉冲场电离（Pulsed SFI）实验中，电场的上升速度决定了原子是沿着绝热路径还是非绝热路径演化。在绝热演化中，原子会穿过斯塔克图中的每一个避越点，最终在特定的场强下电离；而在非绝热演化中，由于电场变化极快，原子会直接跳过避越间隙，其电离阈值更接近氢原子的特征 。通过分析电离脉冲的到达时间，实验者可以分辨出主量子数 $n$ 的微小差异，实现高对比度的态读出 。
 
 \subsection{外加电场中的里德堡原子：从Stark效应到场电离理论}
 
@@ -621,7 +495,7 @@ W = -\frac{1}{2n^2} + \frac{3}{2}Fn(n_1-n_2) - \frac{F^2}{16}n^4[17n^2 - 3(n_1-n
 
 \subsubsection{弱场电离速率（Damburg-Kolosov 理论）}
 
-当电场 $F$ 较小时，电离主要表现为电子穿透 $\eta$ 方向势垒的量子隧穿效应。Damburg 和 Kolosov 通过对内层库仑区解（超几何函数）与外层电场区解（WKB 或 Airy 函数）进行渐近匹配，给出了极高精度的解析表达式 。
+当电场 $F$ 较小时，电离主要表现为电子穿透 $\eta$ 方向势垒的量子隧穿效应。Damburg 和 Kolosov \todo{需要增加引用}通过对内层库仑区解（超几何函数）与外层电场区解（WKB 或 Airy 函数）进行渐近匹配，给出了极高精度的解析表达式 。
 
 \textbf{核心速率公式}
 
@@ -632,11 +506,12 @@ W = -\frac{1}{2n^2} + \frac{3}{2}Fn(n_1-n_2) - \frac{F^2}{16}n^4[17n^2 - 3(n_1-n
 其中 $R = (-2E)^{3/2}/F$ 是衡量势垒穿透深度的关键参数。指数项中的修正函数 $f(n_1, n_2, m)$ 是通过高阶渐近展开确定的精确校正 ：
 \begin{equation}
 \Gamma = \frac{(4R)^{2n_{2}+m+1}}{n^3n_{2} !(n_{2} +m)!} \exp\left[-\frac{2}{3}R-\frac{n^3}{4}F\left(34 n_{2}^{2}+34 n_{2} m+46 n_{2}+7 m^{2}+23 m+\frac{53}{3}\right)\right]
+\label{ch2:eq:ionization_speed_eq}
 \end{equation}
 
 \textbf{场强敏感性与阈值特征}
 
-该公式揭示了 $\Gamma$ 对场强 $F$ 的极高敏感度：场强增加 10\%，电离率通常会产生 3 到 4 个数量级的跳变 。基于此理论，经典的红态电离阈值为 $F \approx 1/16n^4$，而在考虑 Stark 位移后的实际探测中，红态通常在 $1/9n^4$ 附近完全电离 。
+公式~\ref{ch2:eq:ionization_speed_eq}揭示了 $\Gamma$ 对场强 $F$ 的极高敏感度：场强增加 10\%，电离率通常会产生 3 到 4 个数量级的跳变 。基于此理论，经典的红态电离阈值为 $F \approx 1/16n^4$，而在考虑 Stark 位移后的实际探测中，红态通常在 $1/9n^4$ 附近完全电离。\todo{需要增加一个表格，数值展示不同电压下的电离速率}
 
 \subsubsection{脉冲场电离动力学与实验判据}
 
@@ -657,29 +532,38 @@ P_{surv}(T) = \exp\left( -\int_0^T \Gamma(F(t)) dt \right)
 \geq -\frac{\ln(1-P_s)}{\Delta t}
 \end{equation}
 
-这种动力学描述为状态选择性场电离（SFI）谱线中探测峰的指认提供了理论基础，使我们能够根据信号峰的位置精确反推原子的初态量子数 。
+这种动力学描述为状态选择性场电离（SFI）谱线中探测峰的指认提供了理论基础，能够根据信号峰的位置精确反推原子的初态量子数 。
 
 \subsection{里德堡原子间的长程相互作用}
 
-里德堡原子间极其强大的长程相互作用是实现量子逻辑门（Quantum Gates）和量子相变模拟的核心机制 。
+里德堡原子间极其强大的长程相互作用量子相变模拟的核心机制 。
 
-\textbf{范德瓦尔斯相互作用的微观计算}
+\subsubsection{范德瓦尔斯相互作用}
 
-当两个里德堡原子处于距离为 $R$ 的冷原子阵列中时，若它们处于相同的量子态（如 $|nS, nS\rangle$）且远离任何能级交叉点，则其相互作用表现为范德瓦尔斯形式：$$V_{vdW} = -\frac{C_6}{R^6}$$
+当两个里德堡原子处于距离为 $R$ 的冷原子阵列中时，若它们处于相同的量子态（如 $|nS, nS\rangle$）且远离任何能级交叉点，则其相互作用表现为范德瓦尔斯形式：
+\begin{equation}
+V_{vdW} = -\frac{C_6}{R^6}
+\end{equation}
 $C_6$ 的大小由二阶微扰项决定，主要受与其能量最接近的中间对态（如 $|nP, (n-1)P\rangle$）的贡献。由于 $C_6 \propto n^{11}$，其相互作用强度随 $n$ 的增加呈指数级飞跃 。对于 $^{87}\text{Rb}$ 原子的 $nS$ 态，范德瓦尔斯相互作用通常是排斥性的或吸引性的，这取决于能量亏损 $\Delta E$ 的正负 。这种相互作用是各向同性的，非常适合用于模拟伊辛（Ising）型自旋哈密顿量 。
 
-\textbf{偶极-偶极相互作用及其各向异性}
+\subsubsection{偶极-偶极相互作用}
 
 如果原子对被制备在具有相反宇称的态（如 $|nS, nP\rangle$），或者通过弗斯特共振引入，则一阶偶极相互作用项不为零 。此时系统遵循 $1/R^3$ 的标度律：
-$$V_{dip} = \frac{C_3}{R^3}$$
-这种相互作用具有极强的各向异性，取决于原子间轴与外部偏振方向的夹角 $\theta$。当 $\theta = \arccos(1/\sqrt{3}) \approx 54.7^\circ$（魔角）时，相互作用可以被完全抑制 。利用这种特性，可以实现 XY 模型中的角动量交换项，研究量子态在原子阵列中的输运动力学 。
+\begin{equation}
+V_{dip} = \frac{C_3}{R^3}
+\end{equation}
+这种相互作用具有极强的各向异性，取决于原子间轴与外部偏振方向的夹角 $\theta$。当 $\theta = \arccos(1/\sqrt{3}) \approx \SI{54.7}{\deg}$时，相互作用可以被完全抑制 。利用这种特性，可以实现 XY 模型中的角动量交换项，研究量子态在原子阵列中的输运动力学 。
 
-\subsection{弗斯特共振 (Förster Resonance) 及其精密调控}
+\subsubsection{弗斯特共振 (F\"{o}rster Resonance)}
 
-弗斯特共振是指通过外部参数微调，使得原子对的初态和末态能量严格简并，从而将弱相互作用转化为极强共振耦合的过程。在 $^{87}\text{Rb}$ 原子中，一个经典的弗斯特共振过程是：$$|nP, nP\rangle \leftrightarrow |nS, (n+1)S\rangle$$
-在零场下，这两个对态之间存在一个能量亏损 $\delta_0$。利用里德堡原子极高的极化率，施加一个微弱的直流电场 $F$ 即可产生差分斯塔克位移，使得能量亏损 $\delta(F) \to 0$ 。共振时的有效哈密顿量在基底 $\{|initial\rangle, |final\rangle\}$ 下表示为：$$H_{Forster} = \begin{pmatrix} \delta(F) & V_{dd}(R) \\ V_{dd}(R) & 0 \end{pmatrix}$$
-其中 $V_{dd} = C_3/R^3$ 。当 $\delta \to 0$ 时，原本处于 $1/R^6$ 体制的范德瓦尔斯作用会演变为 $1/R^3$ 的偶极耦合体制。这一转变发生的特征距离被称为交叉半径（Crossover radius） $R_c = \sqrt{C_3/\delta}$ 。
-
+弗斯特共振是指通过外部参数微调，使得原子对的初态和末态能量严格简并，从而将弱相互作用转化为极强共振耦合的过程。在 $^{87}\text{Rb}$ 原子中，一个经典的弗斯特共振过程是：
+\begin{equation}
+|nP, nP\rangle \leftrightarrow |nS, (n+1)S\rangle
+\end{equation}
+在零场下，这两个对态之间存在一个能量亏损 $\delta_0$。利用里德堡原子极高的极化率，施加一个微弱的直流电场 $F$ 即可产生差分斯塔克位移，使得能量亏损 $\delta(F) \to 0$ 。共振时的有效哈密顿量在基底 $\{|initial\rangle, |final\rangle\}$ 下表示为：\begin{equation}
+H_{\text{F\"{o}rster}} = \begin{pmatrix} \delta(F) & V_{dd}(R) \\ V_{dd}(R) & 0 \end{pmatrix}
+\end{equation}
+其中 $V_{dd} = C_3/R^3$ 。当 $\delta \to 0$ 时，原本处于 $1/R^6$ 机制的范德瓦尔斯作用会演变为 $1/R^3$ 的偶极耦合机制。这一转变发生的特征距离被称为交叉半径（Crossover radius） $R_c = \sqrt{C_3/\delta}$ 。
 
 
 \subsection{里德堡阻塞效应 (Rydberg Blockade)}
@@ -687,9 +571,17 @@ $$V_{dip} = \frac{C_3}{R^3}$$
 里德堡阻塞是所有基于原子阵列的量子操作的基础。其核心思想是：原子间的强相互作用会抑制在窄空间范围内同时产生多个里德堡激发的可能性 。
 
 当激光以拉比频率 $\Omega$ 驱动原子从基态 $|g\rangle$ 到里德堡态 $|r\rangle$ 时，若两个原子相距较近，相互作用产生的能级位移 $V(R)$ 将使双激发态 $|rr\rangle$ 远离激光共振频率 。阻塞发生的判定条件为 $V(R) > \hbar\Omega$（或者考虑实验展宽 $\gamma$）。由此定义了阻塞半径 $R_b$：
-$$R_b = \left( \frac{C_6}{\hbar\Omega} \right)^{1/6}$$或者$$R_b = \left( \frac{C_3}{\hbar\Omega} \right)^{1/3} $$。
+\begin{equation}
+R_b = \left( \frac{C_6}{\hbar\Omega} \right)^{1/6}
+\end{equation}
+或者
+\begin{equation}
+R_b = \left( \frac{C_3}{\hbar\Omega} \right)^{1/3} 
+\end{equation}。
 在半径为 $R_b$ 的球形区域内，即便存在 $N$ 个原子，激光也只能激发出一个集体相干态：
-$$|W\rangle = \frac{1}{\sqrt{N}} \sum_{i=1}^N |g_1 g_2 \dots r_i \dots g_N\rangle$$
+\begin{equation}
+|W\rangle = \frac{1}{\sqrt{N}} \sum_{i=1}^N |g_1 g_2 \dots r_i \dots g_N\rangle
+\end{equation}
 该集体态与基态的耦合强度增强了 $\sqrt{N}$ 倍，这一体系被称为“里德堡超原子”（Rydberg Superatom） 。
 
 阻塞效应的强度可以通过改变原子间距 $r$ 或主量子数 $n$ 进行动态调节 。在量子模拟中，阻塞效应是实现可编程哈密顿量的关键：只有当控制原子未被激发时，受控原子的里德堡能级才处于共振，从而实现条件激发 。

@@ -13,7 +13,7 @@
 
 基于此，本章利用可编程里德堡量子模拟器的时空可调哈密顿量控制，追踪并定制 $U(1)$ LGT 的实时动力学。通过对拓扑角 $\theta$ 与费米子质量 $m$ 的动力学工程，本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上解析其对应的弦破碎与电荷—宇称对称性破缺特征。进一步地，本文在解禁闭区域探测实时电荷散射动力学，并观测到表征（1+1）维准弹性散射的菱形干涉结构。最后，本文在碰撞开始时对哈密顿量实施突然淬火，从而在高度非平衡条件下实现动力学冻结；该现象表明，动力学生成的高能散射态在一定时间窗口内可由淬火后哈密顿量的有效平衡态描述，这与重离子碰撞中 freeze-out 图像的基本思想相一致~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
 
-\section{理论框架：从里德堡原子到晶格规范场}
+\section{从里德堡原子到晶格规范场}
 
 \begin{figure}[htb]
   \centering
@@ -134,7 +134,7 @@ H_{\rm B} = \frac{1}{2}\int {\rm d}x\left[\dot{\phi}^2 + (\partial_x\phi)^2 + e^
 
 此外，在固定 $\chi$ 下，势隙 $\delta V$ 随质量 $m$ 增大而增大（图~\ref{EDFig:Mapping}\textbf{e}），这对应更强禁闭；该趋势与正文图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}（下图）的观测一致。
 
-\section{材料与方法：实验装置与控制技术}\label{ch7:sec:methods}
+\section{实验装置与控制技术}\label{ch7:sec:methods}
 
 \subsection{可编程原子阵列与里德堡激发}
 本文实验利用可编程里德堡原子阵列作为量子模拟器~\cite{fang_Peobing_2024,shaw_benchmarking_2024,Chen_Interaction_2025,manovitz_quantum_2025,Chen_Spectroscopy_2025}。单个 $^{87}$Rb 原子从激光冷却原子系综中加载到紧密聚焦的二维光镊阵列中；光镊阵列由空间光调制器（Spatial Light Modulator, SLM）衍射的 \SI{808}{\nano\meter} 激光束生成。一对正交取向的声光偏转器（Acousto-Optic Deflector, AOD）用于将原子重排为间距为 $a$ 的无缺陷一维链，使最近邻范德瓦尔斯相互作用达到 $V_{i,i+1}\approx 2\pi\times \SI{7.2}{\mega\hertz}$。重排后，原子进一步冷却至约 $\SI{10}{\micro\kelvin}$，并通过光抽运制备到 $\lvert g\rangle = \lvert5S_{1/2},F=2,m_F=2\rangle$。
@@ -256,7 +256,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
   \caption{
     \textbf{淬火动力学。} 
 \textbf{a}, 双参数淬火协议示意图。禁闭区域中，初始负电荷与正电荷由负电通量管（红箭头）连接并被弦张力 $\chi=1.8\kappa$ 束缚。
@@ -281,7 +281,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_Quench_dynamics_simulation.png}
+  \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/EDFigure_Quench_dynamics_simulation.png}
   \caption{\textbf{淬火动力学的数值模拟。} 
   对应正文图~\ref{Fig3:Quench_dynamics} 的电场 $E_i(t)$ 模拟时空演化，捕捉 $\Omega t^*=11.3$ 处双参数淬火后快速弦破碎的动力学特征。}
   \label{EDFig:Simulation_3}
@@ -320,7 +320,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
   \caption{\textbf{不同弦张力下的散射动力学。} 
   \textbf{a}, 不同弦张力下粒子密度 $\rho_i(t)$ 的时空演化（从左到右：$\chi/\kappa=0,0.3,0.4,0.6$）。
   \textbf{b}, 动力学电荷 $Q_i(t)$ 的相应演化。弦张力增大对应更强局域化，表征更强禁闭。
@@ -338,7 +338,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
   \caption{\textbf{可调费米子质量与弦张力淬火下的散射动力学。} 
   \textbf{a--c}, 解禁闭相动力学：\textbf{a,b}, $m=0$（左）与 $m=0.66\kappa$（右）的 $\rho_i(t)$（\textbf{a}）与 $Q_i(t)$（\textbf{b}）时空演化；\textbf{c} 为对应平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$。
   \textbf{d--f}, 弦张力淬火动力学：在 $\Omega t=10.6$ 淬火至 $\chi=0.6\kappa$（灰色箭头与虚线）。\textbf{d,e} 为 $\rho_i(t)$（\textbf{d}）与 $Q_i(t)$（\textbf{e}）演化；\textbf{f} 为 $E(t)$，显示 $m_0=0.66\kappa$ 的弦振荡显著增强。}
@@ -380,7 +380,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
   \caption{\textbf{实验装置与时序。} 
   \textbf{a}, 弦张力淬火实验时序。序列起始于通过结合全局里德堡 $\pi$ 脉冲（橙色线，$\Omega/2\pi \approx \SI{2.6}{\mega\hertz}$）与格点依赖寻址光束（红线与蓝线）制备类介子态。寻址光束产生差分交流斯塔克频移，使选定原子对里德堡跃迁失谐，如 \textbf{b} 插图所示。红色（蓝色）箭头指示用于初始化 $\mathbb{Z}_2$ 真空（创建类介子激发）的寻址配置。随后体系在 LGT 哈密顿量下演化，正质量由全局蓝失谐（绿线）设定。在淬火时间 $t^*$，用于制备 $\mathbb{Z}_2$ 真空的寻址光束（红线）被快速激活以淬火弦张力。演化结束（$t>t_e$）后，通过格点分辨荧光成像读出原子态。
  \textbf{b}, 态制备后测得的原子基态布居（原始实验数据），显示清晰的格点分辨类介子结构。校正探测误差后制备保真度为 51(5)\%。
@@ -391,7 +391,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \begin{figure}[htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_Mapping_V1.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_Mapping_V1.png}
   \caption{\textbf{晶格规范场论到里德堡原子阵列的映射。} 
   \textbf{a}, 在里德堡原子阵列中实现（1+1）维 $U(1)$ LGT。PXP 模型中里德堡自旋（箭头）编码规范场；辅助费米子（彩色圆圈）定义在相邻自旋之间的链接上。里德堡阻塞强制约束 $n_i+n_{i+1}+n_i^{\mathrm{f}}=1$ 并实现 $U(1)$ 规范对称性。图中示意解禁闭与禁闭相下类介子态的时空演化。
   \textbf{b}, 一维原子链构型示意：从上到下分别为正电场串（$+E$）、负电场串（$-E$）、负电荷激发、正电荷激发以及负—正电荷对。

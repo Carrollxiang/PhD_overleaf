@@ -3,7 +3,7 @@
 
 \chapter{基于 OTOC 和 Holevo 信息的量子信息塌缩与复苏研究}
 
-\section{引言与理论动机}
+\section{引言}
 孤立量子多体系统中的相互作用通常会将局域信息加扰到整个系统中，使其难以通过局域观测恢复。遍历性破缺系统则可能展现出超越这一范式的、根本不同的信息动力学：例如多体局域化体系中输运消失、加扰以对数形式缓慢进行，而动力学受限体系中局域翻转在周围量子比特上诱导迟滞响应，可能带来非传统的信息传播与回流机制。基于第 5 章建立的 PXP 受限动力学平台，本章关注的问题是：当在中心格点编码一比特局域信息后，该信息在多体相互作用与动力学约束共同作用下如何扩散、加扰与回流。
 
 量子信息动力学，即研究局域量子信息如何在复杂多体系统中传播，在理解许多基本问题中起着至关重要的作用。它可以用来研究量子系统中信息传播速度的限制~\cite{
@@ -27,9 +27,9 @@ OTOC 是探测多体系统中量子信息加扰的有力工具~\cite{lewis2019dy
 \end{equation}
 其中 $\hat{W}_i(t)=e^{i\hat{H}t}\hat{W}_i e^{-i\hat{H}t}$，$\ket{\psi}$ 为初态。本章比较两类初态：反铁磁 $\mathbb{Z}_2$ 有序态 $\ket{\mathbb{Z}_2}$ 与平凡直积态 $\ket{\mathbf{0}}=\ket{\downarrow\downarrow\downarrow\cdots}$。实验协议遵循五步法：（1）态制备；（2）在 $\hat{H}$ 下正向演化时间 $t$；（3）施加中心局域微扰 $\sigma_c^z$；（4）在 $-\hat{H}$ 下反向演化时间 $t$；（5）计算基测量得到 $\sigma_j^z$ 的期望值并构造 $\hat{F}_{ij}(t)$。
 
-实验上，本文采用远失谐的 \SI{200}{\ns} 微波脉冲对所有量子比特施加全局 $\sigma^z$ 门以实现时间反演；局域 $\sigma_c^z$ 相移通过 795-\unit{\nano\meter} 寻址激光诱导约 $2\pi\times\SI{5}{\MHz}$ 的光频移，并在约 \SI{110}{\ns} 内实现 $\pi$ 相移。为减弱有限尺寸系统的边界效应，本文制备 25 量子比特链并将 OTOC 测量集中在中心 13 个量子比特区域。
+实验上，本文采用远失谐的 \SI{200}{\ns} 微波脉冲对所有量子比特施加全局 $\sigma^z$ 门以实现时间反演；局域 $\sigma_c^z$ 相移通过 \SI{795}{\nm} 寻址激光诱导约 $2\pi\times\SI{5}{\MHz}$ 的光频移，并在约 \SI{110}{\ns} 内实现 $\pi$ 相移。为减弱有限尺寸系统的边界效应，本文制备 25 量子比特链并将 OTOC 测量集中在中心 13 个量子比特区域。
 
-图~\ref{ch6:fig:si-otoc-sequence} 给出 ZZ-OTOC 的脉冲序列。协议起始于两类初态的制备：\(\ket{\mathbb{Z}_2}\) 与 \(\ket{\mathbf{0}}\)（态制备细节见第~\ref{section:Z2} 节）。随后系统在哈密顿量 \(H\) 下经历持续时间 \(t\) 的正向演化。接着，本文通过 795-\unit{\nano\meter} 寻址激光诱导 \(\pi\) 相移，将局域微扰 \(\sigma_j^z\) 选择性施加到中心（第 13 个）原子上；同时通过微波场对所有量子比特施加全局 \(\prod_i\sigma^z_i\) 旋转。这个全局旋转，结合随后的哈密顿量演化，有效地实现了相等持续时间 $t$ 的时间反演哈密顿量 $-H$，从而实现所需的 OTOC 测量 \(F_{ij}(t) = \bra{\psi}W_i^\dagger(t)V_j^\dagger W_i(t)V_j\ket{\psi}\)。
+图~\ref{ch6:fig:si-otoc-sequence} 给出 ZZ-OTOC 的脉冲序列。协议起始于两类初态的制备：\(\ket{\mathbb{Z}_2}\) 与 \(\ket{\mathbf{0}}\)（态制备细节见第~\ref{section:Z2} 节）。随后系统在哈密顿量 \(H\) 下经历持续时间 \(t\) 的正向演化。接着，本文通过 \SI{795}{\nm} 寻址激光诱导 \(\pi\) 相移，将局域微扰 \(\sigma_j^z\) 选择性施加到中心（第 13 个）原子上；同时通过微波场对所有量子比特施加全局 \(\prod_i\sigma^z_i\) 旋转。这个全局旋转，结合随后的哈密顿量演化，有效地实现了相等持续时间 $t$ 的时间反演哈密顿量 $-H$，从而实现所需的 OTOC 测量 \(F_{ij}(t) = \bra{\psi}W_i^\dagger(t)V_j^\dagger W_i(t)V_j\ket{\psi}\)。
 
 为了减轻光镊陷阱在基态和里德堡态上诱导的差分交流斯塔克频移，陷阱在里德堡激发前关闭，并在态演化后重新打开。考虑到估计的原子温度约为 \SI{10}{\micro\kelvin} 以及释放和再捕获时间为 \SI{10}{\micro\second}，导致的原子损失估计约为 1\%。
 
@@ -42,7 +42,7 @@ OTOC 是探测多体系统中量子信息加扰的有力工具~\cite{lewis2019dy
   \label{ch6:fig:si-otoc-sequence}
 \end{figure}
 
-用于局域微扰 \(\sigma_j^z\) 的 795-\unit{\nano\meter} 寻址激光与用于 $\ket{\mathbb{Z}_2}$ 态制备的交替光频移图案由同一 SLM 的不同区域产生。这些区域加载不同的全息图，从而形成不同的寻址光图案。该空间复用机制使得本文能够在 $\ket{\mathbb{Z}_2}$ 态制备与局域微扰配置之间实现亚微秒级切换，而不受 AOD（微秒级）与 SLM（毫秒级）刷新率的限制。局域微扰脉冲的持续时间为 \(\sim\)\SI{110}{\nano\second}，导致基态上的 \(\pi\) 相移。该局域微扰的有效性通过将其施加到两个由固定间隔隔开的 \(\pi/2\) 脉冲之间的单个原子上来进行实验验证。通过改变第二个脉冲的相位，观察到被寻址和未被寻址原子的 Ramsey 型振荡（图~\ref{ch6:fig:si-otoc-details}）。被寻址原子的振荡相对于未被寻址原子的振荡偏移了 \(1.01(2)\pi\)，证实了对单个原子的受控相移。
+用于局域微扰 \(\sigma_j^z\) 的 \SI{795}{\nm} 寻址激光与用于 $\ket{\mathbb{Z}_2}$ 态制备的交替光频移图案由同一 SLM 的不同区域产生。这些区域加载不同的全息图，从而形成不同的寻址光图案。该空间复用机制使得本文能够在 $\ket{\mathbb{Z}_2}$ 态制备与局域微扰配置之间实现亚微秒级切换，而不受 AOD（微秒级）与 SLM（毫秒级）刷新率的限制。局域微扰脉冲的持续时间为 \(\sim\)\SI{110}{\nano\second}，导致基态上的 \(\pi\) 相移。该局域微扰的有效性通过将其施加到两个由固定间隔隔开的 \(\pi/2\) 脉冲之间的单个原子上来进行实验验证。通过改变第二个脉冲的相位，观察到被寻址和未被寻址原子的 Ramsey 型振荡（图~\ref{ch6:fig:si-otoc-details}）。被寻址原子的振荡相对于未被寻址原子的振荡偏移了 \(1.01(2)\pi\)，证实了对单个原子的受控相移。
 
 \begin{figure}[htb]
   \centering
@@ -114,7 +114,7 @@ F_{cj}(t) = 2P_j(\uparrow) - 1.
 
 \section{基于 Holevo 信息的非马尔可夫输运}
 \subsection{受限希尔伯特空间下的全量子态层析}
-为了在 PXP 动力学约束下执行全量子态层析，本文利用 \SI{480}{\nm} 寻址激光将目标量子比特周围的四个相邻原子（如图~\ref{ch6:fig:hi-sequence} 所示）的里德堡布居转移回基态。480-\unit{\nano\meter} 寻址激光与 $\ket{e}$-$\ket{r}$ 跃迁共振，拉比频率为 $\Omega_{480} \sim 2\pi \times \SI{20}{\MHz}$。这些激光实现快速里德堡-基态转移并创建 EIT 条件，防止相邻量子比特参与由全局激发激光驱动的基态-里德堡跃迁。
+为了在 PXP 动力学约束下执行全量子态层析，本文利用 \SI{480}{\nm} 寻址激光将目标量子比特周围的四个相邻原子（如图~\ref{ch6:fig:hi-sequence} 所示）的里德堡布居转移回基态。\SI{480}{\nm} 寻址激光与 $\ket{e}$-$\ket{r}$ 跃迁共振，拉比频率为 $\Omega_{480} \sim 2\pi \times \SI{20}{\MHz}$。这些激光实现快速里德堡-基态转移并创建 EIT 条件，防止相邻量子比特参与由全局激发激光驱动的基态-里德堡跃迁。
 
 \subsection{数值方法}
 
@@ -149,7 +149,7 @@ Holevo 信息也被提议作为研究多体量子系统中加扰和输运动力�
 在随后的哈密顿量演化过程中，本文测量不同格点 \(j\) 处的 Holevo 信息 $\mathbb{X}_j(t)$，它量化了可以通过远处格点的局域测量检索到多少编码在中心量子比特上的信息：
 \begin{equation}
 \mathbb{X}_j(t) = S\left(\frac{\rho_j(t) + \rho'_j(t)}{2}\right) - \frac{S(\rho_j(t)) + S(\rho'_j(t))}{2},
-\label{Eq:Holevo-information}
+\label{ch6:eq:Holevo-information}
 \end{equation}
 其中 $\rho_j(t)$ 和 $\rho'_j(t)$ 分别是初态 $\ket{\mathbb{Z}_2}$ 和 $\sigma^x_c\ket{\mathbb{Z}_2}$ 经过哈密顿量演化后第 $j$ 个自旋的约化密度矩阵。冯· 诺依曼熵 $S(\rho) = -\text{Tr}(\rho \log_2 \rho)$ 用于量化密度矩阵的信息含量。实验测量过程如图~\ref{ch6:fig:holevo} 所示，包括：(1) 制备初态 $\ket{\mathbb{Z}_2}$ 和 $\sigma^x_{c}\ket{\mathbb{Z}_2}$；(2) 经过时间 $t$ 的哈密顿量演化；(3) 对量子比特 $j$ 进行量子态层析以获得 $\rho_j(t)$ 和 $\rho'_j(t)$。
 
@@ -174,21 +174,21 @@ Holevo 信息是从重建的密度矩阵中提取的，该矩阵包括对角和�
   \caption{
 \textbf{Holevo 信息测量细节。}
 \textbf{a}, {中心 7 个量子比特的里德堡布居，有（蓝色）和没有（红色）里德堡布居转移过程。数据分别通过偶数原子和奇数原子的里德堡布居测量获得。}
-\textbf{b}, {在全局 480-\unit{\nano\meter} 和 780-\unit{\nano\meter} 激光的驱动下，目标量子比特（红色菱形）表现出基态和里德堡态之间的拉比振荡，而相邻量子比特（蓝色方块）由于 480-\unit{\nano\meter} 寻址激光产生的 EIT 条件，不参与自旋旋转过程。}
+\textbf{b}, {在全局 \SI{480}{\nm} 和 \SI{780}{\nm} 激光的驱动下，目标量子比特（红色菱形）表现出基态和里德堡态之间的拉比振荡，而相邻量子比特（蓝色方块）由于 \SI{480}{\nm} 寻址激光产生的 EIT 条件，不参与自旋旋转过程。}
 }
   \label{ch6:fig:hi-dissipative}
 \end{figure}
 
 \subsection{Holevo 信息实验细节}
-实验上，本文实现了一种结合全局旋转和 480-\unit{\nano\meter} 寻址激光的密度矩阵重建新方法。与激发态 $\ket{e}$ 到里德堡态 $\ket{r}$ 的跃迁共振的寻址光束被选择性地施加到四个相邻量子比特，通过从中间态 \(\ket{e}\) 的自发辐射将其里德堡布居转移到基态。转移过程中里德堡布居的衰减率 $\Gamma_r$ 可以估计为：
+实验上，本文实现了一种结合全局旋转和 \SI{480}{\nm} 寻址激光的密度矩阵重建新方法。与激发态 $\ket{e}$ 到里德堡态 $\ket{r}$ 的跃迁共振的寻址光束被选择性地施加到四个相邻量子比特，通过从中间态 \(\ket{e}\) 的自发辐射将其里德堡布居转移到基态。转移过程中里德堡布居的衰减率 $\Gamma_r$ 可以估计为：
 \begin{equation}
 \Gamma_r = \Gamma_e\frac{\Omega_{480}^2/4}{\delta^2 + \Gamma^2/4 + \Omega_{480}^2/2}.
 \end{equation}
-这里，$\Gamma_e = 2\pi \times \SI{6.06}{\MHz}$ 是激发态 $\ket{5P_{3/2}}$ 的自然线宽。项 $\Omega_{480}$ 和 $\delta$ 分别表示寻址光束的拉比频率和失谐。此过程持续约 \SI{200}{\nano\second}，足以耗尽相邻格点处的里德堡布居（图~\ref{ch6:fig:hi-dissipative}a），同时足够短以避免因 480-\unit{\nano\meter} 寻址激光的串扰而对目标量子比特产生不必要的效应。在态转移过程后，相邻量子比特中的里德堡布居减少了 96(1)\%，而目标量子比特的里德堡布居因串扰而减少的量可忽略不计。
+这里，$\Gamma_e = 2\pi \times \SI{6.06}{\MHz}$ 是激发态 $\ket{5P_{3/2}}$ 的自然线宽。项 $\Omega_{480}$ 和 $\delta$ 分别表示寻址光束的拉比频率和失谐。此过程持续约 \SI{200}{\nano\second}，足以耗尽相邻格点处的里德堡布居（图~\ref{ch6:fig:hi-dissipative}a），同时足够短以避免因 \SI{480}{\nm} 寻址激光的串扰而对目标量子比特产生不必要的效应。在态转移过程后，相邻量子比特中的里德堡布居减少了 96(1)\%，而目标量子比特的里德堡布居因串扰而减少的量可忽略不计。
 
-接下来，480-\unit{\nano\meter} 寻址激光将裸里德堡态 \(\ket{r}\) 分裂为两个缀饰态：\(\ket{+} = \frac{1}{\sqrt{2}}(\ket{r} + \ket{e})\) 和 \(\ket{-} = \frac{1}{\sqrt{2}}(\ket{r} - \ket{e})\)，由 \(\hbar\Omega_{480}\) 分隔，其中 $\Omega_{480} \sim 2\pi \times \SI{20}{\MHz}$ 是 480-\unit{\nano\meter} 寻址激光的拉比频率。缀饰态从基态-里德堡跃迁中显著失谐。从基态 \(\ket{g}\) 到缀饰态 \(\ket{+}\) 和 \(\ket{-}\) 的非共振激发引起相消干涉，阻止布居转移到里德堡态。这产生了电磁诱导透明 (EIT) 条件，确保相邻量子比特不参与由全局激发激光驱动的基态-里德堡相干驱动。
+接下来，\SI{480}{\nm} 寻址激光将裸里德堡态 \(\ket{r}\) 分裂为两个缀饰态：\(\ket{+} = \frac{1}{\sqrt{2}}(\ket{r} + \ket{e})\) 和 \(\ket{-} = \frac{1}{\sqrt{2}}(\ket{r} - \ket{e})\)，由 \(\hbar\Omega_{480}\) 分隔，其中 $\Omega_{480} \sim 2\pi \times \SI{20}{\MHz}$ 是 \SI{480}{\nm} 寻址激光的拉比频率。缀饰态从基态-里德堡跃迁中显著失谐。从基态 \(\ket{g}\) 到缀饰态 \(\ket{+}\) 和 \(\ket{-}\) 的非共振激发引起相消干涉，阻止布居转移到里德堡态。这产生了电磁诱导透明 (EIT) 条件，确保相邻量子比特不参与由全局激发激光驱动的基态-里德堡相干驱动。
 
-最后，使用全局激发激光对目标量子比特实施单量子比特旋转。图~\ref{ch6:fig:hi-dissipative}b 演示了在存在由 480-\unit{\nano\meter} 激光寻址的相邻量子比特的情况下，目标量子比特可以经历单量子比特旋转（基态和里德堡态之间的拉比振荡）。由于 480-\unit{\nano\meter} 激光诱导的 EIT 条件，被寻址的相邻量子比特仍然不符合基态-里德堡激发的条件。
+最后，使用全局激发激光对目标量子比特实施单量子比特旋转。图~\ref{ch6:fig:hi-dissipative}b 演示了在存在由 \SI{480}{\nm} 激光寻址的相邻量子比特的情况下，目标量子比特可以经历单量子比特旋转（基态和里德堡态之间的拉比振荡）。由于 \SI{480}{\nm} 激光诱导的 EIT 条件，被寻址的相邻量子比特仍然不符合基态-里德堡激发的条件。
 
 在具有周期性边界条件的理想情况下，PXP 模型将在整个演化过程中表现出泡利 X 算符 $\langle \sigma^x \rangle$ 的平稳期望值。对于像 $\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x \ket{\mathbb{Z}_2}$ 这样的初态，这意味着 $\langle \sigma^x \rangle = 0$。然而，在演化和投影测量之间的间隙时间内，原子之间残留的范德瓦尔斯相互作用可能导致相位积累，导致 $\langle \sigma^x \rangle$ 变为非零。这在准确测量系统密度矩阵所需的非对角元素方面引入了挑战。由于初态（$\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x \ket{\mathbb{Z}_2}$）的差异，即使经过相同的 PXP 演化，两个输出态也可能积累不同的残留相位。这种相位差在直接测量非对角元素时引入了额外的可分辨性，增加了两个输出态 $\rho_j(t)$ 和 $\rho'_j(t)$ 之间的差异。结果，这种额外的可分辨性降低了 Holevo 信息的准确性。为了解决这个问题，本文通过扫描两个 $\pi/2$ 脉冲之间的相移来测量完整的宇称振荡曲线。从该曲线中，本文通过将其拟合为正弦函数来提取振荡幅度 $A$。
 
@@ -205,7 +205,7 @@ Holevo 信息是从重建的密度矩阵中提取的，该矩阵包括对角和�
 	\textbf{通过 Holevo 信息探测量子信息输运动力学。
  } 
 \textbf{a}, 
-    Holevo 信息测量协议示意图。为了测量约化密度矩阵的非对角元素，480-\unit{\nano\meter} 寻址激光首先将相邻格点的里德堡布居转移到基态 $\ket{g}$，然后将 $\ket{r}$ 态分裂为两个缀饰态 $\ket{+}=(\ket{r}+\ket{e})/\sqrt{2}$ 和 $\ket{-}=(\ket{r}-\ket{e})/\sqrt{2}$，从而屏蔽这些格点在全局驱动下的自旋旋转。关于自旋旋转约束下量子态层析的更多细节见第~\ref{Sec:HolevoMeas}节。
+    Holevo 信息测量协议示意图。为了测量约化密度矩阵的非对角元素，\SI{480}{\nm} 寻址激光首先将相邻格点的里德堡布居转移到基态 $\ket{g}$，然后将 $\ket{r}$ 态分裂为两个缀饰态 $\ket{+}=(\ket{r}+\ket{e})/\sqrt{2}$ 和 $\ket{-}=(\ket{r}-\ket{e})/\sqrt{2}$，从而屏蔽这些格点在全局驱动下的自旋旋转。关于自旋旋转约束下量子态层析的更多细节见第~\ref{Sec:HolevoMeas}节。
 \textbf{b} 和 \textbf{c}, 
     分别实验测量和数值模拟的 Holevo 信息时空动力学。
     颜色条对应于 Holevo 信息 $\mathbb{X}_{j}(t)$ 的值。数值模拟利用里德堡哈密顿量 $\hat{H}_\text{R}$ 并根据实验系统的精确表征考虑了各种实验缺陷（见方法和第~\ref{ch6:sec:error-char} 节）。
@@ -288,7 +288,7 @@ H_{\text{toy}}= \frac{\Omega}{2}\sum_i\sigma^x_i+ \sum_{i}V_{i-1,i+2}P_{i,i+1},
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_06/figure/SI_toy_model.png}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_06/figure/SI_toy_model.png}
   \caption{
     \textbf{玩具模型和 PXP 模型之间疤痕态量子信息动力学的比较。} {
 \textbf{a}, 理想玩具模型哈密顿量 $H_{\text{toy}}$ 演化下的完美疤痕态波函数振荡。
@@ -325,7 +325,7 @@ F_{ij}^{exp}(t) =\mathcal{F}_{\mathbb{Z}_2} \cdot F_{ij}^{\mathbb{Z}_2}(t) + \su
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.7\textwidth]{chapters/chapter_06/figure/SI_ZZ-OTOC_Z2_eff.png}
+\includegraphics[width=0.9\textwidth]{chapters/chapter_06/figure/SI_ZZ-OTOC_Z2_eff.png}
 \caption{\textbf{$\ket{\mathbb{Z}_2}$ 态制备保真度对 ZZ-OTOC 动力学的影响。} 
 {
 \textbf{a}--\textbf{d} 显示了四个表现出非平庸动力学的量子比特的 ZZ-OTOC 演化。彩色曲线代表增加的保真度值（0.2--1.0）。量子比特链图（顶部）中的蓝色圆圈指示每个图中的量子比特。
@@ -335,7 +335,7 @@ F_{ij}^{exp}(t) =\mathcal{F}_{\mathbb{Z}_2} \cdot F_{ij}^{\mathbb{Z}_2}(t) + \su
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.7\textwidth]{chapters/chapter_06/figure/SI_ZZ-OTOC_exp_Z2.png}
+\includegraphics[width=0.9\textwidth]{chapters/chapter_06/figure/SI_ZZ-OTOC_exp_Z2.png}
 \caption{
 {\textbf{实验 $\ket{\mathbb{Z}_2}$ 态制备误差对 ZZ-OTOC 动力学的影响。} 实线和虚线分别代表以实验测量的微观态组合 (MMC) 和完美 $\ket{\mathbb{Z}_2}$ 态作为初态的 OTOC 演化数值模拟，显示 13 原子阵列中每个量子比特的差异可忽略不计。} 
 }
@@ -359,11 +359,11 @@ F_{ij}^{exp}(t) =\mathcal{F}_{\mathbb{Z}_2} \cdot F_{ij}^{\mathbb{Z}_2}(t) + \su
 \begin{equation}
 \rho'_j(t) = \mathrm{Tr}_{i\neq j}\rho'(t)
 \end{equation}
-其中 $\mathrm{Tr}_{i\neq j}$ 表示对除第 $j$ 个量子比特之外的所有量子比特的偏迹。然后按照方程 (\ref{Eq:Holevo-information}) 计算 Holevo 信息。数值模拟显示，对于低制备保真度，$\SI{1}{\micro\second}$（驱动拉比频率 $\sim 2\pi \times\SI{1.2}{\MHz}$）后的\textit{塌缩与复苏}动力学会退化，特别是对于远离中心的量子比特；鉴于实验实现的高初态制备保真度，Holevo 信息动力学的独特特征得以保留并保持清晰可辨。
+其中 $\mathrm{Tr}_{i\neq j}$ 表示对除第 $j$ 个量子比特之外的所有量子比特的偏迹。然后按照方程 (\ref{ch6:eq:Holevo-information}) 计算 Holevo 信息。数值模拟显示，对于低制备保真度，$\SI{1}{\micro\second}$（驱动拉比频率 $\sim 2\pi \times\SI{1.2}{\MHz}$）后的\textit{塌缩与复苏}动力学会退化，特别是对于远离中心的量子比特；鉴于实验实现的高初态制备保真度，Holevo 信息动力学的独特特征得以保留并保持清晰可辨。
 
-{为了评估不完美初态制备对 Holevo 信息动力学的影响，本文进行了具有不同初态制备保真度的数值模拟。图~\ref{Fig:Holevo_Z2}a--d 展示了初态制备保真度范围从 0.2 到 1.0 的 Holevo 信息动力学。
+{为了评估不完美初态制备对 Holevo 信息动力学的影响，本文进行了具有不同初态制备保真度的数值模拟。图~\ref{ch6:fig:Holevo_Z2}a--d 展示了初态制备保真度范围从 0.2 到 1.0 的 Holevo 信息动力学。
 结果表明，对于低制备保真度，$\SI{1}{\micro\second}$（驱动拉比频率 $\sim 2\pi \times\SI{1.2}{MHz}$）后的{\textit{塌缩与复苏}动力学}会退化，特别是对于远离中心的量子比特。
-这些结果进一步强调了高 $\ket{\mathbb{Z}_2}$ 态制备保真度对于观察量子信息\textit{塌缩与复苏}的必要性。基于实验制备的初态的测量微观态组合，数值模拟中假设 $\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x\ket{\mathbb{Z}_2}$ 态具有相同的制备保真度，误差态均匀分布在所有初始化为 $\ket{\uparrow}$ 的量子比特上。为此，图~\ref{Fig:Holevo_Z2}e,f 比较了实验制备的 $\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x\ket{\mathbb{Z}_2}$ 态（虚线）与完美初态（实线）的 Holevo 信息动力学。结果表明，鉴于实验实现的高初态制备保真度，Holevo 信息动力学的独特特征得以保留并保持清晰可辨。}
+这些结果进一步强调了高 $\ket{\mathbb{Z}_2}$ 态制备保真度对于观察量子信息\textit{塌缩与复苏}的必要性。基于实验制备的初态的测量微观态组合，数值模拟中假设 $\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x\ket{\mathbb{Z}_2}$ 态具有相同的制备保真度，误差态均匀分布在所有初始化为 $\ket{\uparrow}$ 的量子比特上。为此，图~\ref{ch6:fig:Holevo_Z2}e,f 比较了实验制备的 $\ket{\mathbb{Z}_2}$ 和 $\sigma_c^x\ket{\mathbb{Z}_2}$ 态（虚线）与完美初态（实线）的 Holevo 信息动力学。结果表明，鉴于实验实现的高初态制备保真度，Holevo 信息动力学的独特特征得以保留并保持清晰可辨。}
 
 \begin{figure}[htb]
   \centering
@@ -375,7 +375,7 @@ F_{ij}^{exp}(t) =\mathcal{F}_{\mathbb{Z}_2} \cdot F_{ij}^{\mathbb{Z}_2}(t) + \su
 \textbf{e} 和 \textbf{f},
 实线代表完美初态的动力学，而虚线显示具有实验制备的初态保真度的动力学。} 每个图上方的量子比特链指示所考虑的量子比特的位置（彩色圆圈）。
 }
-\label{Fig:Holevo_Z2}
+\label{ch6:fig:Holevo_Z2}
 \end{figure}
 
 
@@ -391,20 +391,20 @@ P(\downarrow) = \varepsilon(1-\eta) P'(\uparrow) + (1-\eta) P'(\downarrow)
 
 \subsubsection{演化误差}
 
-虽然本文在数值模拟中仅考虑两个态（基态 $\ket{\downarrow}$ 和里德堡态 $\ket{\uparrow}$），但第三个态（中间态 $\ket{e} = \ket{5P_{3/2}}$，线宽为 $\Gamma_e$ $\approx$ 2$\pi \times \SI{6.06}{\MHz}$）参与了由拉曼激光驱动的演化，并在 OTOC 和 Holevo 信息动力学中引入了非相干误差。480-\unit{\nano\meter} (780-\unit{\nano\meter}) 拉曼激光将 $\ket{\uparrow}$ ($\ket{\downarrow}$) 态耦合到 $\ket{e}$，导致不必要的散射和 $\ket{\downarrow}$ 与 $\ket{\uparrow}$ 之间的退极化。此外，里德堡态的辐射寿命也有助于演化过程中的退极化。这些效应可以总结并由一个参数表征，即退极化时间 $T_1$，它解释了 OTOC 和 Holevo 信息振荡的振幅阻尼。
+虽然本文在数值模拟中仅考虑两个态（基态 $\ket{\downarrow}$ 和里德堡态 $\ket{\uparrow}$），但第三个态（中间态 $\ket{e} = \ket{5P_{3/2}}$，线宽为 $\Gamma_e$ $\approx$ 2$\pi \times \SI{6.06}{\MHz}$）参与了由拉曼激光驱动的演化，并在 OTOC 和 Holevo 信息动力学中引入了非相干误差。\SI{480}{\nm} (\SI{780}{\nm}) 拉曼激光将 $\ket{\uparrow}$ ($\ket{\downarrow}$) 态耦合到 $\ket{e}$，导致不必要的散射和 $\ket{\downarrow}$ 与 $\ket{\uparrow}$ 之间的退极化。此外，里德堡态的辐射寿命也有助于演化过程中的退极化。这些效应可以总结并由一个参数表征，即退极化时间 $T_1$，它解释了 OTOC 和 Holevo 信息振荡的振幅阻尼。
 
 本文系统中的演化误差源于三个主要来源：自发辐射引起的退极化、原子的有限温度和激光噪声。
 
 \textbf{退极化效应}。本文考虑了由于中间态自发辐射和里德堡态辐射衰变引起的退极化时间 $T_1$。里德堡态在演化时间 $t$ 内衰变到基态的误差概率近似为 $\eta = \gamma t$，其中 $\gamma t \ll 1$。这里，由于多体演化的复杂性，$\gamma = 1/T_1$ 被视为自由参数。这种复杂性源于两个因素：(1) 在演化过程中，不同的初态（例如 $\ket{\mathbb{Z}_2}$ 和 $\ket{\mathbf{0}}$）导致平均里德堡布居的变化，从而导致不同的有效衰减率；(2) 多体态演化中指数增长的希尔伯特空间和复杂的相互作用导致有效衰减率不同于单原子演化中更容易测量的衰减率。
 
-\textbf{有限温度效应}。原子的热运动导致两个效应：原子位置的波动和多普勒频移。位置波动影响里德堡-里德堡相互作用，其缩放为 $1/R^6$，其中 $R$ 是原子间距离。本文估计位置波动的标准差约为 \SI{0.3}{\um}，直接影响里德堡-里德堡相互作用的强度。另一方面，多普勒频移在里德堡激发中引入频率失谐。本文通过使用释放和再捕获方法测量演化开始时的平均原子温度来表征这些热效应，发现其约为 \SI{10}{\micro K}。由此，本文计算出原子速度分布的标准差为 $\sigma_v = \sqrt{k_B T/M}$，其中 $k_B$ 是玻尔兹曼常数，$T$ 是温度，$M$ 是原子质量。对于本文具有 480-\unit{\nano\meter} $\sigma^+$ 偏振和 780-\unit{\nano\meter} $\sigma^+$ 偏振光的反向传播双光子激发方案，这对应于标准差为 $\delta{\Delta_1}=k \sigma_v \approx 2 \pi \times \SI{25}{\kHz}$ 的多普勒展宽，其中 $k\approx \SI{1.25}{\per\um}$ 是有效双光子波矢量。
+\textbf{有限温度效应}。原子的热运动导致两个效应：原子位置的波动和多普勒频移。位置波动影响里德堡-里德堡相互作用，其缩放为 $1/R^6$，其中 $R$ 是原子间距离。本文估计位置波动的标准差约为 \SI{0.3}{\um}，直接影响里德堡-里德堡相互作用的强度。另一方面，多普勒频移在里德堡激发中引入频率失谐。本文通过使用释放和再捕获方法测量演化开始时的平均原子温度来表征这些热效应，发现其约为 \SI{10}{\micro K}。由此，本文计算出原子速度分布的标准差为 $\sigma_v = \sqrt{k_B T/M}$，其中 $k_B$ 是玻尔兹曼常数，$T$ 是温度，$M$ 是原子质量。对于本文具有 \SI{480}{\nm} $\sigma^+$ 偏振和 \SI{780}{\nm} $\sigma^+$ 偏振光的反向传播双光子激发方案，这对应于标准差为 $\delta{\Delta_1}=k \sigma_v \approx 2 \pi \times \SI{25}{\kHz}$ 的多普勒展宽，其中 $k\approx \SI{1.25}{\per\um}$ 是有效双光子波矢量。
 
-\textbf{激光噪声}。本文表征了激光源的强度和相位噪声。拉比频率波动 $\delta \Omega/\Omega$ 与激光强度波动 $\delta I/I$ 的关系为 $\delta \Omega/\Omega \approx \delta I/(2I)$。使用快速光电二极管(PD)对 780-\unit{\nano\meter} 和 480-\unit{\nano\meter} 拉曼激光功率变化的高带宽测量揭示了 RMS 幅度噪声 $\delta \Omega/\Omega \approx 0.01$。对于激光频率噪声，本文在高于腔线宽（\SI{960}{\nano\meter} 处 $\gamma_\text{cav} \approx 2\pi \times \SI{110}{\kHz}$，\SI{780}{\nano\meter} 处 $2\pi \times \SI{60}{\kHz}$）的傅里叶频率处分析了环内 PDH 误差信号。本文通过积分噪声谱密度 $S_{\nu}(f)$ 来估计激光频率噪声：
+\textbf{激光噪声}。本文表征了激光源的强度和相位噪声。拉比频率波动 $\delta \Omega/\Omega$ 与激光强度波动 $\delta I/I$ 的关系为 $\delta \Omega/\Omega \approx \delta I/(2I)$。使用快速光电二极管(PD)对 \SI{780}{\nm} 和 \SI{480}{\nm} 拉曼激光功率变化的高带宽测量揭示了 RMS 幅度噪声 $\delta \Omega/\Omega \approx 0.01$。对于激光频率噪声，本文在高于腔线宽（\SI{960}{\nano\meter} 处 $\gamma_\text{cav} \approx 2\pi \times \SI{110}{\kHz}$，\SI{780}{\nano\meter} 处 $2\pi \times \SI{60}{\kHz}$）的傅里叶频率处分析了环内 PDH 误差信号。本文通过积分噪声谱密度 $S_{\nu}(f)$ 来估计激光频率噪声：
 \begin{equation}
 \delta{\Delta_2} = \sqrt{\int_{\gamma_\text{cav}}^{f_h} S_{\nu}(f) df},
 \label{ch6:eq:deltaDelta2}
 \end{equation}
-其中 $f_h \approx 1/\delta t$。这产生了组合的 780-\unit{\nano\meter} 和 480-\unit{\nano\meter} 激光贡献的 RMS 频率噪声 $\delta{\Delta_2} \approx 2\pi \times\SI{5}{\kHz}$。由于这种频率噪声以与多普勒效应相同的方式导致量子比特与驱动场之间相对相位的不确定性 $\delta\phi$，本文在接下来的分析中仅考虑 $\delta\phi$ 而不是 $\delta{\Delta_1}$ 和 $\delta{\Delta_2}$ 的组合。
+其中 $f_h \approx 1/\delta t$。这产生了组合的 \SI{780}{\nm} 和 \SI{480}{\nm} 激光贡献的 RMS 频率噪声 $\delta{\Delta_2} \approx 2\pi \times\SI{5}{\kHz}$。由于这种频率噪声以与多普勒效应相同的方式导致量子比特与驱动场之间相对相位的不确定性 $\delta\phi$，本文在接下来的分析中仅考虑 $\delta\phi$ 而不是 $\delta{\Delta_1}$ 和 $\delta{\Delta_2}$ 的组合。
 
 \begin{figure}[htb]
   \centering
@@ -420,7 +420,7 @@ P(\downarrow) = \varepsilon(1-\eta) P'(\uparrow) + (1-\eta) P'(\downarrow)
 在本文的实验中，如第~\hyperref[section:setup]{1.1} 节所述，本文采用 Pound-Drever-Hall (PDH) 技术将里德堡激发激光频率稳定到 ULE 腔。该方法有效地将激光频率噪声抑制到腔线宽以下。本文将高于线宽的高频噪声处理为两个分量：一个归因于伺服凸起~\cite{levine2018high, de2018analysis}，剩余的噪声可以建模为光谱均匀（白）相位噪声~\cite{jiang2023sensitivity}。结果，方程 (\ref{ch6:eq:noisyH}) 中的 $\Delta(t)$ 可以由均方根 (RMS) 幅度为 $\delta\Delta$ 的高斯分布近似。此外，激光功率的变化和空间不均匀性引起拉比频率的高斯型扰动，其特征在于 RMS 幅度 $\delta\Omega$。此外，引入参数 $\delta\phi$ 来表示 $\phi(t)$ 的不确定性，以考虑演化过程中里德堡态和基态之间相对相位的波动，通常源于激发激光的伺服凸起。最后，$V_{ij}(t)$ 的不确定性由原子运动和初始原子距离的无序引入。
 
 \subsubsection{局域微扰不完美}
-对于 ZZ-OTOC 测量，额外的误差源是 $\sigma^z$ 局域微扰非保真度。由于 $\sigma_c^z$ 门是通过远失谐 795-\unit{\nano\meter} 寻址激光束诱导里德堡态和基态之间的相对 $\pi$ 相移来实现的，非保真度主要源于累积相位的不确定性。为了表征局域微扰的不确定性，本文对使用和不使用 795-\unit{\nano\meter} 寻址进行局域 $\sigma_i^z$ 的 Ramsey 实验结果进行了比较分析。结果表明不确定性约为 0.09$\pi$。这种不确定性导致了整体演化噪声，并影响了本文局域微扰的保真度。
+对于 ZZ-OTOC 测量，额外的误差源是 $\sigma^z$ 局域微扰非保真度。由于 $\sigma_c^z$ 门是通过远失谐 \SI{795}{\nm} 寻址激光束诱导里德堡态和基态之间的相对 $\pi$ 相移来实现的，非保真度主要源于累积相位的不确定性。为了表征局域微扰的不确定性，本文对使用和不使用 \SI{795}{\nm} 寻址进行局域 $\sigma_i^z$ 的 Ramsey 实验结果进行了比较分析。结果表明不确定性约为 0.09$\pi$。这种不确定性导致了整体演化噪声，并影响了本文局域微扰的保真度。
 
 \begin{figure}[t]
 \centering
