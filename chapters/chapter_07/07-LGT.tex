@@ -1,27 +1,27 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-\chapter{晶格规范场论中的实时散射与动力学冻结}
+\chapter{格点规范场论中的实时散射与动力学冻结}
 \section{引言}
 
-理解规范场论的非平衡动力学仍是高能物理的核心挑战之一~\cite{Calzetta_Hu_2008,gross_50_2023}。在实验上，从重离子碰撞到轻子与强子对撞，许多关键过程都发生在远离平衡态的强相互作用演化之中；然而，这类演化通常难以进行严格的从头计算（\textit{ab initio}）处理~\cite{bauer_quantum_2023-1}。量子模拟为这一问题提供了资源可控的替代路径~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025}。近年来，多个物理平台已经在实验上观测到规范场论的代表性现象~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025,schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,datla_statistical_2025,gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024,zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}，其中包括弦断裂~\cite{gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024}与假真空衰变~\cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。本章基于可编程里德堡原子阵列，研究（1+1）维 $U(1)$ 晶格规范场论（lattice gauge theory, LGT）中的实时散射与动力学冻结。
+理解规范场论的非平衡动力学仍是高能物理的核心挑战之一~\cite{Calzetta_Hu_2008,gross_50_2023}。在实验上，从重离子碰撞到轻子与强子对撞，许多关键过程都发生在远离平衡态的强相互作用演化之中；然而，这类演化通常难以进行严格的从头计算（\textit{ab initio}）处理~\cite{bauer_quantum_2023-1}。量子模拟为这一问题提供了资源可控的替代路径~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025}。近年来，多个物理平台已经在实验上观测到规范场论的代表性现象~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025,schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,datla_statistical_2025,gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024,zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}，其中包括弦断裂~\cite{gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024}与假真空衰变~\cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。本章基于可编程里德堡原子阵列，研究（1+1）维 $U(1)$ 格点规范场论（lattice gauge theory, LGT）中的实时散射与动力学冻结。
 
 通过时空哈密顿量工程，本文实现了动力学禁闭—解禁闭相变，并在量子淬火过程中观测到弦破碎与对称性恢复。借助单址分辨读出，本文在不同参数区域追踪了类介子激发的传播与散射。进一步地，本文引入双重淬火协议并观测到动力学冻结（freeze-out）：在散射后对哈密顿量进行淬火时，尽管系统被注入大量能量，其后续演化（低阶关联与纠缠增长）均被显著抑制，体系在很长时间内近似停留在一个高度关联的状态。该现象与重离子碰撞中常用的 freeze-out 图像在物理直觉上相呼应~\cite{Berges_QCD_2021}。总体而言，本章建立了一种以高时空分辨率探测非微扰规范动力学的实验路径~\cite{CarmenBanuls_Review_2020}，为研究远离平衡态的规范场论现象提供了可控平台。
 
-规范场论支配三种基本相互作用。以量子色动力学（quantum chromodynamics, QCD）为例，它作为强相互作用理论呈现出禁闭~\cite{wilson_confinement_1974}、弦断裂~\cite{bali_observation_2005}与渐近自由~\cite{Frank_Nobel_2005}等深刻现象。尽管 QCD 的形式结构相对简洁，但夸克与胶子之间的强耦合使得解析求解极具挑战~\cite{wiese_ultracold_2013}。数值上，晶格规范场论~\cite{wilson_confinement_1974,creutz_monte_1983}为平衡性质（能谱、相图等）提供了可靠的非微扰框架，但在实时动力学问题上计算资源需求呈指数级增长~\cite{troyer_computational_2005,CarmenBanuls_Review_2020}。实验上，粒子对撞机能够测量渐近末态，却难以对瞬态中间过程实施可控操控与直接读出~\cite{belyansky_high-energy_2024}。因此，对远离平衡态的规范动力学开展可控、可重复、并能分辨中间态的实验研究，仍是基础物理的重要前沿。
+规范场论支配三种基本相互作用。以量子色动力学（quantum chromodynamics, QCD）为例，它作为强相互作用理论呈现出禁闭~\cite{wilson_confinement_1974}、弦断裂~\cite{bali_observation_2005}与渐近自由~\cite{Frank_Nobel_2005}等深刻现象。尽管 QCD 的形式结构相对简洁，但夸克与胶子之间的强耦合使得解析求解极具挑战~\cite{wiese_ultracold_2013}。数值上，格点规范场论~\cite{wilson_confinement_1974,creutz_monte_1983}为平衡性质（能谱、相图等）提供了可靠的非微扰框架，但在实时动力学问题上计算资源需求呈指数级增长~\cite{troyer_computational_2005,CarmenBanuls_Review_2020}。实验上，粒子对撞机能够测量渐近末态，却难以对瞬态中间过程实施可控操控与直接读出~\cite{belyansky_high-energy_2024}。因此，对远离平衡态的规范动力学开展可控、可重复、并能分辨中间态的实验研究，仍是基础物理的重要前沿。
 
 量子模拟为经典计算与高能对撞实验提供了资源高效的补充~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025,Chai2025fermionic,chai2025resource,chai2025scalable}，使得在离子阱~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025}、超导量子比特~\cite{wang_observation_2022,Cochran2025,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge}、光晶格超冷原子~\cite{schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025}以及里德堡原子阵列~\cite{bernien2017probing,surace_lattice_2020,gonzalez-cuadra_observation_2025,datla_statistical_2025}等平台上开展 LGT 的桌面研究成为可能。这些系统通过哈密顿量工程复现了禁闭~\cite{schweizer_floquet_2019,tan_observation_2021,mildenberger_confinement_2025,zhang_observation_2025}与非平庸真空结构~\cite{zhu_probing_2024}等关键非微扰特征，为理解 QCD 动力学提供了可检验的物理场景。然而，面向高能物理的核心问题——实时散射动力学（可视作基本粒子的碰撞过程）——其实验实现仍然受限：关键瓶颈包括制备具有确定动量结构的入射态，以及在强相互作用期间实现精确的时空操控与读出。
 
 基于此，本章利用可编程里德堡量子模拟器的时空可调哈密顿量控制，追踪并定制 $U(1)$ LGT 的实时动力学。通过对拓扑角 $\theta$ 与费米子质量 $m$ 的动力学工程，本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上解析其对应的弦破碎与电荷—宇称对称性破缺特征。进一步地，本文在解禁闭区域探测实时电荷散射动力学，并观测到表征（1+1）维准弹性散射的菱形干涉结构。最后，本文在碰撞开始时对哈密顿量实施突然淬火，从而在高度非平衡条件下实现动力学冻结；该现象表明，动力学生成的高能散射态在一定时间窗口内可由淬火后哈密顿量的有效平衡态描述，这与重离子碰撞中 freeze-out 图像的基本思想相一致~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
 
-\section{从里德堡原子到晶格规范场}
+\section{从里德堡原子到格点规范场}
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig1_experimental_seup_and_LGT_mapping.png}
 \caption{
-\textbf{里德堡原子晶格规范场论量子模拟器。} 
+\textbf{里德堡原子格点规范场论量子模拟器。} 
 \textbf{a}, 可编程里德堡原子阵列。原子由有效拉比频率 $\Omega$ 与失谐 $\Delta$ 的里德堡激光全局驱动，并通过在各格点提供局域光频移 $\delta_i$ 的远失谐光束实现单独寻址（第~\ref{ch7:sec:methods} 节）。
-\textbf{b}, 晶格规范场论（LGT）映射。原子态 $\ket{g}$ 与 $\ket{r}$ 在奇数格点上分别编码规范场 $+E$（蓝箭头）与 $-E$（红箭头），在偶数格点上对应关系反转。里德堡阻塞效应强制满足高斯定律。在物质格点（定义为相邻规范格点之间的间隙位置），正负电荷作为相反规范极性之间的畴壁出现。
+\textbf{b}, 格点规范场论（LGT）映射。原子态 $\ket{g}$ 与 $\ket{r}$ 在奇数格点上分别编码规范场 $+E$（蓝箭头）与 $-E$（红箭头），在偶数格点上对应关系反转。里德堡阻塞效应强制满足高斯定律。在物质格点（定义为相邻规范格点之间的间隙位置），正负电荷作为相反规范极性之间的畴壁出现。
 \textbf{c}, 量子链接模型的实现。LGT 构型可直接映射到 \textbf{a} 所示阵列中的原子态排列，表现为交替的规范场与局域化的物质激发。
 \textbf{d}, LGT 哈密顿量的控制。全局失谐 $\Delta$ 将费米子质量 $m$ 从 $0$ 调制至 $m>m_c$，对应在 \textbf{e} 中将 $V(\phi)$ 从单阱结构调制为双阱结构。交错失谐 $\delta_i = (-1)^i\delta$ 使 $\theta$ 偏离 $\pi$，通过势能不对称性驱动禁闭—解禁闭相变。
 \textbf{e}, 禁闭—解禁闭机制。在 $\theta=\pi$（解禁闭）时，$V(\phi)$ 的简并极小值对应消失的弦张力，从而允许电荷自由传播；当 $\theta \neq \pi$（禁闭）时，不对称性诱导非零弦张力，分离代价随距离线性增长，从而抑制对产生。
@@ -86,7 +86,7 @@ n_i + n_{i+1} + n^f_i = 1\,.
 \begin{equation}
 f_i \to e^{{\rm i}\phi_i} f_i,\qquad \sigma^+_i \to e^{-{\rm i}(\phi_{i-1}+\phi_i)} \sigma^+_i,
 \end{equation}
-其中 $\phi_i$ 参数化晶格上的规范变换。由于 $|e^{{\rm i}\phi_i}|=1$，该构造对应一维晶格上的 $U(1)$ 规范场论（图~\ref{EDFig:Mapping}\textbf{a}）。守恒律式~\eqref{eq:conserve} 即为高斯定律的晶格模拟。由此可将 $f_i$ 识别为物质场，将 $\sigma_i^z$ 识别为规范场（对应电场 $E_i$）。特别地，$\sigma^+_i$ 扮演链接变量 $U_i$ 的角色并满足 $[E_i,U_i]=U_i$。利用约束式~\eqref{eq:conserve}，式~\eqref{eq:ham} 可重写为
+其中 $\phi_i$ 参数化格点上的规范变换。由于 $|e^{{\rm i}\phi_i}|=1$，该构造对应一维格点上的 $U(1)$ 规范场论（图~\ref{EDFig:Mapping}\textbf{a}）。守恒律式~\eqref{eq:conserve} 即为高斯定律的格点模拟。由此可将 $f_i$ 识别为物质场，将 $\sigma_i^z$ 识别为规范场（对应电场 $E_i$）。特别地，$\sigma^+_i$ 扮演链接变量 $U_i$ 的角色并满足 $[E_i,U_i]=U_i$。利用约束式~\eqref{eq:conserve}，式~\eqref{eq:ham} 可重写为
 \begin{equation}\label{eq:ham2}
 H = \sum_i \left[\frac{\Omega}{2}\left(f^\dagger_{i-1} U_i^\dagger f^\dagger_i + f_{i-1} U_i f_i\right) + \frac{\Delta}{2} n^f_i\right],
 \end{equation}
@@ -100,7 +100,7 @@ G_i = E_{i+1} + E_i + n^f_i
 
 \subsection{施温格模型与玻色化形式}
 
-在连续极限下，链接变量 $U_i$ 对应协变导数 $D_\mu=\partial_\mu - i e A_\mu$（$\mu=0,1$），其中 $A_\mu$ 为晶格场 $\phi_i$ 的连续版本。量子链接模型在该极限下对应一维空间的量子电动力学（quantum electrodynamics, QED），即施温格模型，其哈密顿量为
+在连续极限下，链接变量 $U_i$ 对应协变导数 $D_\mu=\partial_\mu - i e A_\mu$（$\mu=0,1$），其中 $A_\mu$ 为格点场 $\phi_i$ 的连续版本。量子链接模型在该极限下对应一维空间的量子电动力学（quantum electrodynamics, QED），即施温格模型，其哈密顿量为
 \begin{equation}
 H_{\rm QED} = \int {\rm d}x \left[\psi^\dagger (i\gamma^\mu D_\mu-m)\psi - \frac{1}{4}F_{\mu\nu}F^{\mu\nu}\right],
 \end{equation}
@@ -166,9 +166,9 @@ H_{\rm B} = \frac{1}{2}\int {\rm d}x\left[\dot{\phi}^2 + (\partial_x\phi)^2 + e^
 \begin{align}
 \hat{H}_{\mathrm{exp}} = &\frac{\Omega}{2} \sum_i \hat{\sigma}^x_i - (\Delta_0 + \delta) \sum_i \hat{n}_i + \nonumber \\ & \delta \sum_i (-1)^i \hat{n}_i + \sum_{i<j} \frac{C_6}{(a |i-j|)^6} \hat{n}_i \hat{n}_j.
 \end{align}
-其中 $\delta=\Delta_{\mathrm{ac}}/2$ 为交错失谐，$\Delta_0$ 为里德堡激光全局失谐，$C_6$ 为范德瓦尔斯相互作用系数，$a$ 为晶格间距。该哈密顿量与正文所用里德堡哈密顿量 $H_{\mathrm{R}}$ 形式一致，其中 $\Delta=\Delta_0+\delta$ 且 $V_{ij}=C_6/(a|i-j|)^6$。
+其中 $\delta=\Delta_{\mathrm{ac}}/2$ 为交错失谐，$\Delta_0$ 为里德堡激光全局失谐，$C_6$ 为范德瓦尔斯相互作用系数，$a$ 为格点间距。该哈密顿量与正文所用里德堡哈密顿量 $H_{\mathrm{R}}$ 形式一致，其中 $\Delta=\Delta_0+\delta$ 且 $V_{ij}=C_6/(a|i-j|)^6$。
 
-在正文所有测量中，本文将阵列配置为里德堡阻塞半径 $R_b$ 超过晶格间距 $a$，并满足 $R_b/a\gtrsim 1.3$。该条件保证最近邻双激发被有效抑制，从而在动力学上强制满足高斯定律约束。
+在正文所有测量中，本文将阵列配置为里德堡阻塞半径 $R_b$ 超过格点间距 $a$，并满足 $R_b/a\gtrsim 1.3$。该条件保证最近邻双激发被有效抑制，从而在动力学上强制满足高斯定律约束。
 
 对于正文图~\ref{Fig:2_confinement_and_deconfinement_phases}、\ref{Fig:4_Meson_dynamics} 与 \ref{Fig:5_Freeze-frame-dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.2}{\mega\hertz}$，里德堡态 $\lvert 68D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.2}{\micro\meter}$，对应 $R_b/a=1.35$。对于正文图~\ref{Fig3:Quench_dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.5}{\mega\hertz}$，里德堡态 $\lvert 72D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.0}{\micro\meter}$，对应 $R_b/a=1.3$。在所有配置中，频闪测量步长 $\Delta T$ 满足 $\Omega \Delta T = 0.75$。
 
@@ -292,7 +292,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 \begin{figure}[htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig4_Meson_dynamics.png}
-  \caption{\textbf{$U(1)$ 晶格规范场论中的实时散射动力学。} 
+  \caption{\textbf{$U(1)$ 格点规范场论中的实时散射动力学。} 
   \textbf{a,b}, 不同弦张力下实验测量的动力学电荷 $Q_i(t)$ 时空演化。\textbf{c,d}, 选定时刻的格点分辨粒子密度 $\rho_i(t)=|Q_i(t)|$。
   \textbf{a,c}, 强禁闭（$\chi=0.6\kappa$）下电荷保持局域化，密度在整个演化过程中集中于初始位置。
   \textbf{b,d}, 解禁闭（$\chi=0$）下电荷自由传播并在波包重叠时发生散射；在 $\Omega t=19.6$ 处出现中心密度峰值，并在 $\Omega t=29.4$ 演化为对称双峰结构。\textbf{b} 中虚线指示光锥轨迹；\textbf{d} 插图为碰撞示意图。
@@ -376,7 +376,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 需要强调，动力学冻结并非平庸现象：散射态具有较强纠缠~\cite{pichler_real-time_2016}，但在弦张力淬火后半链纠缠熵增长被显著抑制（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{f}），因此简单的能量注入直觉不足以刻画其动力学。扩展该方案，本文还系统研究了不同质量下由解禁闭到禁闭淬火诱导的散射与非平衡动力学（第~\ref{ch7:sec:methods} 节）。动力学冻结作为一种涌现现象，可能与更一般的非平衡动力学结构相关，甚至超越禁闭/解禁闭二分框架。
 
-该现象也与重离子物理中的 freeze-out 描述具有类比：高度非微扰、远离平衡态的演化产物可在一定程度上由有效平衡态表述。里德堡平台中“暂停动力学”以及对相互作用的开关控制，为评估实验观测与平衡理论模型之间的对应关系提供了理想测试平台，与重离子碰撞与晶格 QCD 背景下的相关讨论相呼应~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
+该现象也与重离子物理中的 freeze-out 描述具有类比：高度非微扰、远离平衡态的演化产物可在一定程度上由有效平衡态表述。里德堡平台中“暂停动力学”以及对相互作用的开关控制，为评估实验观测与平衡理论模型之间的对应关系提供了理想测试平台，与重离子碰撞与格点 QCD 背景下的相关讨论相呼应~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
 
 \begin{figure}[htb]
 \centering
@@ -392,7 +392,7 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 \begin{figure}[htb]
 \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_Mapping_V1.png}
-  \caption{\textbf{晶格规范场论到里德堡原子阵列的映射。} 
+  \caption{\textbf{格点规范场论到里德堡原子阵列的映射。} 
   \textbf{a}, 在里德堡原子阵列中实现（1+1）维 $U(1)$ LGT。PXP 模型中里德堡自旋（箭头）编码规范场；辅助费米子（彩色圆圈）定义在相邻自旋之间的链接上。里德堡阻塞强制约束 $n_i+n_{i+1}+n_i^{\mathrm{f}}=1$ 并实现 $U(1)$ 规范对称性。图中示意解禁闭与禁闭相下类介子态的时空演化。
   \textbf{b}, 一维原子链构型示意：从上到下分别为正电场串（$+E$）、负电场串（$-E$）、负电荷激发、正电荷激发以及负—正电荷对。
   \textbf{c--d}, （1+1）维 $U(1)$ LGT 的相图，作为 $m/\kappa$ 与 $\chi/\kappa$ 的函数。在禁闭区域（$\chi\neq 0$，$\theta\neq\pi$）中粒子被电弦束缚；在解禁闭区域（$\chi=0$，$\theta=\pi$）中粒子可自由传播。当 $m>m_c$ 时，$\chi=0$ 处出现自发电荷—宇称对称性破缺，其中 $m_c/\kappa=0.66$（\textbf{d}）。
@@ -410,6 +410,6 @@ $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初�
 
 \section{本章小结}
 
-本章基于可编程里德堡原子阵列实现了（1+1）维 $U(1)$ 晶格规范场论的含时哈密顿量工程，建立了从里德堡哈密顿量到量子链接模型及其连续极限描述的对应关系，并给出了质量、拓扑角与有效弦张力的可控映射。实验上，本文表征了禁闭—解禁闭相及其双参数淬火动力学，观测到弦破碎、对称性恢复以及类介子散射的菱形干涉图样。通过在碰撞开始时淬火到强禁闭相，本章实现了对纠缠散射态的动力学冻结，为高分辨率研究非平衡规范动力学提供了实验路径。
+本章基于可编程里德堡原子阵列实现了（1+1）维 $U(1)$ 格点规范场论的含时哈密顿量工程，建立了从里德堡哈密顿量到量子链接模型及其连续极限描述的对应关系，并给出了质量、拓扑角与有效弦张力的可控映射。实验上，本文表征了禁闭—解禁闭相及其双参数淬火动力学，观测到弦破碎、对称性恢复以及类介子散射的菱形干涉图样。通过在碰撞开始时淬火到强禁闭相，本章实现了对纠缠散射态的动力学冻结，为高分辨率研究非平衡规范动力学提供了实验路径。
 
 \end{document}
