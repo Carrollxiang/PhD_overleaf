@@ -1,415 +1,717 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \chapter{格点规范场论中的实时散射与动力学冻结}
-\section{引言}
 
-理解规范场论的非平衡动力学仍是高能物理的核心挑战之一~\cite{Calzetta_Hu_2008,gross_50_2023}。在实验上，从重离子碰撞到轻子与强子对撞，许多关键过程都发生在远离平衡态的强相互作用演化之中；然而，这类演化通常难以进行严格的从头计算（\textit{ab initio}）处理~\cite{bauer_quantum_2023-1}。量子模拟为这一问题提供了资源可控的替代路径~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025}。近年来，多个物理平台已经在实验上观测到规范场论的代表性现象~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025,schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,datla_statistical_2025,gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024,zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}，其中包括弦断裂~\cite{gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024}与假真空衰变~\cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。本章基于可编程里德堡原子阵列，研究（1+1）维 $U(1)$ 格点规范场论（lattice gauge theory, LGT）中的实时散射与动力学冻结。
 
-通过时空哈密顿量工程，本文实现了动力学禁闭—解禁闭相变，并在量子淬火过程中观测到弦破碎与对称性恢复。借助单址分辨读出，本文在不同参数区域追踪了类介子激发的传播与散射。进一步地，本文引入双重淬火协议并观测到动力学冻结（freeze-out）：在散射后对哈密顿量进行淬火时，尽管系统被注入大量能量，其后续演化（低阶关联与纠缠增长）均被显著抑制，体系在很长时间内近似停留在一个高度关联的状态。该现象与重离子碰撞中常用的 freeze-out 图像在物理直觉上相呼应~\cite{Berges_QCD_2021}。总体而言，本章建立了一种以高时空分辨率探测非微扰规范动力学的实验路径~\cite{CarmenBanuls_Review_2020}，为研究远离平衡态的规范场论现象提供了可控平台。
 
-规范场论支配三种基本相互作用。以量子色动力学（quantum chromodynamics, QCD）为例，它作为强相互作用理论呈现出禁闭~\cite{wilson_confinement_1974}、弦断裂~\cite{bali_observation_2005}与渐近自由~\cite{Frank_Nobel_2005}等深刻现象。尽管 QCD 的形式结构相对简洁，但夸克与胶子之间的强耦合使得解析求解极具挑战~\cite{wiese_ultracold_2013}。数值上，格点规范场论~\cite{wilson_confinement_1974,creutz_monte_1983}为平衡性质（能谱、相图等）提供了可靠的非微扰框架，但在实时动力学问题上计算资源需求呈指数级增长~\cite{troyer_computational_2005,CarmenBanuls_Review_2020}。实验上，粒子对撞机能够测量渐近末态，却难以对瞬态中间过程实施可控操控与直接读出~\cite{belyansky_high-energy_2024}。因此，对远离平衡态的规范动力学开展可控、可重复、并能分辨中间态的实验研究，仍是基础物理的重要前沿。
+\section{引言：从量子信息到高能物理的跨越}
 
-量子模拟为经典计算与高能对撞实验提供了资源高效的补充~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025,Chai2025fermionic,chai2025resource,chai2025scalable}，使得在离子阱~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025}、超导量子比特~\cite{wang_observation_2022,Cochran2025,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge}、光晶格超冷原子~\cite{schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025}以及里德堡原子阵列~\cite{bernien2017probing,surace_lattice_2020,gonzalez-cuadra_observation_2025,datla_statistical_2025}等平台上开展 LGT 的桌面研究成为可能。这些系统通过哈密顿量工程复现了禁闭~\cite{schweizer_floquet_2019,tan_observation_2021,mildenberger_confinement_2025,zhang_observation_2025}与非平庸真空结构~\cite{zhu_probing_2024}等关键非微扰特征，为理解 QCD 动力学提供了可检验的物理场景。然而，面向高能物理的核心问题——实时散射动力学（可视作基本粒子的碰撞过程）——其实验实现仍然受限：关键瓶颈包括制备具有确定动量结构的入射态，以及在强相互作用期间实现精确的时空操控与读出。
+在第五章和第六章中，本论文利用可编程里德堡原子阵列，系统性地研究了 PXP 模型中的受限多体动力学。我们观察到了量子多体疤痕以及局域量子信息的非马尔可夫回流。然而，里德堡阻塞这一动力学约束的物理意义远不止于此。在理论上，当系统处于强阻塞极限（$V\gg\Omega$）时，相邻原子不能同时被激发至里德堡态的动力学约束，可以在其低能有效子空间内，被严格映射为一种涌现的规范不变性（Emergent gauge invariance）。这种涌现对称性的数学结构直接对应于一维量子电动力学中的高斯定律（Gauss's law）。这一深刻的物理对应关系，使得本实验平台能够从量子信息与凝聚态物理的语境，自然地跨越至高能物理领域的格点规范场论（Lattice gauge theory, LGT）模拟。
 
-基于此，本章利用可编程里德堡量子模拟器的时空可调哈密顿量控制，追踪并定制 $U(1)$ LGT 的实时动力学。通过对拓扑角 $\theta$ 与费米子质量 $m$ 的动力学工程，本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上解析其对应的弦破碎与电荷—宇称对称性破缺特征。进一步地，本文在解禁闭区域探测实时电荷散射动力学，并观测到表征（1+1）维准弹性散射的菱形干涉结构。最后，本文在碰撞开始时对哈密顿量实施突然淬火，从而在高度非平衡条件下实现动力学冻结；该现象表明，动力学生成的高能散射态在一定时间窗口内可由淬火后哈密顿量的有效平衡态描述，这与重离子碰撞中 freeze-out 图像的基本思想相一致~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
+理解规范场论的非平衡动力学是现代高能物理学的核心挑战之一。在真实的物理世界中，从重离子碰撞到轻子与强子对撞，许多关键的物理过程都发生在远离平衡态的强相互作用演化之中。然而，对这类极度非平衡的动态过程进行严格的从头计算（\textit{ab initio}）极其困难。尽管格点规范场论为理解能谱和相图等平衡态性质提供了可靠的非微扰框架，但在处理实时演化动力学时，经典计算资源的需求呈指数级增长。在实验方面，传统的大型粒子对撞机能够精确测量渐近末态的产物，却难以对超快瞬态的中间散射过程实施可控的干预与直接读出。
 
-\section{从里德堡原子到格点规范场}
+在此背景下，人工合成量子系统（量子模拟）为研究规范场动力学提供了一条资源可控的替代路径。近年来，包括囚禁离子、超导量子比特、光格点超冷原子以及里德堡原子阵列在内的多个物理平台，已在实验上观测到了规范场论的多种代表性现象，例如弦断裂（String breaking）与假真空衰变（False vacuum decay）。然而，面向高能物理中最核心的实时散射（Real-time scattering）动力学，实验实现依然面临着巨大的瓶颈：这不仅要求制备具有特定动量结构的入射态，还要求在强相互作用期间具备极高时空分辨率的操控与探测能力。
 
-\begin{figure}[htb]
+基于前两章所建立的 PXP 受限动力学平台，本章将引入更复杂的时空哈密顿量工程（Spatiotemporal Hamiltonian engineering），致力于在实验上追踪并定制（1+1）维 U(1) 格点规范场论的实时动力学。在物理图像上，本章将突破单局域缺陷的限制，通过制备空间分离的“粒子-反粒子对”（类介子激发），并结合时空可调的局域寻址激光来动态控制拓扑角 $\theta$ 与费米子质量 $m$。利用这一升级后的动态控制能力，本章将依次探索三个核心的非平衡规范物理现象：
+\begin{itemize}
+    \item 量子淬火(Quench)驱动的动力学禁闭—解禁闭相变（Confinement-deconfinement transitions）及其对应的弦破碎特征；
+    \item 解禁闭区域的类介子实时散射动力学（Real-time scattering dynamics），观测表征准弹性散射的干涉结构；
+    \item 强相互作用下的动力学冻结（Dynamical freeze-out），即在散射碰撞的最激烈时刻对体系施加淬火，观察高能散射态如何近似悬停在一个高度关联的有效平衡态，从而在实验上呼应重离子碰撞物理中的 freeze-out 图像。
+\end{itemize}
+
+
+
+\section{从里德堡原子到格点规范场的映射}
+
+里德堡原子阵列能够模拟格点规范场论的核心基础，在于其强范德瓦尔斯相互作用导致的里德堡阻塞。本节将详细阐述 PXP 模型受限空间如何过渡到量子链接模型（QLM），并建立实验操控变量与高能物理参量之间的严格映射字典。
+
+\subsection{量子链接模型与 U(1) 规范场哈密顿量}
+
+在强阻塞极限（$V_{i,i+1} \gg \Omega$）下，系统被限制在不包含相邻里德堡激发的受限子空间内，即满足局域不等式约束$n_i + n_{i+1} \leq 1$，其中$n_i$是格点$i$的里德堡布居数。为了将这一受限的多体自旋动力学映射为规范场论，我们采用量子链接模型（Quantum Link Model, QLM）的表述。
+
+\begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig1_experimental_seup_and_LGT_mapping.png}
-\caption{
-\textbf{里德堡原子格点规范场论量子模拟器。} 
-\textbf{a}, 可编程里德堡原子阵列。原子由有效拉比频率 $\Omega$ 与失谐 $\Delta$ 的里德堡激光全局驱动，并通过在各格点提供局域光频移 $\delta_i$ 的远失谐光束实现单独寻址（第~\ref{ch7:sec:methods} 节）。
-\textbf{b}, 格点规范场论（LGT）映射。原子态 $\ket{g}$ 与 $\ket{r}$ 在奇数格点上分别编码规范场 $+E$（蓝箭头）与 $-E$（红箭头），在偶数格点上对应关系反转。里德堡阻塞效应强制满足高斯定律。在物质格点（定义为相邻规范格点之间的间隙位置），正负电荷作为相反规范极性之间的畴壁出现。
-\textbf{c}, 量子链接模型的实现。LGT 构型可直接映射到 \textbf{a} 所示阵列中的原子态排列，表现为交替的规范场与局域化的物质激发。
-\textbf{d}, LGT 哈密顿量的控制。全局失谐 $\Delta$ 将费米子质量 $m$ 从 $0$ 调制至 $m>m_c$，对应在 \textbf{e} 中将 $V(\phi)$ 从单阱结构调制为双阱结构。交错失谐 $\delta_i = (-1)^i\delta$ 使 $\theta$ 偏离 $\pi$，通过势能不对称性驱动禁闭—解禁闭相变。
-\textbf{e}, 禁闭—解禁闭机制。在 $\theta=\pi$（解禁闭）时，$V(\phi)$ 的简并极小值对应消失的弦张力，从而允许电荷自由传播；当 $\theta \neq \pi$（禁闭）时，不对称性诱导非零弦张力，分离代价随距离线性增长，从而抑制对产生。
-\textbf{f}, 散射动力学的时空控制。通过结合全局里德堡拉曼 $\pi$ 脉冲与大规模局域搁置光束（第~\ref{ch7:sec:methods} 节）制备高保真类介子初态；随后在散射期间对 LGT 哈密顿量参数实施时空操控，从而触发动力学冻结并实现对中间散射态的“冻结取样”。
-}
-  \label{Fig1:experimental_set_up}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig1_experimental_seup_and_LGT_mapping.png}
+\caption{\textbf{里德堡原子格点规范场论量子模拟器以及物理量映射关系。} }
+  \label{ch7:fig:setup_and_LGT_mapping}
+\end{figure}
+\todo{这里需要重组图\ref{ch7:fig:setup_and_LGT_mapping}的内容，保留a-e}
+
+在这一映射中，存在一个极具物理巧思的反直觉设定（如图 \ref{ch7:fig:setup_and_LGT_mapping}b 与 \ref{ch7:fig:setup_and_LGT_mapping}c 所示）：里德堡原子本身并不代表实物粒子，而是代表定义在链接（Link）上的规范场（Gauge field）；真正的物质场（Matter field，即正负电荷）则被定义在相邻两个原子之间的“空隙（Site）”上。
+为了实现映射，我们在每对被阻塞的原子链接 i,i+1 之间引入一个辅助交错费米子（Staggered fermion）$f_i$。当任一原子处于里德堡态时，该费米子被湮灭；当相邻原子均为基态时，虚拟费米子的狄拉克海被占据。由此，原本的不等式约束在扩大的希尔伯特空间中被严格改写为等式守恒： 
+\begin{equation} 
+n_i + n_{i+1} + n_i^f = 1 
+\end{equation} 其中$n_i^f$为费米子的粒子数算符。
+
+在（1+1）维 U(1) 格点规范场论中，系统的哈密顿量由规范-物质耦合、费米子质量以及电场能量三部分构成：
+\begin{equation}
+\hat{H}_{\text{LGT}} = -\kappa \sum_i \left( \hat{\psi}_i^\dagger \hat{U}_{i,i+1} \hat{\psi}_{i+1} + \text{H.c.} \right) + m \sum_i (-1)^i \hat{\psi}_i^\dagger \hat{\psi}_i + J \sum_i \left( \hat{E}_{i,i+1} + \frac{\theta}{2\pi} \right)^2
+\label{ch7:eq:LGT_hamiltonian}
+\end{equation}
+其中，$\hat{\psi}_i$（$\hat{\psi}_i^\dagger$）代表格点 $i$ 上交错费米子（Staggered fermion）的湮灭（产生）算符；$\kappa$ 为规范-物质耦合常数；$m$ 为交错费米子的静止质量；$J$ 为电场能量尺度，$\theta$ 为拓扑角。$\hat{U}_{i,i+1}$ 为定义在链接 $(i,i+1)$ 上的动力学规范场，其共轭变量为电场 $\hat{E}_{i,i+1}$，两者满足对易关系 $[\hat{E}_{i,i+1}, \hat{U}_{i,i+1}] = \hat{U}_{i,i+1}$。
+
+为了将里德堡阵列与上述模型对应，我们将电场算符与原子的自旋状态建立映射：
+\begin{equation}
+\hat{E}_{i,i+1} = (-1)^i \hat{\sigma}_i^z,
+\end{equation}
+这种交错的定义意味着：在奇数格点上，原子的基态 $\ket{g}$ 和里德堡态 $\ket{r}$ 分别编码正向电场 $+E$ 和反向电场 $-E$；而在偶数格点上，这一对应关系严格反转（如图 \ref{ch7:fig:setup_and_LGT_mapping}b 中的红蓝箭头所示）。
+
+同时，物质格点 $i$ 上的动力学电荷 $\hat{Q}_i$ 被定义为：
+\begin{equation}
+\hat{Q}_i = \hat{\psi}_i^\dagger\hat{\psi}_i - \frac{1+(-1)^i}{2}.
+\end{equation}
+结合图 \ref{ch7:fig:setup_and_LGT_mapping}b 可以直观地理解这一构造：正负电荷作为相反规范电场极性之间的“畴壁（Domain walls）”涌现。当相邻原子的有效电场方向发生翻转时，它们之间的空隙处便会激发出一个正电荷或负电荷。
+
+基于上述定义，U(1) 规范场论的核心——高斯定律（Gauss's law）可被写为局域电荷与电场散度的关系：$\hat{G}_i = \hat{E}_{i,i+1} - \hat{E}_{i-1,i} - \hat{Q}_i = 0$。在里德堡原子阵列中，里德堡阻塞效应严禁相邻原子同为 $\ket{r}$ 态，这从微观动力学上自动且严格地保护了 $\hat{G}_i \ket{\psi} = 0$ 的约束。因此，里德堡阻塞效应自然地涌现为对局域电荷守恒的严格保护，实现了 LGT 的局域规范不变性。
+
+\subsection{连续极限与真空有效势}
+
+为了直观理解上述哈密顿量引发的相变行为，理论上常考虑其连续极限。在连续极限下，该一维格点模型对应于量子电动力学的施温格模型（Schwinger model）。通过费米子玻色化技术，该系统的低能动力学可由一个连续的标量场 $\phi$ 及有效势能描述：
+\begin{equation}
+V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
+\end{equation}
+其中 $e$ 和 $c$ 为常数，$m$ 为费米子质量，$\theta$ 为拓扑角。该有效势能 $V(\phi)$ 的极小值位置与简并度直接决定了规范场论的真空结构，进而主导了系统是处于电荷被电通量管束缚的禁闭相（Confined phase），还是电荷可自由传播的解禁闭相（Deconfined phase）。
+
+必须指出，本实验的有限系统尺寸（$L\sim25$）严格来说距离连续极限较远，因此实验中观测到的现象本质上是有限尺寸下的交叉行为（Crossover）而非热力学极限下的严格相变。然而，上述连续极限提供的有效势能 $V(\varphi)$ 图像，为我们定性理解规范场论的真空结构（如势阱极小值的简并度）、自发电荷-宇称对称性破缺，以及禁闭/解禁闭机制提供了极其准确的指导。
+
+\subsection{实验控制与规范参量的映射}
+
+为了在实验上探索上述规范真空结构的非平衡动力学，我们必须在里德堡物理与高能物理之间建立精确的参数映射关系。基于 QLM 映射，本实验平台中的三大核心操控旋钮与 $U(1)$ LGT 的关键物理量形成了一一映射：
+
+\begin{itemize}
+    \item 1. 拉比频率 $\Omega$ $\leftrightarrow$ 规范-物质耦合常数 $\kappa$：
+   在里德堡系统中，相干拉比驱动$\frac{\Omega}{2}\hat{\sigma}^x_i$对应方程 (\ref{ch7:eq:LGT_hamiltonian}) 中的动能项（即一对正负电荷的产生/湮灭伴随电场方向翻转）。由于规范约定的映射选择，该项系数对应为 $\kappa=-\Omega$（负号来源于格点费米子规范场的标准相位约定，不影响物理本质）。
+    \item 2. 全局失谐 $\Delta$ $\leftrightarrow$ 费米子质量 $m$：
+   调节里德堡激发光的全局单光子失谐 $\Delta$，等效于改变 LGT 中交错费米子的静止质量 $m$。当质量增大时，产生粒子-反粒子对的能量势垒变高，对应于有效势 $V(\phi)$ 中简并极小值分布的改变以及真空涨落的抑制。
+    \item 3. 交错局域失谐 $\delta$ $\leftrightarrow$ 拓扑角 $\theta$ 与弦张力 $\chi$：
+   这是本实验诱导禁闭行为的核心。当系统不存在交错失谐时（$\theta=\pi$），方程 (\ref{ch7:eq:LGT_hamiltonian}) 中的电场能量项对相反取向的电场（$+E$ 与 $−E$）是简并的，此时分离一对正负电荷不会产生额外的线性能量代价，对应于弦张力消失的解禁闭相（Deconfined phase）。 实验上，通过施加空间交错的光频移$\delta_i=(-1)^i\delta$，我们打破了这种平移对称性。这种交错能量偏移在分离正负电荷时，会使得介于电荷之间的“反转电场畴壁（弦）”每延伸一个格点，就付出 $2\delta$ 的能量代价。这种随距离线性增长的能量惩罚正是规范理论中有效弦张力（String tension）禁闭相（Confined phase）。
+\end{itemize}
+
+
+
+\section{规范参量的时空工程与类介子制备}
+
+在前两章的 PXP 受限动力学实验中，局域光频移（\SI{795}{\nm} 寻址光）主要被用于初态制备或在演化间隙施加瞬态相位门。而在格点规范场论的模拟中，为了探究实时的碰撞与禁闭相变，我们必须在强相互作用演化期间，对哈密顿量参数（如费米子质量 $m$ 与弦张力 $\chi$）进行高时空分辨率的动态调控。本节将详细介绍实现这一目标的两个关键实验技术：类介子多体初态的确定性制备，以及基于声光调制器（AOM）的纳秒级规范参量快速切换。
+
+\begin{figure}[!htb]
+\centering
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
+  \caption{\textbf{实验装置与时序。} }
+  \label{ch7:fig:experimental_setup}
 \end{figure}
 
-\subsection{模型与实验平台的统一描述}
+\subsection{空间复用的类介子激发（Meson-like excitation）制备}
 
-本文的实验平台为最多包含 30 个 $^{87}$Rb 原子的可编程阵列（图~\ref{Fig1:experimental_set_up}\textbf{a}）。原子首先制备在基态 $\ket{g}$，并通过有效拉比频率 $\Omega$ 与全局失谐 $\Delta$ 的双光子跃迁耦合到里德堡态 $\ket{r}$。单址分辨控制由远失谐寻址光束实现：该光束在各格点上产生可编程的局域交流斯塔克频移 $\delta_i$，从而允许构造定制失谐图案。特别地，交错配置 $\delta_i = (-1)^i\delta$ 用于调节拓扑角 $\theta$（图~\ref{Fig1:experimental_set_up}\textbf{d}--\textbf{e}）。
+在 LGT 的物理图像中，介子（Meson）对应于真空背景中产生的一对正负电荷（即粒子-反粒子对）。映射到里德堡阵列中，这等效于在 $\ket{\mathbb{Z}_2}$ 绝缘体背景中嵌入一对空间分离的局域畴壁（Domain walls）。例如，在一个 13 原子的链中，包含单个类介子激发的构型可表示为 $\ket{rgrgr\textbf{ggg}rgrgr}$（其中 $r$ 为里德堡态，$g$ 为基态）；而包含两个类介子激发的散射初态则可表示为 $\ket{r\textbf{ggg}rgrgr\textbf{ggg}r}$。
 
-里德堡原子阵列的动力学由
-$
-\hat{H}_{R}/\hbar = \sum_i \left[ \frac{\Omega}{2} \hat{\sigma}_i^x - (\Delta + \delta_i) \hat{n}_i \right] + \sum_{i<j} V_{ij} \hat{n}_i \hat{n}_j
-$
-描述，其中 $\hat{\sigma}_i^x$ 表征基态与里德堡态之间的相干耦合，$\hat{n}_i$ 为里德堡态占据算符，$V_{ij}$ 描述原子间的范德瓦尔斯相互作用。
+由于该类多体激发具有高度的空间不对称性与局域结构，仅依赖全局里德堡脉冲的幅度或相位调制无法实现高保真度制备。为此，我们扩展了第六章中的寻址制备方案。实验中，我们利用同一个空间光调制器（SLM）对两束远失谐的 \SI{795}{\nm} 激光进行空间整形与复用：一束光生成交错的寻址图案以初始化 $\ket{\mathbb{Z}_2}$ 有序真空背景；另一束光则精确寻址额外的特定格点，将其移出共振以引入对应的类介子畴壁缺陷。
 
-在里德堡阻塞区域 $V_{i,i+1} \gg \Omega$，相邻原子不能同时被激发到里德堡态。由于这一动力学约束，$\hat{H}_{R}$ 可映射到量子链接模型表述~\cite{banerjee_atomic_2012}下的 $U(1)$ LGT 哈密顿量~\cite{surace_lattice_2020}（第~\ref{ch7:sec:methods} 节）：
-\begin{multline}
-\hat{H}_{\text{LGT}} = -\kappa \sum_i \left( \hat{\psi}_i^\dagger \hat{U}_{i,i+1} \hat{\psi}_{i+1} + \text{H.c.} \right) \\
-+ m \sum_i (-1)^i \hat{\psi}_i^\dagger \hat{\psi}_i
-+ J \sum_i \left( \hat{E}_{i,i+1} + \frac{\theta}{2\pi} \right)^2.
-\end{multline}
-这里，$\hat{\psi}_i$（$\hat{\psi}_i^\dagger$）为格点 $i$ 的交错费米子湮灭（产生）算符；$\hat{U}_{i,i+1}$ 表示链接 $i,i+1$ 上的动力学规范场并可由自旋-$1/2$ 湮灭算符实现，其共轭变量为电场 $\hat{E}_{i,i+1}$，满足 $[\hat{E}_{i,i+1}, \hat{U}_{i,i+1}] = \hat{U}_{i,i+1}$。因此，体系动力学由规范—物质耦合 $\kappa$、交错费米子质量 $m$ 与规范不变电场能量 $J$ 共同决定。在本实验中，这些参数可通过 $\Omega=-\kappa$、$\Delta=m$ 与交错失谐 $2\delta=\chi=J(\pi-\theta)/\pi$ 独立调控，其中 $\chi$ 为有效弦张力（第~\ref{ch7:sec:methods} 节）。
+如图 \ref{ch7:fig:experimental_setup}a 的时序图与 \ref{ch7:fig:experimental_setup}b 的态制备后基态布居数所示，该方案能够清晰、确定性地在格点中“刻写”出所需的类介子构型。
+在此配置下，所有寻址光束在目标原子上诱导约 $2\pi\times \SI{15}{\mega\hertz}$ 的局域交流斯塔克频移（AC-Stark shift），同时保持极低的光子散射率（$\sim 2\pi\times \SI{5}{\kilo\hertz}$）。在施加全局双光子里德堡 $\pi$ 脉冲期间，被寻址的原子被牢牢锁定在基态，而未被寻址的原子则发生共振拉比翻转。利用这一可扩展的空间复用技术，我们在高达 25 个量子比特的长链中，成功制备了复杂的类介子多体初态，在校正探测误差后的制备保真度达到了 $51(5)\%$。这一高保真度的定制化初态制备。如图 7.2c 所示，经过精细的光路优化，阵列中拉比频率的峰峰值变化（$\delta\Omega_{PP}/\Omega$）为约 1.6\%，而均方根波动（$\delta\Omega_{RMS}/\Omega$）被极大地压制在 0.5\% 水平。这一极高的参数均匀性，为后续观测微弱的散射信号和长时间相干动力学提供了坚实的硬件保障。
 
-在 LGT 表述中，电场 $\hat{E}_{i,i+1}=(-1)^i\hat{\sigma}_i^z$ 可解释为激发区域与未激发区域之间的畴壁构型。物质格点 $i$ 的动力学电荷定义为 $\hat{Q}_i = \hat{\psi}_i^\dagger\hat{\psi}_i - (1+(-1)^i)/2$。里德堡阻塞效应等效强制满足高斯定律约束~\cite{surace_lattice_2020}：$G_i = E_{i,i+1} - E_{i-1,i} - Q_i = 0$，从而保证局域电荷守恒，并体现为 LGT 的规范不变性。动力学电荷、周围电场与原子态构型之间的对应关系如图~\ref{Fig1:experimental_set_up}\textbf{b}--\textbf{c}所示。
+\subsection{规范参量的纳秒级切换与时空控制}
 
-在连续极限下，LGT 哈密顿量可玻色化并映射到正弦-戈登模型，其标量势为 $V(\phi)=e^2\phi^2-cm\cos(2\phi-\theta)$（第~\ref{ch7:sec:methods} 节）~\cite{COLEMAN1976239,surace_lattice_2020}。这里 $e$ 为规范耦合常数，$c$ 为由 $\Omega$ 与 $\Delta$ 决定的常数，$\phi$ 为玻色化标量场。势能 $V(\phi)$ 决定真空结构~\cite{CALLAN1976334}与动力学响应（图~\ref{Fig1:experimental_set_up}\textbf{e}），从而导致禁闭—解禁闭相变~\cite{surace_lattice_2020}与自发电荷—宇称对称性破缺~\cite{yang_observation_2020}等现象。
+探索 (1+1) 维 LGT 相图及非平衡动力学的核心，在于对拓扑角 $\theta$（即弦张力 $\chi$）的动态控制。如 7.2 节所建立的物理字典所示，$\theta$ 项的控制在有效哈密顿量中通过交错局域失谐 $\delta_i=(-1)^i\delta$ 来实现。
 
-实验上，通过协同设计全局里德堡驱动与单址分辨寻址光束（第~\ref{ch7:sec:methods} 节），本文可高保真制备多种 LGT 态：均匀正/负电场真空、孤立电荷、以及类介子激发（粒子—反粒子对）。结合高保真初态制备与对 $V(\phi)$ 的可控调节，使得实时散射动力学在实验上可直接访问（图~\ref{Fig1:experimental_set_up}\textbf{f}）。例如，通过制备空间分离的类介子并淬火到解禁闭（$\theta=\pi$），可触发电荷传播与碰撞；而在散射过程中进一步施加禁闭淬火，则会出现本章讨论的动力学冻结现象（图~\ref{Fig1:experimental_set_up}\textbf{f}）。
+在本章实验中，该交错失谐图案同样由 \SI{795}{\nm} 寻址光束产生，但与以往实验的根本区别在于：寻址光束在全局拉曼演化期间保持开启，并可通过 AOM 进行超快切换。具体而言，开启的寻址光在目标原子（基态）上诱导局域交流斯塔克频移 $\Delta_\mathrm{ac}$；与此同时，我们在全局激发光上施加大小为 $\Delta_\mathrm{ac}/2$ 的整体失谐。两者的叠加精确构造出了所需的交错失谐分布：$\delta_i=(-1)^i\Delta_\mathrm{ac}/2$。此时，系统被引入了大小为 $\chi = \Delta_\mathrm{ac}$ 的有效弦张力。
 
-\subsection{量子链接模型与里德堡哈密顿量映射}
+为了在单次相干演化序列中诱导禁闭—解禁闭相变或实现动力学冻结，我们对送入 AOM 的射频（RF）功率进行精密控制以调节 $\chi$ 的大小。由于寻址光束在 AOM 晶体处的束腰被聚焦至极小的 $\sim \SI{100}{\micro\meter}$，这一光学设计使得我们能够在约 $\SI{20}{\nano\second}$ 内完成寻址光束的开启或关闭。相较于系统的特征演化时间步长（对应的相位累积仅为 $\Omega t \sim 0.15$），这一切换过程是极其迅速的。
 
-在可编程原子阵列中，每个原子可视为包含基态 $\lvert g\rangle$ 与里德堡态 $\lvert r\rangle$ 的二能级系统。里德堡原子间强范德瓦尔斯相互作用导致里德堡阻塞效应，从而禁止相邻原子同时激发。遵循文献~\cite{surace_lattice_2020,cheng_emergent_2024}，该阻塞约束可被理解为涌现的 $U(1)$ 规范不变性，其结构对应于电动力学中的高斯定律。
+这种纳秒级的超快时空工程（Spatiotemporal engineering）, 使得我们不仅能够在 $m=0, \theta=\pi$ 的解禁闭相中观察自由电荷的弹道传播，还能够在散射碰撞发生的最激烈时刻（例如演化至 $t \approx \SI{1.2}{\micro\second}$ 时），瞬间将质量 $m$ 和弦张力 $\chi$ 快速切换至极大值，从而直接在微观层面上干预并截获瞬态的强相互作用中间态。这种对多体哈密顿量“边演化、边修改”的动态操控能力，是突破传统对撞机观测极限、在桌面实验中探索高能散射动力学的核心技术基石。
 
-体系哈密顿量由相干激光驱动与里德堡相互作用两部分组成。相互作用项
-\begin{equation}
-\sum_{i<j} V_{ij} \hat{n}_i \hat{n}_j,\quad V_{ij} \sim C_6/(a|i - j|)^6
-\end{equation}
-描述里德堡态原子之间的范德瓦尔斯排斥，其中 $\hat{n}_i = \lvert r_i\rangle\langle r_i\rvert$ 为粒子数算符。激光驱动项
-\begin{equation}
-\frac{\Omega}{2} \sum_i \hat{\sigma}_x^i - \sum_i (\Delta + \delta_i)\hat{n}_i
-\end{equation}
-由有效双光子拉比频率 $\Omega$、全局失谐 $\Delta$ 与局域失谐 $\delta_i$ 决定。
 
-在实验中，最近邻相互作用 $V_{i,i+1}$ 显著大于 $\Omega$、$\Delta$ 与 $\delta_i$。局域失谐 $\delta_i$ 相对较小，因此在后续理论映射中可近似忽略；但它在调控有效拓扑角 $\theta$ 与真空结构方面仍起关键作用，同时不破坏潜在的规范约束。由于强相互作用，双激发态 $\lvert r_i r_j\rangle$ 能量上受到抑制，体系动力学被限制在排除相邻里德堡激发的受限子空间中。投影到该子空间得到有效哈密顿量
-\begin{equation}
-H_{\mathrm{PXP}} = \frac{\Omega}{2} \sum_i \hat{P}_{i-1} \hat{\sigma}_x^i \hat{P}_{i+1} - \Delta \sum_i \hat{n}_i,
-\end{equation}
-其中 $\hat{P}_i = 1 - \hat{n}_i$ 强制施加阻塞约束。该 PXP 哈密顿量~\cite{Lesanovsky_Interacting_2012}支配阻塞区域中的里德堡阵列动力学。
-
-PXP 哈密顿量中的投影算符在整个希尔伯特空间上施加约束：在里德堡阻塞半径内不允许两个原子同时处于里德堡态。该约束可通过引入辅助费米子来重写。暂时忽略交错费米子的细节，在每对被阻塞的原子之间定义一个位于链接上的虚拟费米子：当任一原子处于里德堡态时，该费米子被湮灭；当所有原子均处于基态时，虚拟费米子的“狄拉克海”被完全占据。由于同一链接上的费米子湮灭算符不能被重复作用于同一量子态，共享同一费米子链接的一对原子不能同时处于里德堡态，从而等效实现阻塞约束。用 $f_i$ 表示链接 $i,i+1$ 上费米子的湮灭算符，可将 PXP 哈密顿量改写为
-\begin{equation}\label{eq:ham}
-H = \sum_i \left[\frac{\Omega}{2}\left(\sigma_i^- f^\dagger_{i-1} f^\dagger_i + \sigma_i^+ f_{i-1} f_i\right) - \Delta n_i\right]
-\end{equation}
-其中 $\sigma^\pm_i = \sigma^x_i \pm {\rm i} \sigma^y_i$。在这一扩大希尔伯特空间中，原始约束 $n_i+n_{i+1}\le 1$ 被改写为等式（图~\ref{EDFig:Mapping}\textbf{a}）：
-\begin{equation}\label{eq:conserve}
-n_i + n_{i+1} + n^f_i = 1\,.
-\end{equation}
-这里 $n^f_i=f^\dagger_i f_i$ 为辅助费米子的粒子数算符。该等式约束对应扩大空间上的守恒律，从而暗示规范对称性的存在。具体而言，哈密顿量与约束在如下规范变换下保持不变：
-\begin{equation}
-f_i \to e^{{\rm i}\phi_i} f_i,\qquad \sigma^+_i \to e^{-{\rm i}(\phi_{i-1}+\phi_i)} \sigma^+_i,
-\end{equation}
-其中 $\phi_i$ 参数化格点上的规范变换。由于 $|e^{{\rm i}\phi_i}|=1$，该构造对应一维格点上的 $U(1)$ 规范场论（图~\ref{EDFig:Mapping}\textbf{a}）。守恒律式~\eqref{eq:conserve} 即为高斯定律的格点模拟。由此可将 $f_i$ 识别为物质场，将 $\sigma_i^z$ 识别为规范场（对应电场 $E_i$）。特别地，$\sigma^+_i$ 扮演链接变量 $U_i$ 的角色并满足 $[E_i,U_i]=U_i$。利用约束式~\eqref{eq:conserve}，式~\eqref{eq:ham} 可重写为
-\begin{equation}\label{eq:ham2}
-H = \sum_i \left[\frac{\Omega}{2}\left(f^\dagger_{i-1} U_i^\dagger f^\dagger_i + f_{i-1} U_i f_i\right) + \frac{\Delta}{2} n^f_i\right],
-\end{equation}
-其中忽略了总体常数以及由用 $n^f_i$ 替代 $n_i$ 引入的边界项。规范变换的生成元
-\begin{equation}
-G_i = E_{i+1} + E_i + n^f_i
-\end{equation}
-与哈密顿量对易，满足 $[G_i,H]=0$，即为高斯定律在该模型中的实现。
-
-式~\eqref{eq:ham2} 具有（1+1）维 $U(1)$ 量子链接模型的标准形式。进一步考虑交错费米子结构（偶/奇格点交替的物质与反物质），可得到 $E_i=(-1)^i\sigma_i^z$ 以及高斯定律约束与哈密顿量的相应修改，从而与正文所用形式一致。背景电场 $E_i^{\mathrm{bg}}$ 可通过平移 $E_i\to E_i+E_i^{\mathrm{bg}}$ 引入，这等效于在哈密顿量中加入拓扑 $\theta$ 项。该项在实验上对应交错局域失谐 $\delta_i=(-1)^i\delta$（与局域交流斯塔克频移成正比）。通过调节 $\delta$，本文可依据 $\delta = J(\pi-\theta)/2\pi$~\cite{banerjee_atomic_2012,surace_lattice_2020,cheng_tunable_2022} 动态控制拓扑角 $\theta$，从而访问不同真空结构与实时禁闭动力学。
-
-\subsection{施温格模型与玻色化形式}
-
-在连续极限下，链接变量 $U_i$ 对应协变导数 $D_\mu=\partial_\mu - i e A_\mu$（$\mu=0,1$），其中 $A_\mu$ 为格点场 $\phi_i$ 的连续版本。量子链接模型在该极限下对应一维空间的量子电动力学（quantum electrodynamics, QED），即施温格模型，其哈密顿量为
-\begin{equation}
-H_{\rm QED} = \int {\rm d}x \left[\psi^\dagger (i\gamma^\mu D_\mu-m)\psi - \frac{1}{4}F_{\mu\nu}F^{\mu\nu}\right],
-\end{equation}
-其中费米子质量对应 $m=\Delta$。这里 $\psi$ 为二分量旋量，$\gamma^\mu$ 为二维 $\gamma$ 矩阵，$F_{\mu\nu}=\partial_\mu A_\nu - \partial_\nu A_\mu$ 为场强张量。在（1+1）维中，$F_{\mu\nu}$ 仅有一个独立分量，对应电场。可利用 $\epsilon^{\mu\nu}$ 张量将费米子自由度玻色化为标量场 $\phi$：
-\begin{equation}
-\psi^\dagger \gamma^\mu \psi = \epsilon^{\mu\nu} \partial_\nu \phi.
-\end{equation}
-将其代入 QED 拉格朗日量并对 $A_\mu$ 积分，可得到等价的玻色子理论，其哈密顿量~\cite{surace_lattice_2020}为
-\begin{equation}\label{eq:Hb}
-H_{\rm B} = \frac{1}{2}\int {\rm d}x\left[\dot{\phi}^2 + (\partial_x\phi)^2 + e^2\phi^2 - cm\cos(2\phi-\theta)\right].
-\end{equation}
-其中 $e$、$c$ 与 $\theta$ 为由 $\Omega$ 与 $\Delta$ 决定的常数；最后一项即拓扑 $\theta$ 项。该项改变真空结构并引入依赖 $\theta$ 的质量间隙，从而导致带电费米子的禁闭/解禁闭行为。\ $\theta$ 的有效取值由里德堡系统参数 $\Delta$ 与 $\delta$ 决定，如正文所述。
-
-\subsection{禁闭/解禁闭机制与弦张力定义}
-
-\subsubsection{禁闭和解禁闭相}
-
-玻色化理论 $H_{\rm B}$ 的真空结构由势 $V(\phi)=e^2\phi^2-cm\cos(2\phi-\theta)$ 的极小值决定，其位置与简并性对 $\theta$ 敏感。这直接对应电荷—宇称对称性破缺与禁闭—解禁闭相变等现象，并可在里德堡原子平台中实现与观测。设 $cm>0$。当 $\theta=0$ 时，$\phi=0$ 为唯一极小值，真空趋于零净电场构型。在该区域，分离静态电荷的能量代价随距离线性增长，对应禁闭相，动力学弦断裂被显著抑制。
-
-随着 $\theta$ 增大，极小值 $\phi$ 从零偏移，真空获得非零净电场，体系逐渐进入较弱禁闭的区域。当 $\theta\to\pi$ 时，全局极小值与最近局域极小值之间的能量差减小，并在 $\theta=\pi$ 处消失（图~\ref{Fig1:experimental_set_up}\textbf{e} 与图~\ref{EDFig:Mapping}\textbf{e}）。此时势在 $\phi=\pm\phi_0/2$ 处出现两个简并的全局极小值：真空二重简并对应电场的相反取向。该结构与电荷—宇称对称性破缺密切相关（见下一节），并通过消失的弦张力显著增强粒子—反粒子对产生，从而导致解禁闭动力学。
-
-当费米子质量为零（$m=0$）时，余弦项消失，理论简化为自由标量场。在缺乏禁闭势的情况下，分离粒子—反粒子对不再产生线性代价，体系处于以电荷自由传播与弦张力缺失为特征的解禁闭相。
-
-\subsubsection{弦张力的调节}
-
-在更高维的规范场论中，威尔逊环算符 $W(C)$（沿闭合回路 $C$ 的链接变量乘积之迹）可作为禁闭序参量：禁闭相对应面积律 $\langle W(C) \rangle \propto e^{-\chi A(C)}$，解禁闭相对应周长律 $\langle W(C) \rangle \propto e^{-kP(C)}$。在一维情形，面积律对应 $\langle W\rangle \propto e^{-\chi LT}$，即静态电荷间势能满足 $U(L)\propto \chi L$；而解禁闭相中 $U(L)$ 近似为常数。需要强调的是，一维静态电荷图像本质上接近经典极限（缺少横向规范自由度），因此本章将 $\chi$ 作为有效弦张力来表征禁闭强度。
-
-在里德堡平台中，$\chi$ 可通过交错失谐 $\delta_i=(-1)^i\delta$（对应调节拓扑角 $\theta$）实现控制，满足 $\delta = J(\pi-\theta)/2\pi$，如图~\ref{EDFig:Mapping}\textbf{e} 所示；另见~\cite{banerjee_atomic_2012,surace_lattice_2020}。当 $\theta=\pi$ 时，$V(\phi)$ 的结构随质量 $m$ 呈现两类情形：$m=0$ 时势在 $\phi=0$ 处只有单极小值；当 $m>m_c$ 时，势在 $\phi=\pm\phi_0$ 处出现两个简并极小值（图~\ref{Fig1:experimental_set_up}\textbf{e} 与图~\ref{EDFig:Mapping}），对应自发电荷—宇称对称性破缺（图~\ref{EDFig:Mapping}\textbf{d}）。两种情形下真空简并均保证反转局域电场（对产生）无能量代价，电荷间势能 $U(L)$ 近似为常数，从而体现消失的弦张力与解禁闭动力学。
-
-当 $\theta$ 偏离 $\pi$ 时，真空简并被解除，相反电场取向之间出现能量分裂 $\delta V$（图~\ref{EDFig:Mapping}\textbf{e}）。分离粒子—反粒子对距离 $L$ 会在电荷之间形成长度为 $L$ 的反转电场畴壁（“弦”），其能量代价 $U(L)\propto \chi L$，且 $\delta V \propto \chi$。因此，随 $\theta$ 进一步偏离 $\pi$（实验上对应更大的交错失谐 $\delta$），$\chi$ 增大并导致更强禁闭。基于上述考虑，本文在实验分析中采用 $\chi=2\delta$ 作为弦张力定义，与正文一致。
-
-此外，在固定 $\chi$ 下，势隙 $\delta V$ 随质量 $m$ 增大而增大（图~\ref{EDFig:Mapping}\textbf{e}），这对应更强禁闭；该趋势与正文图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}（下图）的观测一致。
-
-\section{实验装置与控制技术}\label{ch7:sec:methods}
-
-\subsection{可编程原子阵列与里德堡激发}
-本文实验利用可编程里德堡原子阵列作为量子模拟器~\cite{fang_Peobing_2024,shaw_benchmarking_2024,Chen_Interaction_2025,manovitz_quantum_2025,Chen_Spectroscopy_2025}。单个 $^{87}$Rb 原子从激光冷却原子系综中加载到紧密聚焦的二维光镊阵列中；光镊阵列由空间光调制器（Spatial Light Modulator, SLM）衍射的 \SI{808}{\nano\meter} 激光束生成。一对正交取向的声光偏转器（Acousto-Optic Deflector, AOD）用于将原子重排为间距为 $a$ 的无缺陷一维链，使最近邻范德瓦尔斯相互作用达到 $V_{i,i+1}\approx 2\pi\times \SI{7.2}{\mega\hertz}$。重排后，原子进一步冷却至约 $\SI{10}{\micro\kelvin}$，并通过光抽运制备到 $\lvert g\rangle = \lvert5S_{1/2},F=2,m_F=2\rangle$。
-
-基态 $\lvert g \rangle$ 与里德堡态 $\lvert r \rangle$ 之间的相干耦合由反向传播的 \SI{780}{\nano\meter} 与 \SI{480}{\nano\meter} 激光束驱动的双光子跃迁实现，单光子拉比频率分别为 $\Omega_{780}$ 与 $\Omega_{480}$。两束光相对于中间态 $\lvert5P_{3/2}\rangle$ 失谐 $\Delta_I = 2\pi \times \SI{1.2}{\giga\hertz}$，因此有效双光子拉比频率为 $\Omega=\Omega_{780}\Omega_{480}/(2\Delta_I)$。
-
-\SI{480}{\nano\meter} 激发光由 \SI{960}{\nano\meter} 种子激光倍频（second-harmonic generation, SHG）得到。\SI{780}{\nano\meter} 与 \SI{960}{\nano\meter} 激光均采用 Pound--Drever--Hall（PDH）技术锁定到高精细度超低膨胀（ULE）光学腔；额外的慢速反馈回路用于补偿两台激光器的长期漂移。为以精确时序触发实验序列，本文使用电光调制器（Electro-Optic Modulator, EOM）对 \SI{780}{\nano\meter} 光束进行选通，时间分辨率约为 \SI{10}{\nano\second}（$\Omega t < 0.1$）。为抑制逐次（shot-to-shot）拉比频率波动，两路里德堡激发光均实现了基于声光调制器（Acousto-Optic Modulator, AOM）的采样保持控制。该装置实现了较长的相干时间（$T_2^* \sim \SI{11}{\micro\second}$ 且 $\Omega T_2^* \sim 80$），为高保真量子控制与态制备奠定基础~\cite{xiang_observation_2024}。
-
-\subsection{类介子激发的制备}
-初始化后，本文制备类介子初态以研究散射动力学。在 LGT 映射下，介子对应嵌入 $\mathbb{Z}_2$ 有序背景中的一对局域畴缺陷。以 13 原子链为例，一个代表性的类介子态可写为 $\lvert \text{rgrgr\textbf{ggg}rgrgr} \rangle$；具有两个类介子激发的态可写为 $\lvert \text{r\textbf{ggg}rgrgr\textbf{ggg}r}\rangle$。由于该类激发具有空间不对称与局域结构，仅依赖全局里德堡脉冲的幅度或相位调制很难实现高保真制备；而高保真多体初态制备对于探测非平衡动力学至关重要。
-
-为此，本文结合全局里德堡激发与空间选择性光频移来制备类介子初态。本文使用同一块 SLM 对两束远失谐 \SI{795}{\nano\meter} 激光束（相对于 D1 线失谐约 \SI{15}{\giga\hertz}）进行整形，从而生成可编程的光频移图案：一束光用于制备交错图案以初始化 $\mathbb{Z}_2$ 有序真空背景，另一束光选择性寻址额外格点以引入对应类介子激发的畴壁（图~\ref{EDFig:experimental_setup}\textbf{b} 插图）。所有寻址光束在目标原子处诱导约 $2\pi\times \SI{15}{\mega\hertz}$ 的局域交流斯塔克频移，同时保持较低的光子散射率（约 $2\pi\times \SI{5}{\kilo\hertz}$）。在随后施加全局双光子里德堡 $\pi$ 脉冲期间，被寻址原子被移出共振并保持在基态，未被寻址原子则被共振转移至里德堡态。该过程可扩展地制备单/多类介子激发。在 25 格点链中，本文实现了 51(5)\% 的类介子态保真度（已校正探测误差），并观测到随系统尺寸增大保真度近线性下降。
-
-\subsection{单格点寻址与含时控制}
-拓扑角 $\theta$ 的调节使（1+1）维 LGT 的相图探索尤为关键：它改变背景电场的真空结构，从而诱导禁闭—解禁闭相变与弦断裂动力学。在有效哈密顿量中，$\theta$ 项通过交错局域失谐 $\delta_i=(-1)^i\delta$ 实现，其中 $i$ 为原子格点索引。
-
-实验上，该交错失谐图案由类介子制备所用的 \SI{795}{\nano\meter} 寻址光束之一实现。为在单个实验序列中完成 $\mathbb{Z}_2$ 真空初始化与哈密顿量演化，本文采用 AOM 动态切换光频移（图~\ref{EDFig:experimental_setup}\textbf{a}）。每个被寻址原子在基态经历局域交流斯塔克频移 $\Delta_\mathrm{ac}$；在此基础上施加 $\Delta_\mathrm{ac}/2$ 的全局失谐即可得到所需交错分布 $\delta_i=(-1)^i\Delta_\mathrm{ac}/2$。
-
-为保证在交错失谐下仍能实现相干演化，需要抑制退相干并优化光频移均匀性。退相干主要来自寻址光束强度波动与原子位置不确定性。本文采用束腰约为 $\SI{3}{\micro\meter}$ 的寻址高斯光束（显著大于原子位置不确定性 $\sim \SI{300}{\nano\meter}$），以降低对原子运动的敏感性，并通过反馈回路稳定激光强度与频率。由光束对准漂移与光学串扰引起的空间不均匀性会导致局域失谐幅度 $\delta$ 发生位置依赖偏差。为抑制该效应，本文采用两步校准：首先在 EMCCD 相机上对原子荧光与寻址光束轮廓进行消色差成像以完成初始对准；随后依据测得的局域光频移迭代调整 SLM 全息图，以优化均匀性与串扰抑制。
-
-\subsection{实验参数与测量定义}
-
-\subsubsection{实验参数}
-在上述配置下，体系的有效哈密顿量为
-\begin{align}
-\hat{H}_{\mathrm{exp}} = & \frac{\Omega}{2} \sum_i \hat{\sigma}^x_i - \Delta_0 \sum_i \hat{n}_i - \nonumber\\& \Delta_{\mathrm{ac}} \sum_{i \in \text{odd}} \hat{n}_i + \sum_{i<j} \frac{C_6}{(a |i-j|)^6} \hat{n}_i \hat{n}_j,
-\end{align}
-等价地可重写为
-\begin{align}
-\hat{H}_{\mathrm{exp}} = &\frac{\Omega}{2} \sum_i \hat{\sigma}^x_i - (\Delta_0 + \delta) \sum_i \hat{n}_i + \nonumber \\ & \delta \sum_i (-1)^i \hat{n}_i + \sum_{i<j} \frac{C_6}{(a |i-j|)^6} \hat{n}_i \hat{n}_j.
-\end{align}
-其中 $\delta=\Delta_{\mathrm{ac}}/2$ 为交错失谐，$\Delta_0$ 为里德堡激光全局失谐，$C_6$ 为范德瓦尔斯相互作用系数，$a$ 为格点间距。该哈密顿量与正文所用里德堡哈密顿量 $H_{\mathrm{R}}$ 形式一致，其中 $\Delta=\Delta_0+\delta$ 且 $V_{ij}=C_6/(a|i-j|)^6$。
-
-在正文所有测量中，本文将阵列配置为里德堡阻塞半径 $R_b$ 超过格点间距 $a$，并满足 $R_b/a\gtrsim 1.3$。该条件保证最近邻双激发被有效抑制，从而在动力学上强制满足高斯定律约束。
-
-对于正文图~\ref{Fig:2_confinement_and_deconfinement_phases}、\ref{Fig:4_Meson_dynamics} 与 \ref{Fig:5_Freeze-frame-dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.2}{\mega\hertz}$，里德堡态 $\lvert 68D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.2}{\micro\meter}$，对应 $R_b/a=1.35$。对于正文图~\ref{Fig3:Quench_dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.5}{\mega\hertz}$，里德堡态 $\lvert 72D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.0}{\micro\meter}$，对应 $R_b/a=1.3$。在所有配置中，频闪测量步长 $\Delta T$ 满足 $\Omega \Delta T = 0.75$。
-
-里德堡相互作用的长程尾项可视为有效能量偏移，从而修正映射 LGT 的质量参数控制。实验上，本文引入小的全局激光失谐 $\Delta \sim V_{i,i+1}/32$ 来补偿该偏移，建立 $\Delta_0=0$ 处的有效共振点；随后逐步增加里德堡激发激光的蓝失谐以实现 $\Delta_0>0$，从而在近似 PXP 动力学的同时保持对有效质量的精确控制。
-
-为探测禁闭动力学，本文通过调节送入寻址光束 AOM 的射频（RF）功率来控制局域交错失谐 $\delta$。$\delta$ 与 RF 功率之间的关系通过实验校准获得，表现为主要的线性依赖（图~\ref{EDFig:experimental_setup}\textbf{d}）。该校准提供了设置 $\delta$ 的初始参考，随后对局域交流斯塔克频移进一步微调，以保证失谐控制精度。
-
-为探索动力学禁闭—解禁闭相变，本文实施交错失谐淬火。在正文图~\ref{Fig3:Quench_dynamics} 所示由禁闭到解禁闭的转变中，局域交流斯塔克频移初始设置为 $1.8\Omega = 2\pi \times \SI{2.7}{\mega\hertz}$（对应 $\delta=0.9\Omega$）。在 $t=\SI{1.2}{\micro\second}$（$\Omega t=11.3$）时刻，寻址光束在约 \SI{20}{\nano\second}（$\Omega t\sim 0.15$，远短于实验时间步长；第~\ref{ch7:sec:methods} 节）内突然关闭，从而实现从 $(\Delta_0,\Delta_{\mathrm{ac}})=(0,2\pi\times \SI{2.7}{\mega\hertz})$ 到 $(0,0)$ 的双重淬火。为获得快速切换响应，寻址光束在 AOM 处的束腰约为 $\SI{100}{\micro\meter}$。
-
-在逆过程（解禁闭到禁闭）的淬火实验（正文图~\ref{Fig:5_Freeze-frame-dynamics}）中，寻址光束在 $t=\SI{1.6}{\micro\second}$ 时刻激活，引入 $0.6\Omega=\SI{0.72}{\mega\hertz}$ 的局域交流斯塔克频移并将体系淬火到禁闭相。因此有效失谐从 $\Delta_0+\delta=1.5\Omega$ 变为 $1.8\Omega$，从而提高映射质量参数并增强禁闭动力学的可见度。
-
-\subsubsection{实验测量}
-每次哈密顿量演化结束后，本文将格点分辨荧光收集到 EMCCD 相机上并读出原子态（图~\ref{EDFig:experimental_setup}\textbf{a}）。由此直接得到 $\langle \sigma_i^z(t)\rangle$ 并可计算电场 $\langle E_i(t)\rangle = (-1)^i \langle \sigma_i^z(t)\rangle$（$i$ 为规范格点索引）。物质格点 $j$ 的粒子数密度为 $\langle \rho_j(t)\rangle = (-1)^{j-1}\big(\langle E_j(t)\rangle - \langle E_{j-1}(t)\rangle\big)$，动力学电荷为 $\langle Q_j(t)\rangle = \langle E_j(t)\rangle - \langle E_{j-1}(t)\rangle$，从而满足正文所用关系 $\langle \rho_j(t)\rangle = |\langle Q_j(t)\rangle|$。这些变换在实验中表现出对高斯定律的良好遵守，源于强最近邻里德堡阻塞。正文数据均为未经后处理的原始测量值。
-
-在正文图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c--e} 中，本文通过比较不同质量下稳态体电通量值来研究禁闭强度的质量依赖性。为提取稳态值，$\langle E_\mathrm{B}(t)\rangle$ 的时间轨迹用阻尼振荡函数拟合：$\langle E_\mathrm{B}(t)\rangle = E_\mathrm{s} + E_\mathrm{o} e^{-\gamma t}\cos(\omega t + \phi_0)$，其中 $E_\mathrm{s}$ 为 $t\to\infty$ 的稳态值。拟合与数据收敛良好（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c--e}）。
-
-\subsection{误差分析}
-尽管正文原始实验数据已稳健捕捉（1+1）维 LGT 的关键现象与动力学结构，本文仍给出主要实验缺陷的分析。相关缺陷不改变本章结论，但可为后续优化提供参考。
-
-主要误差来源来自类介子初态制备的不完美。尽管制备保真度较高，单自旋翻转等缺陷仍可能在非预期位置引入正负电荷对，并在后续演化中缓慢热化。对于依赖真空背景以分辨弱信号的散射过程，这类缺陷会增强背景涨落；但主要散射特征仍可稳定分辨。
-
-退相干进一步限制禁闭与解禁闭动力学的可见度，其来源包括激发激光相位噪声、有限原子温度以及技术噪声。具体而言，激发激光在 $f_{\mathrm{servo}} \approx \SI{300}{\kilo\hertz}$ 附近存在伺服凸起，反映反馈带宽有限；该噪声谱分布会限制处于相应频带的拉比驱动相干性。同时，用于蓝光产生的种子激光 PDH 锁定会在伺服凸起频带引入强度噪声，其低频分量（低于 $\sim \Omega/2\pi$）对退相干贡献显著。因此，单纯增大拉比频率并不必然降低退相干；本文选择 $\Omega/2\pi \approx 5 f_{\mathrm{servo}}$ 以平衡相位与强度噪声效应。在禁闭动力学实验中，局域光频移波动还会引入额外退相干，表现为每个原子约 \SI{10}{\kilo\hertz} 的有效失谐随机变化。
-
-里德堡激发光束的空间不均匀性导致拉比频率在阵列中的变化为 $\delta \Omega_\mathrm{PP}/\Omega \approx 1.6\%$（峰峰值）与 $\delta \Omega_\mathrm{RMS}/\Omega \approx 0.5\%$（均方根）（图~\ref{EDFig:experimental_setup}\textbf{c}）。此外，演化过程中约 $\SI{0.3}{\micro\meter}$ 的原子位置不确定性会引起相互作用强度波动。这些效应共同导致偏离理想多体动力学的误差。
-
-最后，荧光成像读出也引入测量误差：本文测得单原子里德堡态探测误差约为 $1\%$（主要由有限寿命导致），基态探测误差约为 $2\%$（主要由原子丢失导致）。
-
-\subsection{数值模拟方法与误差模型}
-
-本文使用 TeNPy 库~\cite{Hauschild2018Efficient} 实现的矩阵乘积态（matrix product state, MPS）方法模拟一维里德堡原子链的非平衡动力学。体系由含时哈密顿量
-\begin{equation}
-\hat{H}(t) = \frac{\Omega}{2}\sum_i\hat{\sigma}_x^i + \sum_i\frac{\Delta_i(t)}{2}\hat{\sigma}_z^i + \sum_{i<j}V_{i, j}\hat{n}_i\hat{n}_{j}
-\end{equation}
-描述，其中拉比频率 $\Omega$、范德瓦尔斯相互作用 $V_{i,j}$ 以及全局与局域失谐 $\Delta_i(t)$ 均由实验标定获得。为提高计算效率，本文在模拟中保留主导的最近邻与次近邻相互作用并忽略较弱长程项。淬火后 $t=t_{\text{quench}}$ 的时间演化采用双格点含时变分原理（time-dependent variational principle, TDVP）计算，时间步长固定为 $\Omega\Delta t=0.06\pi$。MPS 模拟采用键维数 $\chi\le 100$ 与奇异值截断 $10^{-8}$，以平衡数值精度与计算开销。
-
-在 TeNPy 模拟中，本文将实验多能级系统映射为有效二能级系统，并纳入两类主要误差源以逼近实验条件：态制备缺陷，以及退极化（比特翻转）与探测误差的综合效应。
-
-\noindent \textbf{态制备误差。} 为量化不完美态制备的影响（详见第~\ref{ch7:sec:methods} 节中的误差分析部分），并基于测得的初态制备高保真度，本文并行执行 $L+1$ 个模拟（$L$ 为链长）：一个采用理想初态 $\psi_{\text{ideal}}$，另 $L$ 个在格点 $i$ 处引入单自旋翻转误差 $\ket{\psi_i}=\hat{\sigma}_x^i\ket{\psi_{\text{ideal}}}$。需要指出的是，当制备效率进一步降低时，该近似可能失效，因为实际微观误差分布会转向更复杂的多量子比特误差模式。利用实验测得的制备保真度 $\mathcal{F}$，本文构造加权系综
-\begin{equation}
-\rho_{\text{exp}} = \mathcal{F}\ket{\psi_{\text{ideal}}}\bra{\psi_{\text{ideal}}} + \frac{1-\mathcal{F}}{L}\sum_{i=1}^L\ket{\psi_i}\bra{\psi_i}.
-\end{equation}
-
-\noindent \textbf{退极化和探测误差。} 由于中间态自发辐射与里德堡态有限寿命，体系在时间演化过程中存在耗散。受限于 MPS 方法对开放系统的直接模拟能力，TeNPy 难以在 29 原子链尺度上显式纳入耗散通道。本文将这些主要导致里德堡态原子翻转到基态的耗散过程建模为等效探测误差。该近似基于以下事实：退极化与探测误差均表现为实际量子态与测量态之间的差异；对本文关注的可观测量而言，里德堡翻转误差的主要效应是将演化结束后的里德堡态误判为基态。本文估算中间态损耗在哈密顿量驱动期间（序列持续时间约 $\SI{4}{\micro\second}$）贡献约 3.6\%；里德堡态有限寿命在整个实验序列（总时长约 $\SI{5}{\micro\second}$）贡献额外约 3.3\%；加之装置中里德堡态探测误差约 1\%。
-
-据此，本文以态依赖探测概率模拟退极化与探测误差的组合效应：里德堡态以概率 $P_r=8\%$ 被误探测为基态；基态以概率 $P_g=2\%$ 被误识别为里德堡态。数值结果见图~\ref{EDFig:Simulation_2}、\ref{EDFig:Simulation_3} 与 \ref{EDFig:Simulation_4}，分别对应正文图~\ref{Fig:2_confinement_and_deconfinement_phases}、\ref{Fig3:Quench_dynamics} 与 \ref{Fig:4_Meson_dynamics}。实验与模拟之间的一致性支持该误差模型的有效性。同时需要注意，实验数据与误差模型模拟仍存在微小偏差，可能源于模型未显式包含的退相干来源（例如激光噪声与多普勒效应）。
 
 \section{禁闭—解禁闭相变与淬火动力学}
 
-\begin{figure}[htb]
+在格点规范场论中，拓扑角 $\theta$ 与费米子质量 $m$ 共同决定了真空的结构与物理激发的存在形式。本节首先通过静态参数下的演化表征系统的禁闭与解禁闭相，随后利用双参数淬火（Dual-parameter quench）在实时动力学中诱导相变，观测电通量管的破碎与电荷的传播过程。
+
+\subsection{禁闭与解禁闭相的动力学表征}
+
+为了定量区分禁闭与解禁闭行为，本文采用 7.2 节定义的有效弦张力 $\chi$ 作为核心物理量，它量化了在静态极限下分离一对正负电荷所需的线性能量代价。实验中，初态被制备为真空背景中相距 8 个格点的两个类介子激发（位于格点 9 与 17），对应的初始电场构型为 $E_i(t=0)=0.5-\delta_{i,9}-\delta_{i,17}$。随后，系统在不同 $\chi$ 和 $m$ 的哈密顿量下进行演化。
+
+\begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig2_Confinement_deconfinement_phases.png}
   \caption{
-    \textbf{禁闭与解禁闭。}
-\textbf{a,} 不同费米子质量 $m$ 与拓扑角 $\theta$（由弦张力 $\chi$ 量化）下电场 $E_i(t)$ 的时空演化。\textbf{b,} 定制初态的电场与电荷构型。
-\textbf{c--e,} 不同质量值下平均体电通量 $E_\mathrm{B}(t)$ 的演化。
-红色圆圈：解禁闭区域（$\theta=\pi$，对应 $\chi=0$）；
-蓝色方块：禁闭相（$\theta \neq \pi$，$\chi = 0.3\kappa$）。
-实线：实验数据的阻尼振荡拟合（第~\ref{ch7:sec:methods} 节）；虚线：稳态值（阴影带为误差棒）。
-解禁闭相中体电通量稳定在零附近（红色虚线），而禁闭区域收敛到偏移稳态值（蓝色虚线），反映 $\theta\neq\pi$ 时 $V(\phi)$ 的不对称性。
-\textbf{f,} 体电通量稳态偏置 $\delta E$ 随质量的变化关系，误差棒为 68\% 置信区间。
-}
-  \label{Fig:2_confinement_and_deconfinement_phases}
+    \textbf{禁闭与解禁闭。}}
+  \label{ch7:fig:confinement_and_deconfinement_phases}
 \end{figure}
 
-\vspace{.5cm}
+\todo{(此处插入图 \ref{ch7:fig:confinement_and_deconfinement_phases}：对应原 `Fig2\_Confinement\_deconfinement\_phases.png`，展示不同参数下电场的时空演化及体电通量的稳态偏置)}
 
-\subsection{相图与相的动力学表征}
+当系统参数设置为 $\theta=\pi$（即实验中交错失谐 $\delta=0$）时，弦张力消失（$\chi=0$），系统处于解禁闭相（Deconfined phase）。根据标量势 $V(\phi)$ 的理论图像，该区域的动力学随质量 $m$ 呈现两种不同的真空响应：当 $m=0$ 时，真空电场振荡但平均值为零，系统保持电荷-宇称（CP）对称性；当 $m>m_c$ 时，真空简并度增加，导致 CP 对称性自发破缺，电场在长时间演化后弛豫到稳定的极小值（如图 \ref{ch7:fig:confinement_and_deconfinement_phases}e 红色圆圈所示）。在这两种情况下，由于弦张力的消失，粒子-反粒子对的产生与分离不再受到宏观能量势垒的限制。如图 \ref{ch7:fig:confinement_and_deconfinement_phases}a（上图）的实验数据所示，初始局域在格点 9 和 17 的电通量在演化过程中迅速弥散至整个系统，表现出典型的解禁闭弹道传播特征。
 
-禁闭与解禁闭相的表征为后续实时散射与动力学冻结的研究提供基本框架。为此，本文采用有效弦张力 $\chi$ 来量化静态极限下分离异性电荷的线性能量代价（第~\ref{ch7:sec:methods} 节）。实验上，本文通过同时调节费米子质量 $m$ 与拓扑角 $\theta$ 来控制 $\chi$，并测量单址分辨电场 $E_i(t)$ 与平均体电通量
-$E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初态通过真空背景中的电场构型 $E_i(0)=0.5-\delta_{i,9}-\delta_{i,17}$ 在格点 9 与 17 编码两个类介子激发（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{b}）。
+当施加交错失谐 $\delta=0.15\Omega$ 时，系统拓扑角 $\theta$ 偏离 $\pi$，引入了大小为 $\chi=0.3\kappa$ 的非零有效弦张力。此时真空简并被解除，系统进入禁闭相（Confined phase）。在该相区内，电荷的动力学表现出显著的质量依赖性：如图 \ref{ch7:fig:confinement_and_deconfinement_phases}a（下图）所示，对于较小的质量，初始电通量仍有一定程度的扩散；但随着质量 $m$ 的增大，电荷的局域化程度显著增强，正负电荷被“电通量管”稳定束缚。为了进一步定量表征这一非对称真空，本文测量了中心区域的平均体电通量 $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$。如图 \ref{ch7:fig:confinement_and_deconfinement_phases}c-e 的阻尼振荡拟合结果所示，在禁闭相中，$E_\mathrm{B}(t)$ 最终收敛到一个与质量相关的非零稳态偏置 $\delta E$（图 \ref{ch7:fig:confinement_and_deconfinement_phases}f）。该稳态偏置的出现直接反映了 $\theta \neq \pi$ 时势能 $V(\phi)$ 的非对称性，证实了受弦张力主导的禁闭机制。
 
-在解禁闭区域（$\theta=\pi$）中，$V(\phi)$ 的真空结构具有简并特征（图~\ref{Fig1:experimental_set_up}\textbf{e}）。当 $m=0$ 时，势在 $\phi=0$ 处为单极小值，对应电场振荡但平均电场为零的电荷—宇称对称真空（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{b}，红色圆圈）。当 $m>m_c$ 时，简并极小值出现在 $\phi=\pm\phi_0$，导致自发电荷—宇称对称性破缺，电场在长时间后弛豫到稳定极小值（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{e}，红色圆圈）。在两种情形中，真空简并均消除了对产生的能量势垒，使弦张力消失（$\chi=0$）并允许电荷不受阻碍地传播。实验上，初始电通量从格点 9 与 17 迅速分散到整个系统，直接体现解禁闭动力学（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}，上图）。
-
-当拓扑角 $\theta$ 偏离 $\pi$ 时，体系进入禁闭区域。实验上取交错失谐 $\delta=0.15\Omega$（对应 $\chi=0.3\kappa$），从而解除真空简并并在相反电场取向之间建立与 $\chi$ 成正比的能隙（图~\ref{Fig1:experimental_set_up}\textbf{e}），形成线性禁闭势~\cite{surace_lattice_2020,liu2020realizing}。在禁闭区域，动力学表现出显著的质量依赖性：当 $m=0$ 时禁闭较弱，初始电通量仍可快速分散；随 $m$ 增大，电荷局域化增强（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}，下图）。同时，体电通量出现质量依赖的稳态偏置 $\delta E$（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c}--\textbf{e}），反映 $V(\phi)$ 不对称性增强（第~\ref{ch7:sec:methods} 节）以及更强禁闭。补充而言，本文也验证增大弦张力 $\chi$ 会增强禁闭（第~\ref{ch7:sec:methods} 节）。
-
-\vspace{.5cm}
-
-\subsection{LGT 哈密顿量的动力学控制与双参数淬火}
-
-捕捉散射中间态需要时空哈密顿量控制。在已建立的禁闭/解禁闭相表征基础上，本文通过精确调制参数实现快速淬火协议，使得在一次实验序列中完成原位（in situ）相切换。该能力不仅可用于研究弦破碎与对称性恢复，也为后续的动力学冻结提供了实验入口。
-
-淬火实验起始于在格点 15 制备类介子激发，其电场构型为 $E_i(0)=0.5-\delta_{i,15}$。在交错失谐 $\delta=0.9\Omega$（即 $\theta \neq \pi$）与质量 $m=0.9\kappa$ 下，体系初始处于禁闭相，电荷由于非零弦张力对应的真空结构而被束缚在电通量管内。随后在 $\Omega t^*=11.3$ 时刻，本文在 \SI{20}{\nano\second} 内同时淬火 $m\to 0$ 与 $\theta\to\pi$，将体系驱动至解禁闭区域；此时 $V(\phi)$ 中出现真空简并并消除对产生势垒（图~\ref{Fig3:Quench_dynamics}\textbf{a}）。弦张力消失伴随电荷—宇称对称性恢复，从而触发弦破碎、对产生与光锥传播等非平衡动力学。电场 $E_i(t)$ 与电荷密度 $\rho_i(t)=|Q_i(t)|$（第~\ref{ch7:sec:methods} 节）的时空测量揭示了该动力学转变：淬火前由 $\delta=\Delta$ 共振导致的希尔伯特空间破碎振荡~\cite{desaules_ergodicity_2024,Variational_shi.T_2018}在淬火后被光锥传播迅速取代（图~\ref{Fig3:Quench_dynamics}\textbf{d}）。
-
-该转变亦可通过平均中心电通量 $E_c(t)=\frac{1}{14}\sum_{i=8}^{21}E_i(t)$ 的动力学进一步表征。图~\ref{Fig3:Quench_dynamics}\textbf{e} 中测得的 $E_c(t)$ 在淬火点出现振荡基线（虚线所示）的不连续跃迁，标志禁闭与解禁闭之间的切换。空间电荷分布（图~\ref{Fig3:Quench_dynamics}\textbf{f}）进一步显示粒子从禁闭（$\Omega t=0$）到离域（$\Omega t=30.2$）的演化过程，均发生于单次相干演化之中。
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
-  \caption{
-    \textbf{淬火动力学。} 
-\textbf{a}, 双参数淬火协议示意图。禁闭区域中，初始负电荷与正电荷由负电通量管（红箭头）连接并被弦张力 $\chi=1.8\kappa$ 束缚。
-在 $\Omega t^*=11$ 时，快速双参数淬火（$\theta \rightarrow \pi$, $m \rightarrow 0$）至解禁闭相触发弦破碎、对产生与光锥电荷传播。
-阴影区域：平均电场 $\langle E_{j,j+1}\rangle\simeq 0$ 的高电荷密度区域。
-插图：禁闭相与解禁闭相中的有效势 $V(\phi)$。
-\textbf{b}, $\chi$--$m$ 相图中的实验淬火轨迹，红色（黄色）星号表示淬火前（后）参数。
-\textbf{c--d}, 测量的电场 $E_i(t)$（\textbf{c}）与电荷密度 $\rho_i(t)$（\textbf{d}）时空演化。
-\textbf{e}, 平均中心电通量 $E_c(t)$ 的动力学：蓝色方块（红色圆圈）对应禁闭（解禁闭）相；紫色六边形为淬火点；虚线为振荡基线；箭头指示淬火时刻。
-\textbf{f}, 关键时刻的空间电荷分布：淬火前（$\Omega t=0$，蓝色）、淬火点（$\Omega t^*=11.3$，紫色）与淬火后（$\Omega t=30.2$，红色）。误差棒表示一个标准差。
-}
-  \label{Fig3:Quench_dynamics}
-\end{figure}
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_Confinement_deconfinement_phases_simulation.png}
-  \caption{\textbf{禁闭和解禁闭相的数值模拟。} 
-  对应正文图~\ref{Fig:2_confinement_and_deconfinement_phases} 的电场 $E_i(t)$（\textbf{a}）、体电弦 $E_B(t)$（\textbf{b--d}）与稳态偏置 $\delta E$（\textbf{e}）模拟结果，显示实验与数值之间高度一致。}
-  \label{EDFig:Simulation_2}
+  \caption{\textbf{禁闭和解禁闭相的数值模拟。}}
+  \label{ch7:fig:Confinement_deconfinement_phases_simulation}
 \end{figure}
 
-\begin{figure}[htb]
+含噪数值模拟的交叉验证： 为了确证上述观测并非实验退相干引发的假象，我们采用基于 TeNPy 库的矩阵乘积态（MPS）方法进行了含时演化模拟。考虑到系统的开放性，我们在模型中注入了真实校准的误差参数：包括态制备的单比特翻转缺陷，以及将中间态自发辐射和有限寿命等效为 $P_r=8\%$ 的里德堡态误判率和 $P_g=2\%$的基态误判率。如图 \ref{ch7:fig:Confinement_deconfinement_phases_simulation} 所示，包含这些非相干误差的 MPS 模拟结果，无论是在电场 $E_i(t)$ 的时空扩散特征（图 \ref{ch7:fig:Confinement_deconfinement_phases_simulation}a），还是在体电弦 $E_B(t)$的稳态偏置上（图 \ref{ch7:fig:Confinement_deconfinement_phases_simulation}b-e），均与实验数据达到了极高的一致性。这强有力地证明了观测到的禁闭/解禁闭特征来源于 LGT 哈密顿量的内禀规范动力学。
+ 
+\subsection{规范参量的双重淬火与弦破碎动力学}
+
+在明确了稳态参数下的相图特征后，本文利用实验平台高时空分辨率的控制能力，进一步研究了跨越相边界的瞬态响应，即弦破碎（String fragmentation）动力学。
+
+实验以格点 15 处的单个类介子激发为初态，电场构型为 $E_i(0) = 0.5 - \delta_{i,15}$。初始阶段，系统演化参数设定为 $\delta=0.9\Omega$（对应 $\chi=1.8\kappa$）与 $m=0.9\kappa$。在这种强禁闭条件下，正负电荷通过一段负电通量管相连，由于巨大的弦张力束缚，电荷无法自由传播。实验观测到，在淬火前的演化中（$\Omega t < 11.3$），由于局部参数共振（$\delta \approx \Delta$）引起的希尔伯特空间碎裂（Hilbert space fragmentation），系统呈现出高度局域化的持续振荡（如图 \ref{ch7:fig:Quench_dynamics}c, d 的前半部分）。
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
+  \caption{\textbf{淬火动力学。} }
+  \label{ch7:fig:Quench_dynamics}
+\end{figure}
+
+\todo{(此处插入图 \ref{ch7:fig:Quench_dynamics}：对应原 `Fig3\_Quench\_dynamics.png`，展示双参数淬火序列、弦破碎与光锥传播动力学)}
+
+在演化至 $\Omega t^* = 11.3$（约 $\SI{1.2}{\micro\second}$）时，我们利用声光调制器（AOM）在约 $\SI{20}{\nano\second}$ 内关闭寻址光束，实施了一次深度的双参数淬火（Dual-parameter quench）：将拓扑角突变至 $\theta=\pi$，同时将质量突变至 $m=0$。这一操作瞬间将系统从强禁闭相推入解禁闭相。
+
+参数淬火导致束缚电荷的物理机制发生剧变。真空恢复简并状态，弦张力瞬间消失。如图 \ref{ch7:fig:Quench_dynamics}c 和 \ref{ch7:fig:Quench_dynamics}d 的时空演化热图所示，原本局域的电场与电荷密度 $\rho_i(t) = |Q_i(t)|$ 在淬火点之后立即发生形态突变。微观层面上，原有的电通量管发生断裂（弦破碎），并伴随大量的粒子-反粒子对产生。随后，这些电荷以典型的线性光锥（Light-cone）形式向外进行弹道传播。
+
+为了界定相变的发生，本文提取了平均中心电通量 $E_c(t) = \frac{1}{14}\sum_{i=8}^{21} E_i(t)$ 作为观测参量。如图 \ref{ch7:fig:Quench_dynamics}e 所示，$E_c(t)$ 的振荡基线在淬火点 $\Omega t^*$ 处出现明显的不连续跃迁，标志着系统从禁闭到解禁闭的瞬态切换。此外，提取不同特定时刻的空间电荷分布剖面（图 \ref{ch7:fig:Quench_dynamics}f）清晰地展示了粒子从受限局域状态（$\Omega t=0$），经历淬火激发（$\Omega t^*=11.3$），最终演变为全空间离域状态（$\Omega t=30.2$）的完整过程。实验数据与引入了初态及演化误差模型的数值模拟（见 \ref{ch7:fig:Quench_dynamics} 节）保持了高度一致。这一结果表明，本平台能够在单一相干演化序列中，实时捕捉并解析规范场论中剧烈的非平衡相变动力学。
+
+\begin{figure}[!htb]
 \centering
   \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/EDFigure_Quench_dynamics_simulation.png}
-  \caption{\textbf{淬火动力学的数值模拟。} 
-  对应正文图~\ref{Fig3:Quench_dynamics} 的电场 $E_i(t)$ 模拟时空演化，捕捉 $\Omega t^*=11.3$ 处双参数淬火后快速弦破碎的动力学特征。}
-  \label{EDFig:Simulation_3}
+  \caption{\textbf{淬火动力学的数值模拟。} }
+  \label{ch7:fig:Quench_dynamics_simulation}
 \end{figure}
 
-\section{介子实时散射动力学}
+淬火动力学的理论验证： 为了定量检验淬火瞬间复杂的多体动力学，我们同样提取了含噪 MPS 模拟下的电场时空演化轨迹。如图 \ref{ch7:fig:Quench_dynamics_simulation} 所示，模拟结果不仅精确复现了 $\Omega^*t=11.3$ 淬火前受限的“呼吸”振荡，更完美捕捉到了淬火后电通量管瞬间撕裂并沿光锥发散的微观细节。实验与数值之间的紧密吻合表明，本实验平台在极高的时空分辨率下，对规范场论中剧烈的非平衡相变动力学具有卓越的解析能力。
 
-\begin{figure}[htb]
+\section{解禁闭区域的介子实时散射动力学}
+
+类介子等复合粒子的高能散射是探测非微扰规范动力学的基本手段，它能够直观反映出禁闭、束缚态形成与解离等标志性物理过程。尽管非微扰理论方法不断发展，但受限于可控初态的制备难度以及对超快瞬态过程的分辨能力，实时散射动力学的实验研究仍极具挑战。本节利用可编程里德堡阵列在单格点尺度上的高保真度初态制备与演化追踪能力，在实验上观测了 (1+1) 维格点规范场论中的类介子实时散射过程。
+
+\subsection{散射初态制备与强禁闭下的局域化特征}
+
+在实验中，我们通过结合全局激发与局域寻址（详见 7.3 节），在均匀的真空背景中初始化了两个相距 7 个格点的类介子激发。为了在散射过程中抑制背景真空涨落从而提高信号对比度，我们将系统的费米子质量参数设定为 $m=1.5\kappa$。需要指出的是，与部分数值研究所采用的动量选通波包初态不同，本实验中的散射动力学直接来源于静态类介子激发在哈密顿量淬火后所产生的准粒子传播与碰撞。该方案无需复杂的额外波包初始化脉冲序列，在确保物理机制清晰的同时，对制备缺陷具有更高的鲁棒性。
+
+\begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig4_Meson_dynamics.png}
-  \caption{\textbf{$U(1)$ 格点规范场论中的实时散射动力学。} 
-  \textbf{a,b}, 不同弦张力下实验测量的动力学电荷 $Q_i(t)$ 时空演化。\textbf{c,d}, 选定时刻的格点分辨粒子密度 $\rho_i(t)=|Q_i(t)|$。
-  \textbf{a,c}, 强禁闭（$\chi=0.6\kappa$）下电荷保持局域化，密度在整个演化过程中集中于初始位置。
-  \textbf{b,d}, 解禁闭（$\chi=0$）下电荷自由传播并在波包重叠时发生散射；在 $\Omega t=19.6$ 处出现中心密度峰值，并在 $\Omega t=29.4$ 演化为对称双峰结构。\textbf{b} 中虚线指示光锥轨迹；\textbf{d} 插图为碰撞示意图。
-  \textbf{e,f}, 禁闭（\textbf{e}）与解禁闭（\textbf{f}）区域的粒子密度数值模拟。误差棒为一个标准差。}
-  \label{Fig:4_Meson_dynamics}
+  \caption{\textbf{$U(1)$ 格点规范场论中的实时散射动力学。}}
+  \label{ch7:fig:Meson_dynamics}
 \end{figure}
 
-\subsection{介子散射动力学概述}
+\todo{(此处插入图 \ref{ch7:fig:Meson_dynamics}：对应原 `Fig4\_Meson\_dynamics.png`，展示强禁闭与解禁闭下的电荷密度和动力学电荷演化)}
 
-类介子等复合粒子的高能散射为探测非微扰规范动力学提供基本手段，并体现禁闭、束缚态形成与解离等标志性过程~\cite{belyansky_high-energy_2024}。尽管非微扰理论方法持续发展，但受限于受控初态制备与超快过程分辨能力，实时散射动力学的实验研究仍较为稀缺。里德堡 LGT 量子模拟器为研究此类动力学提供了可控实验路径~\cite{Karpov_Spatiotemporal_2022,bauer_quantum_2023-1}。
+为了建立对照基准，我们首先在强禁闭区域（$\chi=0.6\kappa$）内探测系统的动力学响应。通过施加较大的交错失谐，真空简并被解除，分离正负电荷需要付出高昂的线性能量代价。如图 \ref{ch7:fig:Meson_dynamics}a 和 \ref{ch7:fig:Meson_dynamics}c 所测得的动力学电荷 $Q_i(t)$ 与粒子数密度 $\rho_i(t) = |Q_i(t)|$ 的时空演化所示，在此参数下，电荷在整个演化周期内被稳定束缚。粒子密度高度集中于初始激发位置，未发生明显的波包扩散或散射，且背景涨落被有效抑制。
 
-本文利用具有格点与时间分辨控制的里德堡原子阵列，通过在真空态中初始化两个相距 7 个格点的类介子激发来研究散射与动力学冻结，并取质量 $m=1.5\kappa$ 以抑制真空涨落。与部分数值工作采用的动量选通波包初态不同~\cite{pichler_real-time_2016,bauer_quantum_2023-1}，这里的散射来自淬火后类介子态产生的准粒子传播与碰撞。该方案无需额外波包初始化，并在不改变类介子融化机制的前提下对缺陷较为鲁棒。
+\subsection{解禁闭区域的准弹性散射与干涉特征}
 
-强禁闭区域（$\chi=0.6\kappa$）通过调节交错失谐 $\delta$（等效控制拓扑角 $\theta$）实现：真空简并被解除，电荷被稳定束缚。电荷在整个演化中保持局域化，其动力学由 $Q_i(t)$（图~\ref{Fig:4_Meson_dynamics}\textbf{a}）与 $\rho_i(t)$（图~\ref{Fig:4_Meson_dynamics}\textbf{c}）量化，背景涨落很小。在保持禁闭的同时减小 $\chi$ 会导致适度的有界波包扩散，详见第~\ref{ch7:sec:methods} 节讨论。
+当系统参数被切换至解禁闭区域（$\chi=0$）时，真空恢复简并状态，线性禁闭势消失。动力学行为发生了定性改变：由于电荷分离不再产生额外的能量惩罚，组成类介子的正负电荷发生解离，并以典型的弹道（Ballistic）形式向外传播。
 
-进入解禁闭区域（$\chi=0$）后，动力学发生定性改变：线性禁闭势被消失的弦张力取代，组成电荷呈弹道传播~\cite{surace_lattice_2020,Karpov_Spatiotemporal_2022}。具体而言，正（负）电荷沿光锥轨迹向右（左）移动（图~\ref{Fig:4_Meson_dynamics}\textbf{b} 虚线），并伴随显著展宽，电荷分离不再产生线性能量代价。随着来自左侧激发的正电荷与来自右侧激发的负电荷在 $\Omega t\approx 11$ 附近波包重叠，体系出现菱形干涉结构，表征（1+1）维准弹性散射~\cite{surace_lattice_2020}。$\Omega t=19.6$ 处的瞬态中心峰在 $\Omega t=29.4$ 演化为对称双峰（图~\ref{Fig:4_Meson_dynamics}\textbf{d}），并与数值模拟一致（图~\ref{Fig:4_Meson_dynamics}\textbf{e}--\textbf{f}）。同时，左（右）边缘处出现超过真空背景的密度峰值，对应未参与碰撞的负（正）电荷继续向外传播。
+如图 \ref{ch7:fig:Meson_dynamics}b 的实验数据所示，在解禁闭条件下，来自左侧类介子的正电荷向右传播，而来自右侧类介子的负电荷向左传播，两者的运动轨迹均严格受限于线性光锥边界（图 \ref{ch7:fig:Meson_dynamics}b 中虚线所示）。随着演化的进行，这两个相向运动的波包在 $\Omega t \approx 11$ 附近发生空间重叠与碰撞。实验观测到，碰撞区域形成了一个清晰的菱形干涉图样（Diamond-shaped interference pattern），这是 (1+1) 维格点规范场中准弹性散射的典型特征。
 
-\subsection{不同弦张力下的散射}
+通过提取特定时刻的格点分辨粒子密度（图 \ref{ch7:fig:Meson_dynamics}d），我们可以定量重构散射的演化阶段：在 $\Omega t=19.6$ 时，由于波包的剧烈重叠，系统中心出现了一个瞬态的高密度峰值；随着散射过程的继续，该中心峰在 $\Omega t=29.4$ 时逐渐分离并演化为对称的双峰结构，表明散射后的粒子已穿过相互作用区并继续向外传播。同时，在原子链的左右边缘处，出现了明显超出真空背景的密度峰值，这对应于初始类介子中未参与中心碰撞的另外半数电荷（即左侧类介子的负电荷与右侧类介子的正电荷），它们在无阻碍地向外围自由传播。
 
-通过调节弦张力，本文系统探索不同禁闭强度下的散射动力学。初态为嵌入真空背景的两个类介子激发，其动力学电荷构型为 $Q_i=\sum_{j=8,9,16,17}(-1)^{i+1}\delta_{i,j}$。随后体系在不同弦张力的 LGT 哈密顿量下演化：保持 $m=1.5\kappa$，将拓扑项 $\chi$ 从 $0$ 调制到 $0.6\kappa$。
-
-图~\ref{EDFig:string-tension}\textbf{a--b} 显示了粒子密度 $\rho_i(t)$（\textbf{a}）与动力学电荷 $Q_i(t)$（\textbf{b}）的时空演化。大弦张力（如 $\chi=0.6\kappa$）下，粒子—反粒子对保持局域并形成稳定束缚态；随着 $\chi$ 降低，粒子仍保持束缚但在长时间演化中出现波包扩散；当 $\chi=0$ 时束缚态溶解并进入散射动力学。
-
-本文进一步以 $E(t)=[E_9(t)+E_{17}(t)]/2$ 追踪最初编码为负电场的平均电场动力学，结果如图~\ref{EDFig:string-tension}\textbf{c}。禁闭区域中，随 $\chi$ 增大可见更长寿命的振荡与更慢衰减，反映更强局域化；解禁闭区域中，粒子自由传播导致早期（$\Omega t\lesssim 12$）电场快速衰减，碰撞后散射动力学对应小幅残余振荡。
-
-\begin{figure}[htb]
-\centering
-  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
-  \caption{\textbf{不同弦张力下的散射动力学。} 
-  \textbf{a}, 不同弦张力下粒子密度 $\rho_i(t)$ 的时空演化（从左到右：$\chi/\kappa=0,0.3,0.4,0.6$）。
-  \textbf{b}, 动力学电荷 $Q_i(t)$ 的相应演化。弦张力增大对应更强局域化，表征更强禁闭。
-  \textbf{c}, 平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$ 的时间演化：禁闭区域随 $\chi$ 增大出现更长寿命振荡与更慢衰减；解禁闭区域早期快速衰减后出现碰撞诱导的残余振荡。}
-  \label{EDFig:string-tension}
-\end{figure}
-
-\subsection{不同质量与弦张力淬火下的散射响应}
-
-由于质量依赖的真空涨落以及弦断裂阈值 $U(L)\sim 2m$，禁闭/解禁闭动力学随质量而变化。为进一步研究该效应，本文考察较小质量下的散射动力学。制备类介子态后，本文先取 $\chi=0$ 将体系初始化在解禁闭相，动力学由 $\rho_i(t)$ 与 $Q_i(t)$ 表征（图~\ref{EDFig:tune-masses}\textbf{a--b}）。当 $m=0$ 时可见自由粒子传播并伴随显著真空涨落；当质量调至临界值 $m_c=0.66\kappa$ 时，$V(\phi)$ 由单阱转为双阱，势底平坦性导致更复杂的动力学结构。
-
-随后本文施加淬火以研究散射过程中的非平衡响应。体系初始处于解禁闭相，取 $m_0=0$ 或 $0.66\kappa$。在 $\Omega t=10.6$（图~\ref{EDFig:tune-masses}\textbf{d--f} 灰色箭头）时刻，本文突然开启局域寻址光束，在被寻址格点诱导 $\Delta_{\rm ac}=0.6\Omega$ 的交流斯塔克频移，从而引入强弦张力 $\chi=0.6\kappa$，同时质量平移为 $m_0+0.3\kappa$，体系被淬火进入禁闭相。
-
-如图~\ref{EDFig:tune-masses}\textbf{d--e}，对 $m_0=0$ 的情形，淬火后原先解禁闭下的弹性散射轨迹消失，体现禁闭对传播的抑制；对 $m_0=0.66\kappa$ 的情形，淬火后出现更强电场振荡（图~\ref{EDFig:tune-masses}\textbf{c,f}），其中平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$ 的演化显示：$m_0=0$ 时变化较弱（小质量对应弱禁闭，与正文一致），而 $m_0=0.66\kappa$ 时淬火后振荡显著增强，反映真空结构变化。需要强调的是，双重淬火前后规范格点 9 与 17 未施加寻址光束。总体而言，这些结果表明：强弦张力可在淬火后冻结粒子传播，而真空振荡仍可持续存在；轻质量对应更强真空涨落，而较重质量更利于辨识类介子激发的动力学结构。
-
-\begin{figure}[htb]
-\centering
-  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
-  \caption{\textbf{可调费米子质量与弦张力淬火下的散射动力学。} 
-  \textbf{a--c}, 解禁闭相动力学：\textbf{a,b}, $m=0$（左）与 $m=0.66\kappa$（右）的 $\rho_i(t)$（\textbf{a}）与 $Q_i(t)$（\textbf{b}）时空演化；\textbf{c} 为对应平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$。
-  \textbf{d--f}, 弦张力淬火动力学：在 $\Omega t=10.6$ 淬火至 $\chi=0.6\kappa$（灰色箭头与虚线）。\textbf{d,e} 为 $\rho_i(t)$（\textbf{d}）与 $Q_i(t)$（\textbf{e}）演化；\textbf{f} 为 $E(t)$，显示 $m_0=0.66\kappa$ 的弦振荡显著增强。}
-  \label{EDFig:tune-masses}
-\end{figure}
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_scattering_simulation.png}
-  \caption{\textbf{散射动力学的数值模拟。} 
-  对应正文图~\ref{Fig:4_Meson_dynamics}\textbf{a}（禁闭）与 \textbf{b}（解禁闭）的动力学电荷 $Q_i(t)$ 模拟时空演化。}
-  \label{EDFig:Simulation_4}
+  \caption{\textbf{散射动力学的数值模拟。}}
+  \label{ch7:fig:scattering_simulation}
 \end{figure}
 
-\section{动力学冻结}
+含噪数值模拟的交叉验证： 为了确证上述波包碰撞与菱形干涉图案的非微扰物理本质，并排除实验耗散引起的假象，我们采用了基于 MPS 的含时演化模拟进行了交叉验证。模拟中同样注入了态制备缺陷以及里德堡态误判率。正文图 \ref{ch7:fig:scattering_simulation}e, f 展示了粒子密度 $\rho(t)$ 的模拟结果；在此基础上，图 7.5 进一步展示了完整动力学电荷 $Q_i(t)$   的时空演化模拟。数值结果不仅在强禁闭相中完美复现了正负电荷的严格局域化（图 \ref{ch7:fig:scattering_simulation}a），更在解禁闭相中精确捕捉了正负电荷波包相向传播、交叠干涉并最终穿透彼此的完整轨迹（图 7.5b）。实验观测到的时空动力学与包含了真实物理噪声的 LGT 理论模拟在定性与定量上均保持了高度一致，验证了本实验平台对复杂复合粒子散射过程的精确追踪能力。
+ 
+\subsection{弦张力与费米子质量对散射动力学的系统调制}
 
-\subsection{动力学冻结协议与实验观测}
+为了进一步验证散射动力学与规范场参量之间的依赖关系，并论证核心实验参数选择的物理合理性，本小节系统地探索了有效弦张力 $\chi$ 与交错费米子质量 $m$ 对体系非平衡演化的联合调制作用。
 
-\begin{figure}[htb]
+\subsubsection{不同弦张力下的散射动力学}
+
+\begin{figure}[!htb]
 \centering
-  \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig5_Quantum_freeze-out_dynamics.png}
-  \caption{\textbf{动力学冻结。} 
-  \textbf{a}, 冻结协议示意图。体系初始制备在解禁闭相以允许电荷自由传播；碰撞开始时（$\Omega t=12.1$，黑色箭头）弦张力从 $\chi=0$ 突然淬火到 $0.6\kappa$，从而冻结高纠缠散射态并抑制后续演化。
-  \textbf{b,c}, 实验测量的动力学电荷 $Q_i(t)$（\textbf{b}）与粒子密度 $\rho_i(t)$（\textbf{c}）演化。淬火后可见清晰的平行传播波前（\textbf{b} 虚线）与被保留的瞬态碰撞构型（\textbf{c}）。插图为电荷分布示意；误差棒为一个标准差。
-  \textbf{d,e}, 对应 \textbf{b,c} 的数值模拟，显示实验与数值预测高度一致。
-  \textbf{f}, 采用实验参数（第~\ref{ch7:sec:methods} 节）模拟有（紫色）与无（棕色）淬火时半链纠缠熵 $S(t)$ 的演化。弦张力在 $\Omega t=12.1$ 后淬火会显著抑制熵增长，体现散射态的冻结。}
-  \label{Fig:5_Freeze-frame-dynamics}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
+  \caption{\textbf{不同弦张力下的散射动力学。} }
+  \label{ch7:fig:string-tension}
 \end{figure}
 
-哈密顿量参数的时空控制使本文能够研究散射过程中拓扑角 $\theta$ 的突然改变，从而改变类介子之间的相互作用。具体而言，本文先在解禁闭相（$\chi=0$，$m=1.5\kappa$）初始化体系，使电荷在碰撞开始前自由传播并形成波包重叠。在碰撞开始时（$\Omega t^*=12.1$），本文突然淬火到强禁闭（$\chi=0.6\kappa$，$m=1.8\kappa$）（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{a}）。
 
-该双重淬火过程是高度非平衡且非微扰的。直观上，体系应继续向热态演化；然而，本文观察到瞬态散射构型在长时间尺度上近似守恒：这一点由 $\Omega t=11.3$（淬火前）与 $\Omega t=30.2$（淬火后）处几乎相同的密度分布以及稳定的电荷分布共同证明（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{b}--\textbf{e} 插图）。本文将该结果称为动力学冻结。
+\todo{(此处可选择性插入图 \ref{ch7:fig:string-tension}：对应原补充材料 `EDFigure\_String\_tension.png`，展示不同弦张力下的演化与平均电场)}
 
-\subsection{动力学冻结的物理图像与可观测量}
+我们首先固定费米子质量为 $m=1.5\kappa$，系统调节有效弦张力 $\chi$ 的大小（从 0 调制至 0.6$\kappa$），并监测其对类介子散射的影响。如图 \ref{ch7:fig:string-tension}a 和 \ref{ch7:fig:string-tension}b 所示，在较大的弦张力（如 $\chi=0.6\kappa$）下，粒子-反粒子对保持强局域化并形成稳定的束缚态。随着 $\chi$ 的逐渐降低，原本稳定局域的束缚态开始在长时间演化中表现出有限范围内的波包扩散。当 $\chi$ 最终降至 0 时，束缚态彻底融化，系统平滑地过渡到前述的完全散射状态。
 
-需要强调，动力学冻结并非平庸现象：散射态具有较强纠缠~\cite{pichler_real-time_2016}，但在弦张力淬火后半链纠缠熵增长被显著抑制（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{f}），因此简单的能量注入直觉不足以刻画其动力学。扩展该方案，本文还系统研究了不同质量下由解禁闭到禁闭淬火诱导的散射与非平衡动力学（第~\ref{ch7:sec:methods} 节）。动力学冻结作为一种涌现现象，可能与更一般的非平衡动力学结构相关，甚至超越禁闭/解禁闭二分框架。
+此外，我们提取了最初被编码为负电场的两个激发位置的平均电场动力学$E(t) = [E_9(t)+E_{17}(t)]/2$（图 \ref{ch7:fig:string-tension}c）。数据分析显示：在禁闭区域，随着 $\chi$ 的增大，电场表现出寿命更长的相干振荡与更慢的衰减速率，直接证明了强弦张力对电荷扩散的压制；而在解禁闭区域（$\chi=0$），粒子自由传播导致电场在早期（$\Omega t \lesssim 12$）发生快速衰减，随后在碰撞发生期，散射相互作用诱导了小幅的残余电场振荡。
+ 
 
-该现象也与重离子物理中的 freeze-out 描述具有类比：高度非微扰、远离平衡态的演化产物可在一定程度上由有效平衡态表述。里德堡平台中“暂停动力学”以及对相互作用的开关控制，为评估实验观测与平衡理论模型之间的对应关系提供了理想测试平台，与重离子碰撞与格点 QCD 背景下的相关讨论相呼应~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
+\subsubsection{费米子质量对真空涨落与淬火响应的调制}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 \centering
-  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
-  \caption{\textbf{实验装置与时序。} 
-  \textbf{a}, 弦张力淬火实验时序。序列起始于通过结合全局里德堡 $\pi$ 脉冲（橙色线，$\Omega/2\pi \approx \SI{2.6}{\mega\hertz}$）与格点依赖寻址光束（红线与蓝线）制备类介子态。寻址光束产生差分交流斯塔克频移，使选定原子对里德堡跃迁失谐，如 \textbf{b} 插图所示。红色（蓝色）箭头指示用于初始化 $\mathbb{Z}_2$ 真空（创建类介子激发）的寻址配置。随后体系在 LGT 哈密顿量下演化，正质量由全局蓝失谐（绿线）设定。在淬火时间 $t^*$，用于制备 $\mathbb{Z}_2$ 真空的寻址光束（红线）被快速激活以淬火弦张力。演化结束（$t>t_e$）后，通过格点分辨荧光成像读出原子态。
- \textbf{b}, 态制备后测得的原子基态布居（原始实验数据），显示清晰的格点分辨类介子结构。校正探测误差后制备保真度为 51(5)\%。
- \textbf{c}, 阵列拉比频率不均匀性：峰峰值变化 $\delta \Omega_\mathrm{PP}/\Omega\approx 1.6\%$，均方根波动 $\delta \Omega_\mathrm{RMS}/\Omega=0.5\%$。
- \textbf{d}, 交流斯塔克频移随 AOM 射频（RF）功率的变化关系，呈现近线性依赖，用于禁闭演化期间光频移的初始校准。}
-  \label{EDFig:experimental_setup}
+  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
+  \caption{\textbf{可调费米子质量与弦张力淬火下的散射动力学。}  }
+  \label{ch7:fig:tune-masses}
 \end{figure}
+\todo{(此处插入图 \ref{ch7:fig:tune-masses}：对应原 EDFigure\_masses.png，展示不同费米子质量下的散射与弦张力淬火动力学)}
 
-\begin{figure}[htb]
+在上述关于类介子准弹性散射的主实验中，系统的交错费米子质量被特定地设定为 $m=1.5\kappa$。这一选择并非偶然，而是基于对不同质量下真空涨落与禁闭阈值的系统性评估。为了论证该参数选择的物理合理性，我们补充考察了较轻质量（$m=0$ 与临界质量 $m_c=0.66\kappa$ ）下的散射与淬火行为。
+将系统初始化于无弦张力的解禁闭相（$\chi=0$）中。如图 \ref{ch7:fig:tune-masses}a 和 \ref{ch7:fig:tune-masses}b（左侧）所示，当 $m=0$ 时，标量势 $V(\varphi)$ 在 $\varphi=0$ 处为单一极小值。虽然粒子可以自由传播，但由于缺乏质量项带来的能隙保护，粒子对的产生与湮灭不受能量惩罚，系统中伴随着极为剧烈的背景真空涨落。这种全局的电荷与密度涨落严重淹没了单粒子层面的散射轨迹。当质量被调节至临界值 $m_c=0.66\kappa$（图 \ref{ch7:fig:tune-masses}a 和 \ref{ch7:fig:tune-masses}b 右侧）时，有效势 $V(\varphi)$ 恰好处于由单阱向双阱结构转变的相变点。此时势阱底部极为平坦，导致了更加复杂的非线性动力学演化与背景噪声。通过这一系统性的参数扫描可以得出结论：在主实验中选择较重的质量 $m=1.5\kappa$，其物理意义在于有效压制无关的背景真空涨落，从而在真实的实验信噪比下，提取出最清晰的类介子波包传播与干涉信号。
+除了静态参数下的演化，本文还考察了不同初始质量对系统淬火响应的影响。在 $\Omega t=10.6$ 时（即粒子波包发生显著重叠之前），实验突然开启局域寻址光束引入 $\chi=0.6\kappa$ 的强弦张力，同时将质量平移至 $m_0+0.3\kappa$，使系统瞬间被淬火至强禁闭相（图 \ref{ch7:fig:tune-masses}d-f 的灰色箭头处）。
+实验结果表明，强弦张力对粒子传播的“冻结”效应具有普适性：无论是从 $m_0=0$ 还是 $m_c=0.66\kappa$ 出发，强弦张力的突然引入均能有效截断粒子的空间传播，使得原本在解禁闭相中可见的弹性散射轨迹在淬火后立即消失（图 \ref{ch7:fig:tune-masses}d, e）。然而，通过提取平均电场动力学 E(t)（图 \ref{ch7:fig:tune-masses}f），可以观察到微观真空响应的显著差异：对于 $m_0=0$ 的情形，由于小质量对应的禁闭效应较弱，淬火前后的电场变化并不剧烈；而对于处于相变临界点的 $m_0=m_c=0.66\kappa$，淬火操作（相当于突然改变了真空的双阱结构）激发了显著且长寿命的电场弦振荡。
+综上所述，本小节通过对 LGT 弦张力与质量参数空间的系统探索，不仅验证了弦张力淬火截断粒子传播的可靠性，也从实验上严格界定了真空涨落与粒子散射动力学之间的竞争关系，为本章核心实验参数的确立提供了完备的物理支撑。
+
+\section{强相互作用下的动力学冻结 (Freeze-out)}
+
+在通过静态哈密顿量成功观测到介子弹性散射后，本节进一步利用实验平台的高时空分辨率控制能力，探究系统在剧烈碰撞过程中的非平衡响应。具体而言，本文在类介子散射发生的最激烈时刻对系统实施全局哈密顿量淬火，并在实验上观测到了一种新颖的“动力学冻结（Dynamical freeze-out）”现象。
+
+\subsection{散射中间态的截获与冻结协议}
+
+为了实现对瞬态散射过程的微观干预，本文设计了如下的动力学冻结协议（如图 \ref{ch7:fig:Freeze-frame-dynamics}a 所示）：首先，体系被初始化于解禁闭相（$\chi=0$，$m=1.5\kappa$），使得初始制备的两个类介子能够如 7.5 节所述发生自由的弹道传播与波包重叠。随后，在演化至 $\Omega t^* = 12.1$ 时（此时相向运动的正负电荷波包已在中心区域发生显著重叠与碰撞），本文利用声光调制器（AOM）迅速开启局域寻址光束，在约 $\SI{20}{\nano\second}$ 内为系统突然引入大小为 $\chi=0.6\kappa$ 的强弦张力，同时将费米子质量平移至 $m=1.8\kappa$。这一双重淬火操作将系统瞬间从解禁闭相推入强禁闭相。
+
+\begin{figure}[!htb]
 \centering
-  \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_Mapping_V1.png}
-  \caption{\textbf{格点规范场论到里德堡原子阵列的映射。} 
-  \textbf{a}, 在里德堡原子阵列中实现（1+1）维 $U(1)$ LGT。PXP 模型中里德堡自旋（箭头）编码规范场；辅助费米子（彩色圆圈）定义在相邻自旋之间的链接上。里德堡阻塞强制约束 $n_i+n_{i+1}+n_i^{\mathrm{f}}=1$ 并实现 $U(1)$ 规范对称性。图中示意解禁闭与禁闭相下类介子态的时空演化。
-  \textbf{b}, 一维原子链构型示意：从上到下分别为正电场串（$+E$）、负电场串（$-E$）、负电荷激发、正电荷激发以及负—正电荷对。
-  \textbf{c--d}, （1+1）维 $U(1)$ LGT 的相图，作为 $m/\kappa$ 与 $\chi/\kappa$ 的函数。在禁闭区域（$\chi\neq 0$，$\theta\neq\pi$）中粒子被电弦束缚；在解禁闭区域（$\chi=0$，$\theta=\pi$）中粒子可自由传播。当 $m>m_c$ 时，$\chi=0$ 处出现自发电荷—宇称对称性破缺，其中 $m_c/\kappa=0.66$（\textbf{d}）。
-  \textbf{e}, 标量势 $V(\phi)$ 作为 $m$ 与 $\theta$ 的函数（计算中取 $c=1$ 与 $e=1$）。在解禁闭相（$\theta=\pi$）中，$\phi=0$ 处出现鞍点；当 $m>m_c$ 时，势在 $\pm\phi_0$ 处形成两个极小值并导致自发电荷—宇称对称性破缺。在禁闭相（$\theta\neq\pi$）中，极小值产生偏置并引入势隙 $\delta V$；该能隙随质量增大与 $\theta$ 偏离 $\pi$ 而增大，表征更强禁闭。}
-  \label{EDFig:Mapping}
+  \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/Fig5_Quantum_freeze-out_dynamics.png}
+  \caption{\textbf{动力学冻结。}}
+  \label{ch7:fig:Freeze-frame-dynamics}
 \end{figure}
 
-\section{分析与讨论}
 
-本章基于可编程里德堡量子模拟器研究了（1+1）维 $U(1)$ LGT 的实时散射与动力学冻结。本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上观测到弦破碎与对称性恢复；在解禁闭区域，本文追踪实时电荷散射过程并解析其菱形干涉特征；在碰撞开始时实施禁闭淬火则使高度纠缠的散射态出现动力学冻结，从而实现对瞬态中间态的“冻结取样”。
+\todo{(此处插入图 \ref{ch7:fig:Freeze-frame-dynamics}：对应原 `Fig5\_Quantum\_freeze-out\_dynamics.png`，展示冻结协议、电荷/密度演化及纠缠熵对比)}
 
-本章展示的实验方案为未来在规范场论量子模拟中探索更一般的非平衡现象提供了基础，包括动力学量子相变~\cite{Huang_Dynamical_2019,Zache_Dynamical_2019}、弱遍历性破缺~\cite{Desaules_Weak_2023,desaules_ergodicity_2024}以及涌现流体动力学~\cite{Berges_QCD_2021}等。动力学冻结为在复杂散射过程中解析超快、非微扰演化提供了可控模板。进一步的研究可用于检验：在局域可观测量与量子关联层面，非平衡动力学产物在多大程度上可被有效平衡态描述，从而与重离子碰撞中的 freeze-out 图像形成可定量对比~\cite{bauer_quantum_2023}。
+从直觉上看，对一个正在发生强相互作用散射的多体系统实施如此剧烈的全局参数淬火，通常会导致大量能量注入，进而驱使系统向无特征的高温热态快速演化。然而，实验测量的时空动力学给出了截然不同的结果。如图 \ref{ch7:fig:Freeze-frame-dynamics}b 和 \ref{ch7:fig:Freeze-frame-dynamics}c 测得的动力学电荷 $Q_i(t)$ 与粒子密度 $\rho_i(t)$ 所示，在淬火时刻 $\Omega t^*$ 之后，原本处于快速演化和干涉中的瞬态散射构型被突然“暂停”。通过对比淬火前（$\Omega t=11.3$）与淬火后长时间演化（$\Omega t=30.2$）的电荷与密度分布（图 \ref{ch7:fig:Freeze-frame-dynamics}c 插图），可以发现两者保持了高度的一致性。这意味着，瞬态的碰撞空间构型在后续的长演化时间尺度上实现了近似守恒，未发生显著的扩散或热化衰减。
 
-此外，多体威尔逊环算符的实现~\cite{glaetzle2014quantum,dai_four-body_2017,meth_simulating_2025}将把里德堡 LGT 量子模拟器扩展到更高维度，从而有望探索例如磁单极子凝聚等涌现机制（其被认为可能与 QCD 的禁闭相关）。进一步模拟非阿贝尔规范场论（如基于 $SU(2)$ 与 $SU(3)$ 的理论）则需要将模拟哈密顿量工程与数字量子电路相结合，以实现非对易群的操作~\cite{gonzalez-cuadra_hardware_2022,zache_fermion-qudit_2023}。沿这些方向的推进将使得对非阿贝尔规范场论开展高时间分辨、可调控的第一性原理研究成为可能，包括实时多阶段强子碰撞以及宇宙学情景中的弦破碎与强子化~\cite{gross_50_2023}。
+\subsection{纠缠熵动力学与高能物理图像}
 
-\section{本章小结}
+为了排除上述现象仅是平庸能量注入或单粒子局域化效应的可能，必须考察系统在量子关联层面的动力学。在到达淬火点 $\Omega t^* = 12.1$ 时，由于波包的交叠与多体相互作用，系统已经演化为一个具有较强纠缠的多体散射态。本文利用含噪数值模拟提取了系统半链纠缠熵 $S(t)$ 的时间演化轨迹。
 
-本章基于可编程里德堡原子阵列实现了（1+1）维 $U(1)$ 格点规范场论的含时哈密顿量工程，建立了从里德堡哈密顿量到量子链接模型及其连续极限描述的对应关系，并给出了质量、拓扑角与有效弦张力的可控映射。实验上，本文表征了禁闭—解禁闭相及其双参数淬火动力学，观测到弦破碎、对称性恢复以及类介子散射的菱形干涉图样。通过在碰撞开始时淬火到强禁闭相，本章实现了对纠缠散射态的动力学冻结，为高分辨率研究非平衡规范动力学提供了实验路径。
+如图 \ref{ch7:fig:Freeze-frame-dynamics}f 所示，如果系统始终在解禁闭相中演化（无淬火，棕色曲线），其纠缠熵将随着散射的进行而持续、快速地增长。然而，在施加弦张力淬火后（紫色曲线），纠缠熵的增长趋势被立即且显著地抑制，在整个可观测的时间窗口内保持在一个近乎平坦的稳定值。这一纠缠熵停止生长的证据强有力地表明：弦张力淬火不仅冻结了局域的电荷密度分布，更在全局多体态的层面上冻结了量子信息的进一步加扰与扩散。
+
+这种在强相互作用下涌现的动力学冻结现象，在微观物理图像上与高能重离子碰撞实验中常用的“Freeze-out”模型产生了深刻的共鸣。在重离子碰撞中，夸克-胶子等离子体（QGP）在极度非平衡的膨胀与冷却后，其末态强子的产额与分布通常可以被一个有效温度和化学势下的热力学平衡态所成功描述。而在本实验中，淬火产生的高能、高纠缠瞬态散射态，在很长的时间窗口内近似表现为淬火后禁闭哈密顿量的一个有效平衡态。
+
+
+\section{本章小结与讨论}
+
+\subsection{核心工作总结}
+本章基于可编程里德堡原子阵列，系统性地探索了 (1+1) 维 U(1) 格点规范场论的非平衡动力学。在理论层面，本章建立了从受限里德堡哈密顿量到量子链接模型及其连续极限的精确映射，并给出了费米子质量 $m$、拓扑角 $\theta$ 与有效弦张力 $\chi$ 等高能物理参量的可控实验字典。在实验层面，通过引入高时空分辨率的哈密顿量动态工程（特别是基于 AOM 的纳秒级交错失谐淬火），本章突破了传统静态模拟的限制。
+
+利用这一技术，本章首先表征了系统的禁闭与解禁闭相，并利用双参数淬火观测到了弦破碎与电荷—宇称对称性恢复的瞬态动力学。随后，在解禁闭区域内，实验追踪了类介子的实时电荷散射过程，成功解析了表征准弹性散射的菱形干涉图样。最后，通过在碰撞波包重叠的最激烈时刻实施瞬态禁闭淬火，本章成功截获了具有高度纠缠特征的瞬态散射中间态，观测到了系统演化的动力学冻结（Dynamical freeze-out）现象。结合引入探测与演化噪声的矩阵乘积态（MPS）数值模拟，本章的所有实验观测在定性与定量上均得到了严格的理论交叉验证。
+
+\subsection{物理意义与高能物理关联}
+本章所观测到的动力学冻结现象，不仅展示了里德堡量子模拟器在“原位（\textit{ab initio}）”干预多体动力学方面的独特优势，更在物理图像上与高能重离子碰撞中的 Freeze-out 唯象模型产生了深刻的映射关系。在诸如大型强子对撞机（LHC）的重离子碰撞实验中，夸克-胶子等离子体（QGP）在经历极度非平衡的膨胀与超快散射后，其末态强子的产额与分布往往能够被一个有效温度和化学势下的热力学平衡态所近似描述。
+
+本章的实验结果在微观层面上证明：一个由剧烈强相互作用产生的高能、高纠缠非平衡散射态，确实可以通过外部哈密顿量的瞬态改变被“悬停”在一个有效平衡态上；且在此过程中，其局域物理量（电荷与密度分布）和全局关联（纠缠熵）的演化均被显著抑制。这为在局域可观测量与量子关联层面，定量检验“非平衡动力学产物在多大程度上可被有效平衡态描述”提供了一个高度可控的桌面实验模板。
+
+\subsection{未来展望}
+本章展示的时空哈密顿量工程不仅为探索动力学量子相变、弱遍历性破缺以及涌现流体动力学等更一般的非平衡现象奠定了基础，也为后续更复杂规范场论的模拟指明了方向。
+
+一方面，未来可通过引入多体威尔逊环（Wilson plaquette）算符的设计与控制，将当前的里德堡 LGT 量子模拟器扩展至二维或更高维度，从而有望在实验上探索磁单极子凝聚等被认为与 QCD 禁闭机制密切相关的涌现现象。另一方面，若要进一步模拟非阿贝尔规范场论（如基于 SU(2) 与 SU(3) 群的理论），则需要探索将模拟哈密顿量演化（Analog evolution）与数字量子电路（Digital quantum circuits）相结合的混合计算架构，以实现非对易群的复杂操作。沿着这些方向的持续推进，有望最终实现对非阿贝尔规范场论中多阶段强子碰撞、宇宙学演化中的弦破碎以及强子化等核心物理过程的高分辨率、第一性原理研究。
+
+
+
+% \section{引言}
+
+% 理解规范场论的非平衡动力学仍是高能物理的核心挑战之一~\cite{Calzetta_Hu_2008,gross_50_2023}。在实验上，从重离子碰撞到轻子与强子对撞，许多关键过程都发生在远离平衡态的强相互作用演化之中；然而，这类演化通常难以进行严格的从头计算（\textit{ab initio}）处理~\cite{bauer_quantum_2023-1}。量子模拟为这一问题提供了资源可控的替代路径~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025}。近年来，多个物理平台已经在实验上观测到规范场论的代表性现象~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025,schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025,wang_observation_2022,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge,bernien2017probing,surace_lattice_2020,datla_statistical_2025,gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024,zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}，其中包括弦断裂~\cite{gonzalez-cuadra_observation_2025,Cochran2025,de_observation_2024,liu_string_2024}与假真空衰变~\cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。本章基于可编程里德堡原子阵列，研究（1+1）维 $U(1)$ 格点规范场论（lattice gauge theory, LGT）中的实时散射与动力学冻结。
+
+% 通过时空哈密顿量工程，本文实现了动力学禁闭—解禁闭相变，并在量子淬火过程中观测到弦破碎与对称性恢复。借助单址分辨读出，本文在不同参数区域追踪了类介子激发的传播与散射。进一步地，本文引入双重淬火协议并观测到动力学冻结（freeze-out）：在散射后对哈密顿量进行淬火时，尽管系统被注入大量能量，其后续演化（低阶关联与纠缠增长）均被显著抑制，体系在很长时间内近似停留在一个高度关联的状态。该现象与重离子碰撞中常用的 freeze-out 图像在物理直觉上相呼应~\cite{Berges_QCD_2021}。总体而言，本章建立了一种以高时空分辨率探测非微扰规范动力学的实验路径~\cite{CarmenBanuls_Review_2020}，为研究远离平衡态的规范场论现象提供了可控平台。
+
+% 规范场论支配三种基本相互作用。以量子色动力学（quantum chromodynamics, QCD）为例，它作为强相互作用理论呈现出禁闭~\cite{wilson_confinement_1974}、弦断裂~\cite{bali_observation_2005}与渐近自由~\cite{Frank_Nobel_2005}等深刻现象。尽管 QCD 的形式结构相对简洁，但夸克与胶子之间的强耦合使得解析求解极具挑战~\cite{wiese_ultracold_2013}。数值上，格点规范场论~\cite{wilson_confinement_1974,creutz_monte_1983}为平衡性质（能谱、相图等）提供了可靠的非微扰框架，但在实时动力学问题上计算资源需求呈指数级增长~\cite{troyer_computational_2005,CarmenBanuls_Review_2020}。实验上，粒子对撞机能够测量渐近末态，却难以对瞬态中间过程实施可控操控与直接读出~\cite{belyansky_high-energy_2024}。因此，对远离平衡态的规范动力学开展可控、可重复、并能分辨中间态的实验研究，仍是基础物理的重要前沿。
+
+% 量子模拟为经典计算与高能对撞实验提供了资源高效的补充~\cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025,Chai2025fermionic,chai2025resource,chai2025scalable}，使得在离子阱~\cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025}、超导量子比特~\cite{wang_observation_2022,Cochran2025,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge}、光晶 格超冷原子~\cite{schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025}以及里德堡原子阵列~\cite{bernien2017probing,surace_lattice_2020,gonzalez-cuadra_observation_2025,datla_statistical_2025}等平台上开展 LGT 的桌面研究成为可能。这些系统通过哈密顿量工程复现了禁闭~\cite{schweizer_floquet_2019,tan_observation_2021,mildenberger_confinement_2025,zhang_observation_2025}与非平庸真空结构~\cite{zhu_probing_2024}等关键非微扰特征，为理解 QCD 动力学提供了可检验的物理场景。然而，面向高能物理的核心问题——实时散射动力学（可视作基本粒子的碰撞过程）——其实验实现仍然受限：关键瓶颈包括制备具有确定动量结构的入射态，以及在强相互作用期间实现精确的时空操控与读出。
+
+% 基于此，本章利用可编程里德堡量子模拟器的时空可调哈密顿量控制，追踪并定制 $U(1)$ LGT 的实时动力学。通过对拓扑角 $\theta$ 与费米子质量 $m$ 的动力学工程，本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上解析其对应的弦破碎与电荷—宇称对称性破缺特征。进一步地，本文在解禁闭区域探测实时电荷散射动力学，并观测到表征（1+1）维准弹性散射的菱形干涉结构。最后，本文在碰撞开始时对哈密顿量实施突然淬火，从而在高度非平衡条件下实现动力学冻结；该现象表明，动力学生成的高能散射态在一定时间窗口内可由淬火后哈密顿量的有效平衡态描述，这与重离子碰撞中 freeze-out 图像的基本思想相一致~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
+
+% \section{从里德堡原子到格点规范场}
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig1_experimental_seup_and_LGT_mapping.png}
+% \caption{
+% \textbf{里德堡原子格点规范场论量子模拟器。} 
+% \textbf{a}, 可编程里德堡原子阵列。原子由有效拉比频率 $\Omega$ 与失谐 $\Delta$ 的里德堡激光全局驱动，并通过在各格点提供局域光频移 $\delta_i$ 的远失谐光束实现单独寻址（第~\ref{ch7:sec:methods} 节）。
+% \textbf{b}, 格点规范场论（LGT）映射。原子态 $\ket{g}$ 与 $\ket{r}$ 在奇数格点上分别编码规范场 $+E$（蓝箭头）与 $-E$（红箭头），在偶数格点上对应关系反转。里德堡阻塞效应强制满足高斯定律。在物质格点（定义为相邻规范格点之间的间隙位置），正负电荷作为相反规范极性之间的畴壁出现。
+% \textbf{c}, 量子链接模型的实现。LGT 构型可直接映射到 \textbf{a} 所示阵列中的原子态排列，表现为交替的规范场与局域化的物质激发。
+% \textbf{d}, LGT 哈密顿量的控制。全局失谐 $\Delta$ 将费米子质量 $m$ 从 $0$ 调制至 $m>m_c$，对应在 \textbf{e} 中将 $V(\phi)$ 从单阱结构调制为双阱结构。交错失谐 $\delta_i = (-1)^i\delta$ 使 $\theta$ 偏离 $\pi$，通过势能不对称性驱动禁闭—解禁闭相变。
+% \textbf{e}, 禁闭—解禁闭机制。在 $\theta=\pi$（解禁闭）时，$V(\phi)$ 的简并极小值对应消失的弦张力，从而允许电荷自由传播；当 $\theta \neq \pi$（禁闭）时，不对称性诱导非零弦张力，分离代价随距离线性增长，从而抑制对产生。
+% \textbf{f}, 散射动力学的时空控制。通过结合全局里德堡拉曼 $\pi$ 脉冲与大规模局域搁置光束（第~\ref{ch7:sec:methods} 节）制备高保真类介子初态；随后在散射期间对 LGT 哈密顿量参数实施时空操控，从而触发动力学冻结并实现对中间散射态的“冻结取样”。
+% }
+%   \label{Fig1:experimental_set_up}
+% \end{figure}
+
+% \subsection{模型与实验平台的统一描述}
+
+% 本文的实验平台为最多包含 30 个 $^{87}$Rb 原子的可编程阵列（图~\ref{Fig1:experimental_set_up}\textbf{a}）。原子首先制备在基态 $\ket{g}$，并通过有效拉比频率 $\Omega$ 与全局失谐 $\Delta$ 的双光子跃迁耦合到里德堡态 $\ket{r}$。单址分辨控制由远失谐寻址光束实现：该光束在各格点上产生可编程的局域交流斯塔克频移 $\delta_i$，从而允许构造定制失谐图案。特别地，交错配置 $\delta_i = (-1)^i\delta$ 用于调节拓扑角 $\theta$（图~\ref{Fig1:experimental_set_up}\textbf{d}--\textbf{e}）。
+
+% 里德堡原子阵列的动力学由
+% $
+% \hat{H}_{R}/\hbar = \sum_i \left[ \frac{\Omega}{2} \hat{\sigma}_i^x - (\Delta + \delta_i) \hat{n}_i \right] + \sum_{i<j} V_{ij} \hat{n}_i \hat{n}_j
+% $
+% 描述，其中 $\hat{\sigma}_i^x$ 表征基态与里德堡态之间的相干耦合，$\hat{n}_i$ 为里德堡态占据算符，$V_{ij}$ 描述原子间的范德瓦尔斯相互作用。
+
+% 在里德堡阻塞区域 $V_{i,i+1} \gg \Omega$，相邻原子不能同时被激发到里德堡态。由于这一动力学约束，$\hat{H}_{R}$ 可映射到量子链接模型表述~\cite{banerjee_atomic_2012}下的 $U(1)$ LGT 哈密顿量~\cite{surace_lattice_2020}（第~\ref{ch7:sec:methods} 节）：
+% \begin{multline}
+% \hat{H}_{\text{LGT}} = -\kappa \sum_i \left( \hat{\psi}_i^\dagger \hat{U}_{i,i+1} \hat{\psi}_{i+1} + \text{H.c.} \right) \\
+% + m \sum_i (-1)^i \hat{\psi}_i^\dagger \hat{\psi}_i
+% + J \sum_i \left( \hat{E}_{i,i+1} + \frac{\theta}{2\pi} \right)^2.
+% \end{multline}
+% 这里，$\hat{\psi}_i$（$\hat{\psi}_i^\dagger$）为格点 $i$ 的交错费米子湮灭（产生）算符；$\hat{U}_{i,i+1}$ 表示链接 $i,i+1$ 上的动力学规范场并可由自旋-$1/2$ 湮灭算符实现，其共轭变量为电场 $\hat{E}_{i,i+1}$，满足 $[\hat{E}_{i,i+1}, \hat{U}_{i,i+1}] = \hat{U}_{i,i+1}$。因此，体系动力学由规范—物质耦合 $\kappa$、交错费米子质量 $m$ 与规范不变电场能量 $J$ 共同决定。在本实验中，这些参数可通过 $\Omega=-\kappa$、$\Delta=m$ 与交错失谐 $2\delta=\chi=J(\pi-\theta)/\pi$ 独立调控，其中 $\chi$ 为有效弦张力（第~\ref{ch7:sec:methods} 节）。
+
+% 在 LGT 表述中，电场 $\hat{E}_{i,i+1}=(-1)^i\hat{\sigma}_i^z$ 可解释为激发区域与未激发区域之间的畴壁构型。物质格点 $i$ 的动力学电荷定义为 $\hat{Q}_i = \hat{\psi}_i^\dagger\hat{\psi}_i - (1+(-1)^i)/2$。里德堡阻塞效应等效强制满足高斯定律约束~\cite{surace_lattice_2020}：$G_i = E_{i,i+1} - E_{i-1,i} - Q_i = 0$，从而保证局域电荷守恒，并体现为 LGT 的规范不变性。动力学电荷、周围电场与原子态构型之间的对应关系如图~\ref{Fig1:experimental_set_up}\textbf{b}--\textbf{c}所示。
+
+% 在连续极限下，LGT 哈密顿量可玻色化并映射到正弦-戈登模型，其标量势为 $V(\phi)=e^2\phi^2-cm\cos(2\phi-\theta)$（第~\ref{ch7:sec:methods} 节）~\cite{COLEMAN1976239,surace_lattice_2020}。这里 $e$ 为规范耦合常数，$c$ 为由 $\Omega$ 与 $\Delta$ 决定的常数，$\phi$ 为玻色化标量场。势能 $V(\phi)$ 决定真空结构~\cite{CALLAN1976334}与动力学响应（图~\ref{Fig1:experimental_set_up}\textbf{e}），从而导致禁闭—解禁闭相变~\cite{surace_lattice_2020}与自发电荷—宇称对称性破缺~\cite{yang_observation_2020}等现象。
+
+% 实验上，通过协同设计全局里德堡驱动与单址分辨寻址光束（第~\ref{ch7:sec:methods} 节），本文可高保真制备多种 LGT 态：均匀正/负电场真空、孤立电荷、以及类介子激发（粒子—反粒子对）。结合高保真初态制备与对 $V(\phi)$ 的可控调节，使得实时散射动力学在实验上可直接访问（图~\ref{Fig1:experimental_set_up}\textbf{f}）。例如，通过制备空间分离的类介子并淬火到解禁闭（$\theta=\pi$），可触发电荷传播与碰撞；而在散射过程中进一步施加禁闭淬火，则会出现本章讨论的动力学冻结现象（图~\ref{Fig1:experimental_set_up}\textbf{f}）。
+
+% \subsection{量子链接模型与里德堡哈密顿量映射}
+
+% 在可编程原子阵列中，每个原子可视为包含基态 $\lvert g\rangle$ 与里德堡态 $\lvert r\rangle$ 的二能级系统。里德堡原子间强范德瓦尔斯相互作用导致里德堡阻塞效应，从而禁止相邻原子同时激发。遵循文献~\cite{surace_lattice_2020,cheng_emergent_2024}，该阻塞约束可被理解为涌现的 $U(1)$ 规范不变性，其结构对应于电动力学中的高斯定律。
+
+% 体系哈密顿量由相干激光驱动与里德堡相互作用两部分组成。相互作用项
+% \begin{equation}
+% \sum_{i<j} V_{ij} \hat{n}_i \hat{n}_j,\quad V_{ij} \sim C_6/(a|i - j|)^6
+% \end{equation}
+% 描述里德堡态原子之间的范德瓦尔斯排斥，其中 $\hat{n}_i = \lvert r_i\rangle\langle r_i\rvert$ 为粒子数算符。激光驱动项
+% \begin{equation}
+% \frac{\Omega}{2} \sum_i \hat{\sigma}_x^i - \sum_i (\Delta + \delta_i)\hat{n}_i
+% \end{equation}
+% 由有效双光子拉比频率 $\Omega$、全局失谐 $\Delta$ 与局域失谐 $\delta_i$ 决定。
+
+% 在实验中，最近邻相互作用 $V_{i,i+1}$ 显著大于 $\Omega$、$\Delta$ 与 $\delta_i$。局域失谐 $\delta_i$ 相对较小，因此在后续理论映射中可近似忽略；但它在调控有效拓扑角 $\theta$ 与真空结构方面仍起关键作用，同时不破坏潜在的规范约束。由于强相互作用，双激发态 $\lvert r_i r_j\rangle$ 能量上受到抑制，体系动力学被限制在排除相邻里德堡激发的受限子空间中。投影到该子空间得到有效哈密顿量
+% \begin{equation}
+% H_{\mathrm{PXP}} = \frac{\Omega}{2} \sum_i \hat{P}_{i-1} \hat{\sigma}_x^i \hat{P}_{i+1} - \Delta \sum_i \hat{n}_i,
+% \end{equation}
+% 其中 $\hat{P}_i = 1 - \hat{n}_i$ 强制施加阻塞约束。该 PXP 哈密顿量~\cite{Lesanovsky_Interacting_2012}支配阻塞区域中的里德堡阵列动力学。
+
+% PXP 哈密顿量中的投影算符在整个希尔伯特空间上施加约束：在里德堡阻塞半径内不允许两个原子同时处于里德堡态。该约束可通过引入辅助费米子来重写。暂时忽略交错费米子的细节，在每对被阻塞的原子之间定义一个位于链接上的虚拟费米子：当任一原子处于里德堡态时，该费米子被湮灭；当所有原子均处于基态时，虚拟费米子的“狄拉克海”被完全占据。由于同一链接上的费米子湮灭算符不能被重复作用于同一量子态，共享同一费米子链接的一对原子不能同时处于里德堡态，从而等效实现阻塞约束。用 $f_i$ 表示链接 $i,i+1$ 上费米子的湮灭算符，可将 PXP 哈密顿量改写为
+% \begin{equation}\label{eq:ham}
+% H = \sum_i \left[\frac{\Omega}{2}\left(\sigma_i^- f^\dagger_{i-1} f^\dagger_i + \sigma_i^+ f_{i-1} f_i\right) - \Delta n_i\right]
+% \end{equation}
+% 其中 $\sigma^\pm_i = \sigma^x_i \pm {\rm i} \sigma^y_i$。在这一扩大希尔伯特空间中，原始约束 $n_i+n_{i+1}\le 1$ 被改写为等式（图~\ref{EDFig:Mapping}\textbf{a}）：
+% \begin{equation}\label{eq:conserve}
+% n_i + n_{i+1} + n^f_i = 1\,.
+% \end{equation}
+% 这里 $n^f_i=f^\dagger_i f_i$ 为辅助费米子的粒子数算符。该等式约束对应扩大空间上的守恒律，从而暗示规范对称性的存在。具体而言，哈密顿量与约束在如下规范变换下保持不变：
+% \begin{equation}
+% f_i \to e^{{\rm i}\phi_i} f_i,\qquad \sigma^+_i \to e^{-{\rm i}(\phi_{i-1}+\phi_i)} \sigma^+_i,
+% \end{equation}
+% 其中 $\phi_i$ 参数化格点上的规范变换。由于 $|e^{{\rm i}\phi_i}|=1$，该构造对应一维格点上的 $U(1)$ 规范场论（图~\ref{EDFig:Mapping}\textbf{a}）。守恒律式~\eqref{eq:conserve} 即为高斯定律的格点模拟。由此可将 $f_i$ 识别为物质场，将 $\sigma_i^z$ 识别为规范场（对应电场 $E_i$）。特别地，$\sigma^+_i$ 扮演链接变量 $U_i$ 的角色并满足 $[E_i,U_i]=U_i$。利用约束式~\eqref{eq:conserve}，式~\eqref{eq:ham} 可重写为
+% \begin{equation}\label{eq:ham2}
+% H = \sum_i \left[\frac{\Omega}{2}\left(f^\dagger_{i-1} U_i^\dagger f^\dagger_i + f_{i-1} U_i f_i\right) + \frac{\Delta}{2} n^f_i\right],
+% \end{equation}
+% 其中忽略了总体常数以及由用 $n^f_i$ 替代 $n_i$ 引入的边界项。规范变换的生成元
+% \begin{equation}
+% G_i = E_{i+1} + E_i + n^f_i
+% \end{equation}
+% 与哈密顿量对易，满足 $[G_i,H]=0$，即为高斯定律在该模型中的实现。
+
+% 式~\eqref{eq:ham2} 具有（1+1）维 $U(1)$ 量子链接模型的标准形式。进一步考虑交错费米子结构（偶/奇格点交替的物质与反物质），可得到 $E_i=(-1)^i\sigma_i^z$ 以及高斯定律约束与哈密顿量的相应修改，从而与正文所用形式一致。背景电场 $E_i^{\mathrm{bg}}$ 可通过平移 $E_i\to E_i+E_i^{\mathrm{bg}}$ 引入，这等效于在哈密顿量中加入拓扑 $\theta$ 项。该项在实验上对应交错局域失谐 $\delta_i=(-1)^i\delta$（与局域交流斯塔克频移成正比）。通过调节 $\delta$，本文可依据 $\delta = J(\pi-\theta)/2\pi$~\cite{banerjee_atomic_2012,surace_lattice_2020,cheng_tunable_2022} 动态控制拓扑角 $\theta$，从而访问不同真空结构与实时禁闭动力学。
+
+% \subsection{施温格模型与玻色化形式}
+
+% 在连续极限下，链接变量 $U_i$ 对应协变导数 $D_\mu=\partial_\mu - i e A_\mu$（$\mu=0,1$），其中 $A_\mu$ 为格点场 $\phi_i$ 的连续版本。量子链接模型在该极限下对应一维空间的量子电动力学（quantum electrodynamics, QED），即施温格模型，其哈密顿量为
+% \begin{equation}
+% H_{\rm QED} = \int {\rm d}x \left[\psi^\dagger (i\gamma^\mu D_\mu-m)\psi - \frac{1}{4}F_{\mu\nu}F^{\mu\nu}\right],
+% \end{equation}
+% 其中费米子质量对应 $m=\Delta$。这里 $\psi$ 为二分量旋量，$\gamma^\mu$ 为二维 $\gamma$ 矩阵，$F_{\mu\nu}=\partial_\mu A_\nu - \partial_\nu A_\mu$ 为场强张量。在（1+1）维中，$F_{\mu\nu}$ 仅有一个独立分量，对应电场。可利用 $\epsilon^{\mu\nu}$ 张量将费米子自由度玻色化为标量场 $\phi$：
+% \begin{equation}
+% \psi^\dagger \gamma^\mu \psi = \epsilon^{\mu\nu} \partial_\nu \phi.
+% \end{equation}
+% 将其代入 QED 拉格朗日量并对 $A_\mu$ 积分，可得到等价的玻色子理论，其哈密顿量~\cite{surace_lattice_2020}为
+% \begin{equation}\label{eq:Hb}
+% H_{\rm B} = \frac{1}{2}\int {\rm d}x\left[\dot{\phi}^2 + (\partial_x\phi)^2 + e^2\phi^2 - cm\cos(2\phi-\theta)\right].
+% \end{equation}
+% 其中 $e$、$c$ 与 $\theta$ 为由 $\Omega$ 与 $\Delta$ 决定的常数；最后一项即拓扑 $\theta$ 项。该项改变真空结构并引入依赖 $\theta$ 的质量间隙，从而导致带电费米子的禁闭/解禁闭行为。\ $\theta$ 的有效取值由里德堡系统参数 $\Delta$ 与 $\delta$ 决定，如正文所述。
+
+% \subsection{禁闭/解禁闭机制与弦张力定义}
+
+% \subsubsection{禁闭和解禁闭相}
+
+% 玻色化理论 $H_{\rm B}$ 的真空结构由势 $V(\phi)=e^2\phi^2-cm\cos(2\phi-\theta)$ 的极小值决定，其位置与简并性对 $\theta$ 敏感。这直接对应电荷—宇称对称性破缺与禁闭—解禁闭相变等现象，并可在里德堡原子平台中实现与观测。设 $cm>0$。当 $\theta=0$ 时，$\phi=0$ 为唯一极小值，真空趋于零净电场构型。在该区域，分离静态电荷的能量代价随距离线性增长，对应禁闭相，动力学弦断裂被显著抑制。
+
+% 随着 $\theta$ 增大，极小值 $\phi$ 从零偏移，真空获得非零净电场，体系逐渐进入较弱禁闭的区域。当 $\theta\to\pi$ 时，全局极小值与最近局域极小值之间的能量差减小，并在 $\theta=\pi$ 处消失（图~\ref{Fig1:experimental_set_up}\textbf{e} 与图~\ref{EDFig:Mapping}\textbf{e}）。此时势在 $\phi=\pm\phi_0/2$ 处出现两个简并的全局极小值：真空二重简并对应电场的相反取向。该结构与电荷—宇称对称性破缺密切相关（见下一节），并通过消失的弦张力显著增强粒子—反粒子对产生，从而导致解禁闭动力学。
+
+% 当费米子质量为零（$m=0$）时，余弦项消失，理论简化为自由标量场。在缺乏禁闭势的情况下，分离粒子—反粒子对不再产生线性代价，体系处于以电荷自由传播与弦张力缺失为特征的解禁闭相。
+
+% \subsubsection{弦张力的调节}
+
+% 在更高维的规范场论中，威尔逊环算符 $W(C)$（沿闭合回路 $C$ 的链接变量乘积之迹）可作为禁闭序参量：禁闭相对应面积律 $\langle W(C) \rangle \propto e^{-\chi A(C)}$，解禁闭相对应周长律 $\langle W(C) \rangle \propto e^{-kP(C)}$。在一维情形，面积律对应 $\langle W\rangle \propto e^{-\chi LT}$，即静态电荷间势能满足 $U(L)\propto \chi L$；而解禁闭相中 $U(L)$ 近似为常数。需要强调的是，一维静态电荷图像本质上接近经典极限（缺少横向规范自由度），因此本章将 $\chi$ 作为有效弦张力来表征禁闭强度。
+
+% 在里德堡平台中，$\chi$ 可通过交错失谐 $\delta_i=(-1)^i\delta$（对应调节拓扑角 $\theta$）实现控制，满足 $\delta = J(\pi-\theta)/2\pi$，如图~\ref{EDFig:Mapping}\textbf{e} 所示；另见~\cite{banerjee_atomic_2012,surace_lattice_2020}。当 $\theta=\pi$ 时，$V(\phi)$ 的结构随质量 $m$ 呈现两类情形：$m=0$ 时势在 $\phi=0$ 处只有单极小值；当 $m>m_c$ 时，势在 $\phi=\pm\phi_0$ 处出现两个简并极小值（图~\ref{Fig1:experimental_set_up}\textbf{e} 与图~\ref{EDFig:Mapping}），对应自发电荷—宇称对称性破缺（图~\ref{EDFig:Mapping}\textbf{d}）。两种情形下真空简并均保证反转局域电场（对产生）无能量代价，电荷间势能 $U(L)$ 近似为常数，从而体现消失的弦张力与解禁闭动力学。
+
+% 当 $\theta$ 偏离 $\pi$ 时，真空简并被解除，相反电场取向之间出现能量分裂 $\delta V$（图~\ref{EDFig:Mapping}\textbf{e}）。分离粒子—反粒子对距离 $L$ 会在电荷之间形成长度为 $L$ 的反转电场畴壁（“弦”），其能量代价 $U(L)\propto \chi L$，且 $\delta V \propto \chi$。因此，随 $\theta$ 进一步偏离 $\pi$（实验上对应更大的交错失谐 $\delta$），$\chi$ 增大并导致更强禁闭。基于上述考虑，本文在实验分析中采用 $\chi=2\delta$ 作为弦张力定义，与正文一致。
+
+% 此外，在固定 $\chi$ 下，势隙 $\delta V$ 随质量 $m$ 增大而增大（图~\ref{EDFig:Mapping}\textbf{e}），这对应更强禁闭；该趋势与正文图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}（下图）的观测一致。
+
+% \section{实验装置与控制技术}\label{ch7:sec:methods}
+
+% \subsection{可编程原子阵列与里德堡激发}
+% 本文实验利用可编程里德堡原子阵列作为量子模拟器~\cite{fang_Peobing_2024,shaw_benchmarking_2024,Chen_Interaction_2025,manovitz_quantum_2025,Chen_Spectroscopy_2025}。单个 $^{87}$Rb 原子从激光冷却原子系综中加载到紧密聚焦的二维光镊阵列中；光镊阵列由空间光调制器（Spatial Light Modulator, SLM）衍射的 \SI{808}{\nano\meter} 激光束生成。一对正交取向的声光偏转器（Acousto-Optic Deflector, AOD）用于将原子重排为间距为 $a$ 的无缺陷一维链，使最近邻范德瓦尔斯相互作用达到 $V_{i,i+1}\approx 2\pi\times \SI{7.2}{\mega\hertz}$。重排后，原子进一步冷却至约 $\SI{10}{\micro\kelvin}$，并通过光抽运制备到 $\lvert g\rangle = \lvert5S_{1/2},F=2,m_F=2\rangle$。
+
+% 基态 $\lvert g \rangle$ 与里德堡态 $\lvert r \rangle$ 之间的相干耦合由反向传播的 \SI{780}{\nano\meter} 与 \SI{480}{\nano\meter} 激光束驱动的双光子跃迁实现，单光子拉比频率分别为 $\Omega_{780}$ 与 $\Omega_{480}$。两束光相对于中间态 $\lvert5P_{3/2}\rangle$ 失谐 $\Delta_I = 2\pi \times \SI{1.2}{\giga\hertz}$，因此有效双光子拉比频率为 $\Omega=\Omega_{780}\Omega_{480}/(2\Delta_I)$。
+
+% \SI{480}{\nano\meter} 激发光由 \SI{960}{\nano\meter} 种子激光倍频（second-harmonic generation, SHG）得到。\SI{780}{\nano\meter} 与 \SI{960}{\nano\meter} 激光均采用 Pound--Drever--Hall（PDH）技术锁定到高精细度超低膨胀（ULE）光学腔；额外的慢速反馈回路用于补偿两台激光器的长期漂移。为以精确时序触发实验序列，本文使用电光调制器（Electro-Optic Modulator, EOM）对 \SI{780}{\nano\meter} 光束进行选通，时间分辨率约为 \SI{10}{\nano\second}（$\Omega t < 0.1$）。为抑制逐次（shot-to-shot）拉比频率波动，两路里德堡激发光均实现了基于声光调制器（Acousto-Optic Modulator, AOM）的采样保持控制。该装置实现了较长的相干时间（$T_2^* \sim \SI{11}{\micro\second}$ 且 $\Omega T_2^* \sim 80$），为高保真量子控制与态制备奠定基础~\cite{xiang_observation_2024}。
+
+% \subsection{类介子激发的制备}
+% 初始化后，本文制备类介子初态以研究散射动力学。在 LGT 映射下，介子对应嵌入 $\mathbb{Z}_2$ 有序背景中的一对局域畴缺陷。以 13 原子链为例，一个代表性的类介子态可写为 $\lvert \text{rgrgr\textbf{ggg}rgrgr} \rangle$；具有两个类介子激发的态可写为 $\lvert \text{r\textbf{ggg}rgrgr\textbf{ggg}r}\rangle$。由于该类激发具有空间不对称与局域结构，仅依赖全局里德堡脉冲的幅度或相位调制很难实现高保真制备；而高保真多体初态制备对于探测非平衡动力学至关重要。
+
+% 为此，本文结合全局里德堡激发与空间选择性光频移来制备类介子初态。本文使用同一块 SLM 对两束远失谐 \SI{795}{\nano\meter} 激光束（相对于 D1 线失谐约 \SI{15}{\giga\hertz}）进行整形，从而生成可编程的光频移图案：一束光用于制备交错图案以初始化 $\mathbb{Z}_2$ 有序真空背景，另一束光选择性寻址额外格点以引入对应类介子激发的畴壁（图~\ref{EDFig:experimental_setup}\textbf{b} 插图）。所有寻址光束在目标原子处诱导约 $2\pi\times \SI{15}{\mega\hertz}$ 的局域交流斯塔克频移，同时保持较低的光子散射率（约 $2\pi\times \SI{5}{\kilo\hertz}$）。在随后施加全局双光子里德堡 $\pi$ 脉冲期间，被寻址原子被移出共振并保持在基态，未被寻址原子则被共振转移至里德堡态。该过程可扩展地制备单/多类介子激发。在 25 格点链中，本文实现了 51(5)\% 的类介子态保真度（已校正探测误差），并观测到随系统尺寸增大保真度近线性下降。
+
+% \subsection{单格点寻址与含时控制}
+% 拓扑角 $\theta$ 的调节使（1+1）维 LGT 的相图探索尤为关键：它改变背景电场的真空结构，从而诱导禁闭—解禁闭相变与弦断裂动力学。在有效哈密顿量中，$\theta$ 项通过交错局域失谐 $\delta_i=(-1)^i\delta$ 实现，其中 $i$ 为原子格点索引。
+
+% 实验上，该交错失谐图案由类介子制备所用的 \SI{795}{\nano\meter} 寻址光束之一实现。为在单个实验序列中完成 $\mathbb{Z}_2$ 真空初始化与哈密顿量演化，本文采用 AOM 动态切换光频移（图~\ref{EDFig:experimental_setup}\textbf{a}）。每个被寻址原子在基态经历局域交流斯塔克频移 $\Delta_\mathrm{ac}$；在此基础上施加 $\Delta_\mathrm{ac}/2$ 的全局失谐即可得到所需交错分布 $\delta_i=(-1)^i\Delta_\mathrm{ac}/2$。
+
+% 为保证在交错失谐下仍能实现相干演化，需要抑制退相干并优化光频移均匀性。退相干主要来自寻址光束强度波动与原子位置不确定性。本文采用束腰约为 $\SI{3}{\micro\meter}$ 的寻址高斯光束（显著大于原子位置不确定性 $\sim \SI{300}{\nano\meter}$），以降低对原子运动的敏感性，并通过反馈回路稳定激光强度与频率。由光束对准漂移与光学串扰引起的空间不均匀性会导致局域失谐幅度 $\delta$ 发生位置依赖偏差。为抑制该效应，本文采用两步校准：首先在 EMCCD 相机上对原子荧光与寻址光束轮廓进行消色差成像以完成初始对准；随后依据测得的局域光频移迭代调整 SLM 全息图，以优化均匀性与串扰抑制。
+
+% \subsection{实验参数与测量定义}
+
+% \subsubsection{实验参数}
+% 在上述配置下，体系的有效哈密顿量为
+% \begin{align}
+% \hat{H}_{\mathrm{exp}} = & \frac{\Omega}{2} \sum_i \hat{\sigma}^x_i - \Delta_0 \sum_i \hat{n}_i - \nonumber\\& \Delta_{\mathrm{ac}} \sum_{i \in \text{odd}} \hat{n}_i + \sum_{i<j} \frac{C_6}{(a |i-j|)^6} \hat{n}_i \hat{n}_j,
+% \end{align}
+% 等价地可重写为
+% \begin{align}
+% \hat{H}_{\mathrm{exp}} = &\frac{\Omega}{2} \sum_i \hat{\sigma}^x_i - (\Delta_0 + \delta) \sum_i \hat{n}_i + \nonumber \\ & \delta \sum_i (-1)^i \hat{n}_i + \sum_{i<j} \frac{C_6}{(a |i-j|)^6} \hat{n}_i \hat{n}_j.
+% \end{align}
+% 其中 $\delta=\Delta_{\mathrm{ac}}/2$ 为交错失谐，$\Delta_0$ 为里德堡激光全局失谐，$C_6$ 为范德瓦尔斯相互作用系数，$a$ 为格点间距。该哈密顿量与正文所用里德堡哈密顿量 $H_{\mathrm{R}}$ 形式一致，其中 $\Delta=\Delta_0+\delta$ 且 $V_{ij}=C_6/(a|i-j|)^6$。
+
+% 在正文所有测量中，本文将阵列配置为里德堡阻塞半径 $R_b$ 超过格点间距 $a$，并满足 $R_b/a\gtrsim 1.3$。该条件保证最近邻双激发被有效抑制，从而在动力学上强制满足高斯定律约束。
+
+% 对于正文图~\ref{Fig:2_confinement_and_deconfinement_phases}、\ref{Fig:4_Meson_dynamics} 与 \ref{Fig:5_Freeze-frame-dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.2}{\mega\hertz}$，里德堡态 $\lvert 68D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.2}{\micro\meter}$，对应 $R_b/a=1.35$。对于正文图~\ref{Fig3:Quench_dynamics}，本文采用 $\Omega = 2\pi \times \SI{1.5}{\mega\hertz}$，里德堡态 $\lvert 72D_{5/2}, m_j = 5/2 \rangle$，以及 $a = \SI{7.0}{\micro\meter}$，对应 $R_b/a=1.3$。在所有配置中，频闪测量步长 $\Delta T$ 满足 $\Omega \Delta T = 0.75$。
+
+% 里德堡相互作用的长程尾项可视为有效能量偏移，从而修正映射 LGT 的质量参数控制。实验上，本文引入小的全局激光失谐 $\Delta \sim V_{i,i+1}/32$ 来补偿该偏移，建立 $\Delta_0=0$ 处的有效共振点；随后逐步增加里德堡激发激光的蓝失谐以实现 $\Delta_0>0$，从而在近似 PXP 动力学的同时保持对有效质量的精确控制。
+
+% 为探测禁闭动力学，本文通过调节送入寻址光束 AOM 的射频（RF）功率来控制局域交错失谐 $\delta$。$\delta$ 与 RF 功率之间的关系通过实验校准获得，表现为主要的线性依赖（图~\ref{EDFig:experimental_setup}\textbf{d}）。该校准提供了设置 $\delta$ 的初始参考，随后对局域交流斯塔克频移进一步微调，以保证失谐控制精度。
+
+% 为探索动力学禁闭—解禁闭相变，本文实施交错失谐淬火。在正文图~\ref{Fig3:Quench_dynamics} 所示由禁闭到解禁闭的转变中，局域交流斯塔克频移初始设置为 $1.8\Omega = 2\pi \times \SI{2.7}{\mega\hertz}$（对应 $\delta=0.9\Omega$）。在 $t=\SI{1.2}{\micro\second}$（$\Omega t=11.3$）时刻，寻址光束在约 \SI{20}{\nano\second}（$\Omega t\sim 0.15$，远短于实验时间步长；第~\ref{ch7:sec:methods} 节）内突然关闭，从而实现从 $(\Delta_0,\Delta_{\mathrm{ac}})=(0,2\pi\times \SI{2.7}{\mega\hertz})$ 到 $(0,0)$ 的双重淬火。为获得快速切换响应，寻址光束在 AOM 处的束腰约为 $\SI{100}{\micro\meter}$。
+
+% 在逆过程（解禁闭到禁闭）的淬火实验（正文图~\ref{Fig:5_Freeze-frame-dynamics}）中，寻址光束在 $t=\SI{1.6}{\micro\second}$ 时刻激活，引入 $0.6\Omega=\SI{0.72}{\mega\hertz}$ 的局域交流斯塔克频移并将体系淬火到禁闭相。因此有效失谐从 $\Delta_0+\delta=1.5\Omega$ 变为 $1.8\Omega$，从而提高映射质量参数并增强禁闭动力学的可见度。
+
+% \subsubsection{实验测量}
+% 每次哈密顿量演化结束后，本文将格点分辨荧光收集到 EMCCD 相机上并读出原子态（图~\ref{EDFig:experimental_setup}\textbf{a}）。由此直接得到 $\langle \sigma_i^z(t)\rangle$ 并可计算电场 $\langle E_i(t)\rangle = (-1)^i \langle \sigma_i^z(t)\rangle$（$i$ 为规范格点索引）。物质格点 $j$ 的粒子数密度为 $\langle \rho_j(t)\rangle = (-1)^{j-1}\big(\langle E_j(t)\rangle - \langle E_{j-1}(t)\rangle\big)$，动力学电荷为 $\langle Q_j(t)\rangle = \langle E_j(t)\rangle - \langle E_{j-1}(t)\rangle$，从而满足正文所用关系 $\langle \rho_j(t)\rangle = |\langle Q_j(t)\rangle|$。这些变换在实验中表现出对高斯定律的良好遵守，源于强最近邻里德堡阻塞。正文数据均为未经后处理的原始测量值。
+
+% 在正文图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c--e} 中，本文通过比较不同质量下稳态体电通量值来研究禁闭强度的质量依赖性。为提取稳态值，$\langle E_\mathrm{B}(t)\rangle$ 的时间轨迹用阻尼振荡函数拟合：$\langle E_\mathrm{B}(t)\rangle = E_\mathrm{s} + E_\mathrm{o} e^{-\gamma t}\cos(\omega t + \phi_0)$，其中 $E_\mathrm{s}$ 为 $t\to\infty$ 的稳态值。拟合与数据收敛良好（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c--e}）。
+
+% \subsection{误差分析}
+% 尽管正文原始实验数据已稳健捕捉（1+1）维 LGT 的关键现象与动力学结构，本文仍给出主要实验缺陷的分析。相关缺陷不改变本章结论，但可为后续优化提供参考。
+
+% 主要误差来源来自类介子初态制备的不完美。尽管制备保真度较高，单自旋翻转等缺陷仍可能在非预期位置引入正负电荷对，并在后续演化中缓慢热化。对于依赖真空背景以分辨弱信号的散射过程，这类缺陷会增强背景涨落；但主要散射特征仍可稳定分辨。
+
+% 退相干进一步限制禁闭与解禁闭动力学的可见度，其来源包括激发激光相位噪声、有限原子温度以及技术噪声。具体而言，激发激光在 $f_{\mathrm{servo}} \approx \SI{300}{\kilo\hertz}$ 附近存在伺服凸起，反映反馈带宽有限；该噪声谱分布会限制处于相应频带的拉比驱动相干性。同时，用于蓝光产生的种子激光 PDH 锁定会在伺服凸起频带引入强度噪声，其低频分量（低于 $\sim \Omega/2\pi$）对退相干贡献显著。因此，单纯增大拉比频率并不必然降低退相干；本文选择 $\Omega/2\pi \approx 5 f_{\mathrm{servo}}$ 以平衡相位与强度噪声效应。在禁闭动力学实验中，局域光频移波动还会引入额外退相干，表现为每个原子约 \SI{10}{\kilo\hertz} 的有效失谐随机变化。
+
+% 里德堡激发光束的空间不均匀性导致拉比频率在阵列中的变化为 $\delta \Omega_\mathrm{PP}/\Omega \approx 1.6\%$（峰峰值）与 $\delta \Omega_\mathrm{RMS}/\Omega \approx 0.5\%$（均方根）（图~\ref{EDFig:experimental_setup}\textbf{c}）。此外，演化过程中约 $\SI{0.3}{\micro\meter}$ 的原子位置不确定性会引起相互作用强度波动。这些效应共同导致偏离理想多体动力学的误差。
+
+% 最后，荧光成像读出也引入测量误差：本文测得单原子里德堡态探测误差约为 $1\%$（主要由有限寿命导致），基态探测误差约为 $2\%$（主要由原子丢失导致）。
+
+% \subsection{数值模拟方法与误差模型}
+
+% 本文使用 TeNPy 库~\cite{Hauschild2018Efficient} 实现的矩阵乘积态（matrix product state, MPS）方法模拟一维里德堡原子链的非平衡动力学。体系由含时哈密顿量
+% \begin{equation}
+% \hat{H}(t) = \frac{\Omega}{2}\sum_i\hat{\sigma}_x^i + \sum_i\frac{\Delta_i(t)}{2}\hat{\sigma}_z^i + \sum_{i<j}V_{i, j}\hat{n}_i\hat{n}_{j}
+% \end{equation}
+% 描述，其中拉比频率 $\Omega$、范德瓦尔斯相互作用 $V_{i,j}$ 以及全局与局域失谐 $\Delta_i(t)$ 均由实验标定获得。为提高计算效率，本文在模拟中保留主导的最近邻与次近邻相互作用并忽略较弱长程项。淬火后 $t=t_{\text{quench}}$ 的时间演化采用双格点含时变分原理（time-dependent variational principle, TDVP）计算，时间步长固定为 $\Omega\Delta t=0.06\pi$。MPS 模拟采用键维数 $\chi\le 100$ 与奇异值截断 $10^{-8}$，以平衡数值精度与计算开销。
+
+% 在 TeNPy 模拟中，本文将实验多能级系统映射为有效二能级系统，并纳入两类主要误差源以逼近实验条件：态制备缺陷，以及退极化（比特翻转）与探测误差的综合效应。
+
+% \noindent \textbf{态制备误差。} 为量化不完美态制备的影响（详见第~\ref{ch7:sec:methods} 节中的误差分析部分），并基于测得的初态制备高保真度，本文并行执行 $L+1$ 个模拟（$L$ 为链长）：一个采用理想初态 $\psi_{\text{ideal}}$，另 $L$ 个在格点 $i$ 处引入单自旋翻转误差 $\ket{\psi_i}=\hat{\sigma}_x^i\ket{\psi_{\text{ideal}}}$。需要指出的是，当制备效率进一步降低时，该近似可能失效，因为实际微观误差分布会转向更复杂的多量子比特误差模式。利用实验测得的制备保真度 $\mathcal{F}$，本文构造加权系综
+% \begin{equation}
+% \rho_{\text{exp}} = \mathcal{F}\ket{\psi_{\text{ideal}}}\bra{\psi_{\text{ideal}}} + \frac{1-\mathcal{F}}{L}\sum_{i=1}^L\ket{\psi_i}\bra{\psi_i}.
+% \end{equation}
+
+% \noindent \textbf{退极化和探测误差。} 由于中间态自发辐射与里德堡态有限寿命，体系在时间演化过程中存在耗散。受限于 MPS 方法对开放系统的直接模拟能力，TeNPy 难以在 29 原子链尺度上显式纳入耗散通道。本文将这些主要导致里德堡态原子翻转到基态的耗散过程建模为等效探测误差。该近似基于以下事实：退极化与探测误差均表现为实际量子态与测量态之间的差异；对本文关注的可观测量而言，里德堡翻转误差的主要效应是将演化结束后的里德堡态误判为基态。本文估算中间态损耗在哈密顿量驱动期间（序列持续时间约 $\SI{4}{\micro\second}$）贡献约 3.6\%；里德堡态有限寿命在整个实验序列（总时长约 $\SI{5}{\micro\second}$）贡献额外约 3.3\%；加之装置中里德堡态探测误差约 1\%。
+
+% 据此，本文以态依赖探测概率模拟退极化与探测误差的组合效应：里德堡态以概率 $P_r=8\%$ 被误探测为基态；基态以概率 $P_g=2\%$ 被误识别为里德堡态。数值结果见图~\ref{EDFig:Simulation_2}、\ref{EDFig:Simulation_3} 与 \ref{EDFig:Simulation_4}，分别对应正文图~\ref{Fig:2_confinement_and_deconfinement_phases}、\ref{Fig3:Quench_dynamics} 与 \ref{Fig:4_Meson_dynamics}。实验与模拟之间的一致性支持该误差模型的有效性。同时需要注意，实验数据与误差模型模拟仍存在微小偏差，可能源于模型未显式包含的退相干来源（例如激光噪声与多普勒效应）。
+
+% \section{禁闭—解禁闭相变与淬火动力学}
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig2_Confinement_deconfinement_phases.png}
+%   \caption{
+%     \textbf{禁闭与解禁闭。}
+% \textbf{a,} 不同费米子质量 $m$ 与拓扑角 $\theta$（由弦张力 $\chi$ 量化）下电场 $E_i(t)$ 的时空演化。\textbf{b,} 定制初态的电场与电荷构型。
+% \textbf{c--e,} 不同质量值下平均体电通量 $E_\mathrm{B}(t)$ 的演化。
+% 红色圆圈：解禁闭区域（$\theta=\pi$，对应 $\chi=0$）；
+% 蓝色方块：禁闭相（$\theta \neq \pi$，$\chi = 0.3\kappa$）。
+% 实线：实验数据的阻尼振荡拟合（第~\ref{ch7:sec:methods} 节）；虚线：稳态值（阴影带为误差棒）。
+% 解禁闭相中体电通量稳定在零附近（红色虚线），而禁闭区域收敛到偏移稳态值（蓝色虚线），反映 $\theta\neq\pi$ 时 $V(\phi)$ 的不对称性。
+% \textbf{f,} 体电通量稳态偏置 $\delta E$ 随质量的变化关系，误差棒为 68\% 置信区间。
+% }
+%   \label{Fig:2_confinement_and_deconfinement_phases}
+% \end{figure}
+
+% \vspace{.5cm}
+
+% \subsection{相图与相的动力学表征}
+
+% 禁闭与解禁闭相的表征为后续实时散射与动力学冻结的研究提供基本框架。为此，本文采用有效弦张力 $\chi$ 来量化静态极限下分离异性电荷的线性能量代价（第~\ref{ch7:sec:methods} 节）。实验上，本文通过同时调节费米子质量 $m$ 与拓扑角 $\theta$ 来控制 $\chi$，并测量单址分辨电场 $E_i(t)$ 与平均体电通量
+% $E_\mathrm{B}(t) = \frac{1}{7}\sum_{i=10}^{16} E_i(t)$ 的动力学响应。初态通过真空背景中的电场构型 $E_i(0)=0.5-\delta_{i,9}-\delta_{i,17}$ 在格点 9 与 17 编码两个类介子激发（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{b}）。
+
+% 在解禁闭区域（$\theta=\pi$）中，$V(\phi)$ 的真空结构具有简并特征（图~\ref{Fig1:experimental_set_up}\textbf{e}）。当 $m=0$ 时，势在 $\phi=0$ 处为单极小值，对应电场振荡但平均电场为零的电荷—宇称对称真空（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{b}，红色圆圈）。当 $m>m_c$ 时，简并极小值出现在 $\phi=\pm\phi_0$，导致自发电荷—宇称对称性破缺，电场在长时间后弛豫到稳定极小值（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{e}，红色圆圈）。在两种情形中，真空简并均消除了对产生的能量势垒，使弦张力消失（$\chi=0$）并允许电荷不受阻碍地传播。实验上，初始电通量从格点 9 与 17 迅速分散到整个系统，直接体现解禁闭动力学（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}，上图）。
+
+% 当拓扑角 $\theta$ 偏离 $\pi$ 时，体系进入禁闭区域。实验上取交错失谐 $\delta=0.15\Omega$（对应 $\chi=0.3\kappa$），从而解除真空简并并在相反电场取向之间建立与 $\chi$ 成正比的能隙（图~\ref{Fig1:experimental_set_up}\textbf{e}），形成线性禁闭势~\cite{surace_lattice_2020,liu2020realizing}。在禁闭区域，动力学表现出显著的质量依赖性：当 $m=0$ 时禁闭较弱，初始电通量仍可快速分散；随 $m$ 增大，电荷局域化增强（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{a}，下图）。同时，体电通量出现质量依赖的稳态偏置 $\delta E$（图~\ref{Fig:2_confinement_and_deconfinement_phases}\textbf{c}--\textbf{e}），反映 $V(\phi)$ 不对称性增强（第~\ref{ch7:sec:methods} 节）以及更强禁闭。补充而言，本文也验证增大弦张力 $\chi$ 会增强禁闭（第~\ref{ch7:sec:methods} 节）。
+
+% \vspace{.5cm}
+
+% \subsection{LGT 哈密顿量的动力学控制与双参数淬火}
+
+% 捕捉散射中间态需要时空哈密顿量控制。在已建立的禁闭/解禁闭相表征基础上，本文通过精确调制参数实现快速淬火协议，使得在一次实验序列中完成原位（in situ）相切换。该能力不仅可用于研究弦破碎与对称性恢复，也为后续的动力学冻结提供了实验入口。
+
+% 淬火实验起始于在格点 15 制备类介子激发，其电场构型为 $E_i(0)=0.5-\delta_{i,15}$。在交错失谐 $\delta=0.9\Omega$（即 $\theta \neq \pi$）与质量 $m=0.9\kappa$ 下，体系初始处于禁闭相，电荷由于非零弦张力对应的真空结构而被束缚在电通量管内。随后在 $\Omega t^*=11.3$ 时刻，本文在 \SI{20}{\nano\second} 内同时淬火 $m\to 0$ 与 $\theta\to\pi$，将体系驱动至解禁闭区域；此时 $V(\phi)$ 中出现真空简并并消除对产生势垒（图~\ref{Fig3:Quench_dynamics}\textbf{a}）。弦张力消失伴随电荷—宇称对称性恢复，从而触发弦破碎、对产生与光锥传播等非平衡动力学。电场 $E_i(t)$ 与电荷密度 $\rho_i(t)=|Q_i(t)|$（第~\ref{ch7:sec:methods} 节）的时空测量揭示了该动力学转变：淬火前由 $\delta=\Delta$ 共振导致的希尔伯特空间破碎振荡~\cite{desaules_ergodicity_2024,Variational_shi.T_2018}在淬火后被光锥传播迅速取代（图~\ref{Fig3:Quench_dynamics}\textbf{d}）。
+
+% 该转变亦可通过平均中心电通量 $E_c(t)=\frac{1}{14}\sum_{i=8}^{21}E_i(t)$ 的动力学进一步表征。图~\ref{Fig3:Quench_dynamics}\textbf{e} 中测得的 $E_c(t)$ 在淬火点出现振荡基线（虚线所示）的不连续跃迁，标志禁闭与解禁闭之间的切换。空间电荷分布（图~\ref{Fig3:Quench_dynamics}\textbf{f}）进一步显示粒子从禁闭（$\Omega t=0$）到离域（$\Omega t=30.2$）的演化过程，均发生于单次相干演化之中。
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
+%   \caption{
+%     \textbf{淬火动力学。} 
+% \textbf{a}, 双参数淬火协议示意图。禁闭区域中，初始负电荷与正电荷由负电通量管（红箭头）连接并被弦张力 $\chi=1.8\kappa$ 束缚。
+% 在 $\Omega t^*=11$ 时，快速双参数淬火（$\theta \rightarrow \pi$, $m \rightarrow 0$）至解禁闭相触发弦破碎、对产生与光锥电荷传播。
+% 阴影区域：平均电场 $\langle E_{j,j+1}\rangle\simeq 0$ 的高电荷密度区域。
+% 插图：禁闭相与解禁闭相中的有效势 $V(\phi)$。
+% \textbf{b}, $\chi$--$m$ 相图中的实验淬火轨迹，红色（黄色）星号表示淬火前（后）参数。
+% \textbf{c--d}, 测量的电场 $E_i(t)$（\textbf{c}）与电荷密度 $\rho_i(t)$（\textbf{d}）时空演化。
+% \textbf{e}, 平均中心电通量 $E_c(t)$ 的动力学：蓝色方块（红色圆圈）对应禁闭（解禁闭）相；紫色六边形为淬火点；虚线为振荡基线；箭头指示淬火时刻。
+% \textbf{f}, 关键时刻的空间电荷分布：淬火前（$\Omega t=0$，蓝色）、淬火点（$\Omega t^*=11.3$，紫色）与淬火后（$\Omega t=30.2$，红色）。误差棒表示一个标准差。
+% }
+%   \label{Fig3:Quench_dynamics}
+% \end{figure}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_Confinement_deconfinement_phases_simulation.png}
+%   \caption{\textbf{禁闭和解禁闭相的数值模拟。} 
+%   对应正文图~\ref{Fig:2_confinement_and_deconfinement_phases} 的电场 $E_i(t)$（\textbf{a}）、体电弦 $E_B(t)$（\textbf{b--d}）与稳态偏置 $\delta E$（\textbf{e}）模拟结果，显示实验与数值之间高度一致。}
+%   \label{EDFig:Simulation_2}
+% \end{figure}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/EDFigure_Quench_dynamics_simulation.png}
+%   \caption{\textbf{淬火动力学的数值模拟。} 
+%   对应正文图~\ref{Fig3:Quench_dynamics} 的电场 $E_i(t)$ 模拟时空演化，捕捉 $\Omega t^*=11.3$ 处双参数淬火后快速弦破碎的动力学特征。}
+%   \label{EDFig:Simulation_3}
+% \end{figure}
+
+% \section{介子实时散射动力学}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig4_Meson_dynamics.png}
+%   \caption{\textbf{$U(1)$ 格点规范场论中的实时散射动力学。} 
+%   \textbf{a,b}, 不同弦张力下实验测量的动力学电荷 $Q_i(t)$ 时空演化。\textbf{c,d}, 选定时刻的格点分辨粒子密度 $\rho_i(t)=|Q_i(t)|$。
+%   \textbf{a,c}, 强禁闭（$\chi=0.6\kappa$）下电荷保持局域化，密度在整个演化过程中集中于初始位置。
+%   \textbf{b,d}, 解禁闭（$\chi=0$）下电荷自由传播并在波包重叠时发生散射；在 $\Omega t=19.6$ 处出现中心密度峰值，并在 $\Omega t=29.4$ 演化为对称双峰结构。\textbf{b} 中虚线指示光锥轨迹；\textbf{d} 插图为碰撞示意图。
+%   \textbf{e,f}, 禁闭（\textbf{e}）与解禁闭（\textbf{f}）区域的粒子密度数值模拟。误差棒为一个标准差。}
+%   \label{Fig:4_Meson_dynamics}
+% \end{figure}
+
+% \subsection{介子散射动力学概述}
+
+% 类介子等复合粒子的高能散射为探测非微扰规范动力学提供基本手段，并体现禁闭、束缚态形成与解离等标志性过程~\cite{belyansky_high-energy_2024}。尽管非微扰理论方法持续发展，但受限于受控初态制备与超快过程分辨能力，实时散射动力学的实验研究仍较为稀缺。里德堡 LGT 量子模拟器为研究此类动力学提供了可控实验路径~\cite{Karpov_Spatiotemporal_2022,bauer_quantum_2023-1}。
+
+% 本文利用具有格点与时间分辨控制的里德堡原子阵列，通过在真空态中初始化两个相距 7 个格点的类介子激发来研究散射与动力学冻结，并取质量 $m=1.5\kappa$ 以抑制真空涨落。与部分数值工作采用的动量选通波包初态不同~\cite{pichler_real-time_2016,bauer_quantum_2023-1}，这里的散射来自淬火后类介子态产生的准粒子传播与碰撞。该方案无需额外波包初始化，并在不改变类介子融化机制的前提下对缺陷较为鲁棒。
+
+% 强禁闭区域（$\chi=0.6\kappa$）通过调节交错失谐 $\delta$（等效控制拓扑角 $\theta$）实现：真空简并被解除，电荷被稳定束缚。电荷在整个演化中保持局域化，其动力学由 $Q_i(t)$（图~\ref{Fig:4_Meson_dynamics}\textbf{a}）与 $\rho_i(t)$（图~\ref{Fig:4_Meson_dynamics}\textbf{c}）量化，背景涨落很小。在保持禁闭的同时减小 $\chi$ 会导致适度的有界波包扩散，详见第~\ref{ch7:sec:methods} 节讨论。
+
+% 进入解禁闭区域（$\chi=0$）后，动力学发生定性改变：线性禁闭势被消失的弦张力取代，组成电荷呈弹道传播~\cite{surace_lattice_2020,Karpov_Spatiotemporal_2022}。具体而言，正（负）电荷沿光锥轨迹向右（左）移动（图~\ref{Fig:4_Meson_dynamics}\textbf{b} 虚线），并伴随显著展宽，电荷分离不再产生线性能量代价。随着来自左侧激发的正电荷与来自右侧激发的负电荷在 $\Omega t\approx 11$ 附近波包重叠，体系出现菱形干涉结构，表征（1+1）维准弹性散射~\cite{surace_lattice_2020}。$\Omega t=19.6$ 处的瞬态中心峰在 $\Omega t=29.4$ 演化为对称双峰（图~\ref{Fig:4_Meson_dynamics}\textbf{d}），并与数值模拟一致（图~\ref{Fig:4_Meson_dynamics}\textbf{e}--\textbf{f}）。同时，左（右）边缘处出现超过真空背景的密度峰值，对应未参与碰撞的负（正）电荷继续向外传播。
+
+% \subsection{不同弦张力下的散射}
+
+% 通过调节弦张力，本文系统探索不同禁闭强度下的散射动力学。初态为嵌入真空背景的两个类介子激发，其动力学电荷构型为 $Q_i=\sum_{j=8,9,16,17}(-1)^{i+1}\delta_{i,j}$。随后体系在不同弦张力的 LGT 哈密顿量下演化：保持 $m=1.5\kappa$，将拓扑项 $\chi$ 从 $0$ 调制到 $0.6\kappa$。
+
+% 图~\ref{EDFig:string-tension}\textbf{a--b} 显示了粒子密度 $\rho_i(t)$（\textbf{a}）与动力学电荷 $Q_i(t)$（\textbf{b}）的时空演化。大弦张力（如 $\chi=0.6\kappa$）下，粒子—反粒子对保持局域并形成稳定束缚态；随着 $\chi$ 降低，粒子仍保持束缚但在长时间演化中出现波包扩散；当 $\chi=0$ 时束缚态溶解并进入散射动力学。
+
+% 本文进一步以 $E(t)=[E_9(t)+E_{17}(t)]/2$ 追踪最初编码为负电场的平均电场动力学，结果如图~\ref{EDFig:string-tension}\textbf{c}。禁闭区域中，随 $\chi$ 增大可见更长寿命的振荡与更慢衰减，反映更强局域化；解禁闭区域中，粒子自由传播导致早期（$\Omega t\lesssim 12$）电场快速衰减，碰撞后散射动力学对应小幅残余振荡。
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
+%   \caption{\textbf{不同弦张力下的散射动力学。} 
+%   \textbf{a}, 不同弦张力下粒子密度 $\rho_i(t)$ 的时空演化（从左到右：$\chi/\kappa=0,0.3,0.4,0.6$）。
+%   \textbf{b}, 动力学电荷 $Q_i(t)$ 的相应演化。弦张力增大对应更强局域化，表征更强禁闭。
+%   \textbf{c}, 平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$ 的时间演化：禁闭区域随 $\chi$ 增大出现更长寿命振荡与更慢衰减；解禁闭区域早期快速衰减后出现碰撞诱导的残余振荡。}
+%   \label{EDFig:string-tension}
+% \end{figure}
+
+% \subsection{不同质量与弦张力淬火下的散射响应}
+
+% 由于质量依赖的真空涨落以及弦断裂阈值 $U(L)\sim 2m$，禁闭/解禁闭动力学随质量而变化。为进一步研究该效应，本文考察较小质量下的散射动力学。制备类介子态后，本文先取 $\chi=0$ 将体系初始化在解禁闭相，动力学由 $\rho_i(t)$ 与 $Q_i(t)$ 表征（图~\ref{EDFig:tune-masses}\textbf{a--b}）。当 $m=0$ 时可见自由粒子传播并伴随显著真空涨落；当质量调至临界值 $m_c=0.66\kappa$ 时，$V(\phi)$ 由单阱转为双阱，势底平坦性导致更复杂的动力学结构。
+
+% 随后本文施加淬火以研究散射过程中的非平衡响应。体系初始处于解禁闭相，取 $m_0=0$ 或 $0.66\kappa$。在 $\Omega t=10.6$（图~\ref{EDFig:tune-masses}\textbf{d--f} 灰色箭头）时刻，本文突然开启局域寻址光束，在被寻址格点诱导 $\Delta_{\rm ac}=0.6\Omega$ 的交流斯塔克频移，从而引入强弦张力 $\chi=0.6\kappa$，同时质量平移为 $m_0+0.3\kappa$，体系被淬火进入禁闭相。
+
+% 如图~\ref{EDFig:tune-masses}\textbf{d--e}，对 $m_0=0$ 的情形，淬火后原先解禁闭下的弹性散射轨迹消失，体现禁闭对传播的抑制；对 $m_0=0.66\kappa$ 的情形，淬火后出现更强电场振荡（图~\ref{EDFig:tune-masses}\textbf{c,f}），其中平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$ 的演化显示：$m_0=0$ 时变化较弱（小质量对应弱禁闭，与正文一致），而 $m_0=0.66\kappa$ 时淬火后振荡显著增强，反映真空结构变化。需要强调的是，双重淬火前后规范格点 9 与 17 未施加寻址光束。总体而言，这些结果表明：强弦张力可在淬火后冻结粒子传播，而真空振荡仍可持续存在；轻质量对应更强真空涨落，而较重质量更利于辨识类介子激发的动力学结构。
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
+%   \caption{\textbf{可调费米子质量与弦张力淬火下的散射动力学。} 
+%   \textbf{a--c}, 解禁闭相动力学：\textbf{a,b}, $m=0$（左）与 $m=0.66\kappa$（右）的 $\rho_i(t)$（\textbf{a}）与 $Q_i(t)$（\textbf{b}）时空演化；\textbf{c} 为对应平均电场 $E(t)=[E_9(t)+E_{17}(t)]/2$。
+%   \textbf{d--f}, 弦张力淬火动力学：在 $\Omega t=10.6$ 淬火至 $\chi=0.6\kappa$（灰色箭头与虚线）。\textbf{d,e} 为 $\rho_i(t)$（\textbf{d}）与 $Q_i(t)$（\textbf{e}）演化；\textbf{f} 为 $E(t)$，显示 $m_0=0.66\kappa$ 的弦振荡显著增强。}
+%   \label{EDFig:tune-masses}
+% \end{figure}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_scattering_simulation.png}
+%   \caption{\textbf{散射动力学的数值模拟。} 
+%   对应正文图~\ref{Fig:4_Meson_dynamics}\textbf{a}（禁闭）与 \textbf{b}（解禁闭）的动力学电荷 $Q_i(t)$ 模拟时空演化。}
+%   \label{EDFig:Simulation_4}
+% \end{figure}
+
+% \section{动力学冻结}
+
+% \subsection{动力学冻结协议与实验观测}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig5_Quantum_freeze-out_dynamics.png}
+%   \caption{\textbf{动力学冻结。} 
+%   \textbf{a}, 冻结协议示意图。体系初始制备在解禁闭相以允许电荷自由传播；碰撞开始时（$\Omega t=12.1$，黑色箭头）弦张力从 $\chi=0$ 突然淬火到 $0.6\kappa$，从而冻结高纠缠散射态并抑制后续演化。
+%   \textbf{b,c}, 实验测量的动力学电荷 $Q_i(t)$（\textbf{b}）与粒子密度 $\rho_i(t)$（\textbf{c}）演化。淬火后可见清晰的平行传播波前（\textbf{b} 虚线）与被保留的瞬态碰撞构型（\textbf{c}）。插图为电荷分布示意；误差棒为一个标准差。
+%   \textbf{d,e}, 对应 \textbf{b,c} 的数值模拟，显示实验与数值预测高度一致。
+%   \textbf{f}, 采用实验参数（第~\ref{ch7:sec:methods} 节）模拟有（紫色）与无（棕色）淬火时半链纠缠熵 $S(t)$ 的演化。弦张力在 $\Omega t=12.1$ 后淬火会显著抑制熵增长，体现散射态的冻结。}
+%   \label{Fig:5_Freeze-frame-dynamics}
+% \end{figure}
+
+% 哈密顿量参数的时空控制使本文能够研究散射过程中拓扑角 $\theta$ 的突然改变，从而改变类介子之间的相互作用。具体而言，本文先在解禁闭相（$\chi=0$，$m=1.5\kappa$）初始化体系，使电荷在碰撞开始前自由传播并形成波包重叠。在碰撞开始时（$\Omega t^*=12.1$），本文突然淬火到强禁闭（$\chi=0.6\kappa$，$m=1.8\kappa$）（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{a}）。
+
+% 该双重淬火过程是高度非平衡且非微扰的。直观上，体系应继续向热态演化；然而，本文观察到瞬态散射构型在长时间尺度上近似守恒：这一点由 $\Omega t=11.3$（淬火前）与 $\Omega t=30.2$（淬火后）处几乎相同的密度分布以及稳定的电荷分布共同证明（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{b}--\textbf{e} 插图）。本文将该结果称为动力学冻结。
+
+% \subsection{动力学冻结的物理图像与可观测量}
+
+% 需要强调，动力学冻结并非平庸现象：散射态具有较强纠缠~\cite{pichler_real-time_2016}，但在弦张力淬火后半链纠缠熵增长被显著抑制（图~\ref{Fig:5_Freeze-frame-dynamics}\textbf{f}），因此简单的能量注入直觉不足以刻画其动力学。扩展该方案，本文还系统研究了不同质量下由解禁闭到禁闭淬火诱导的散射与非平衡动力学（第~\ref{ch7:sec:methods} 节）。动力学冻结作为一种涌现现象，可能与更一般的非平衡动力学结构相关，甚至超越禁闭/解禁闭二分框架。
+
+% 该现象也与重离子物理中的 freeze-out 描述具有类比：高度非微扰、远离平衡态的演化产物可在一定程度上由有效平衡态表述。里德堡平台中“暂停动力学”以及对相互作用的开关控制，为评估实验观测与平衡理论模型之间的对应关系提供了理想测试平台，与重离子碰撞与格点 QCD 背景下的相关讨论相呼应~\cite{borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}。
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
+%   \caption{\textbf{实验装置与时序。} 
+%   \textbf{a}, 弦张力淬火实验时序。序列起始于通过结合全局里德堡 $\pi$ 脉冲（橙色线，$\Omega/2\pi \approx \SI{2.6}{\mega\hertz}$）与格点依赖寻址光束（红线与蓝线）制备类介子态。寻址光束产生差分交流斯塔克频移，使选定原子对里德堡跃迁失谐，如 \textbf{b} 插图所示。红色（蓝色）箭头指示用于初始化 $\mathbb{Z}_2$ 真空（创建类介子激发）的寻址配置。随后体系在 LGT 哈密顿量下演化，正质量由全局蓝失谐（绿线）设定。在淬火时间 $t^*$，用于制备 $\mathbb{Z}_2$ 真空的寻址光束（红线）被快速激活以淬火弦张力。演化结束（$t>t_e$）后，通过格点分辨荧光成像读出原子态。
+%  \textbf{b}, 态制备后测得的原子基态布居（原始实验数据），显示清晰的格点分辨类介子结构。校正探测误差后制备保真度为 51(5)\%。
+%  \textbf{c}, 阵列拉比频率不均匀性：峰峰值变化 $\delta \Omega_\mathrm{PP}/\Omega\approx 1.6\%$，均方根波动 $\delta \Omega_\mathrm{RMS}/\Omega=0.5\%$。
+%  \textbf{d}, 交流斯塔克频移随 AOM 射频（RF）功率的变化关系，呈现近线性依赖，用于禁闭演化期间光频移的初始校准。}
+%   \label{EDFig:experimental_setup}
+% \end{figure}
+
+% \begin{figure}[!htb]
+% \centering
+%   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_Mapping_V1.png}
+%   \caption{\textbf{格点规范场论到里德堡原子阵列的映射。} 
+%   \textbf{a}, 在里德堡原子阵列中实现（1+1）维 $U(1)$ LGT。PXP 模型中里德堡自旋（箭头）编码规范场；辅助费米子（彩色圆圈）定义在相邻自旋之间的链接上。里德堡阻塞强制约束 $n_i+n_{i+1}+n_i^{\mathrm{f}}=1$ 并实现 $U(1)$ 规范对称性。图中示意解禁闭与禁闭相下类介子态的时空演化。
+%   \textbf{b}, 一维原子链构型示意：从上到下分别为正电场串（$+E$）、负电场串（$-E$）、负电荷激发、正电荷激发以及负—正电荷对。
+%   \textbf{c--d}, （1+1）维 $U(1)$ LGT 的相图，作为 $m/\kappa$ 与 $\chi/\kappa$ 的函数。在禁闭区域（$\chi\neq 0$，$\theta\neq\pi$）中粒子被电弦束缚；在解禁闭区域（$\chi=0$，$\theta=\pi$）中粒子可自由传播。当 $m>m_c$ 时，$\chi=0$ 处出现自发电荷—宇称对称性破缺，其中 $m_c/\kappa=0.66$（\textbf{d}）。
+%   \textbf{e}, 标量势 $V(\phi)$ 作为 $m$ 与 $\theta$ 的函数（计算中取 $c=1$ 与 $e=1$）。在解禁闭相（$\theta=\pi$）中，$\phi=0$ 处出现鞍点；当 $m>m_c$ 时，势在 $\pm\phi_0$ 处形成两个极小值并导致自发电荷—宇称对称性破缺。在禁闭相（$\theta\neq\pi$）中，极小值产生偏置并引入势隙 $\delta V$；该能隙随质量增大与 $\theta$ 偏离 $\pi$ 而增大，表征更强禁闭。}
+%   \label{EDFig:Mapping}
+% \end{figure}
+
+% \section{分析与讨论}
+
+% 本章基于可编程里德堡量子模拟器研究了（1+1）维 $U(1)$ LGT 的实时散射与动力学冻结。本文实现由量子淬火驱动的禁闭—解禁闭相变，并在实验上观测到弦破碎与对称性恢复；在解禁闭区域，本文追踪实时电荷散射过程并解析其菱形干涉特征；在碰撞开始时实施禁闭淬火则使高度纠缠的散射态出现动力学冻结，从而实现对瞬态中间态的“冻结取样”。
+
+% 本章展示的实验方案为未来在规范场论量子模拟中探索更一般的非平衡现象提供了基础，包括动力学量子相变~\cite{Huang_Dynamical_2019,Zache_Dynamical_2019}、弱遍历性破缺~\cite{Desaules_Weak_2023,desaules_ergodicity_2024}以及涌现流体动力学~\cite{Berges_QCD_2021}等。动力学冻结为在复杂散射过程中解析超快、非微扰演化提供了可控模板。进一步的研究可用于检验：在局域可观测量与量子关联层面，非平衡动力学产物在多大程度上可被有效平衡态描述，从而与重离子碰撞中的 freeze-out 图像形成可定量对比~\cite{bauer_quantum_2023}。
+
+% 此外，多体威尔逊环算符的实现~\cite{glaetzle2014quantum,dai_four-body_2017,meth_simulating_2025}将把里德堡 LGT 量子模拟器扩展到更高维度，从而有望探索例如磁单极子凝聚等涌现机制（其被认为可能与 QCD 的禁闭相关）。进一步模拟非阿贝尔规范场论（如基于 $SU(2)$ 与 $SU(3)$ 的理论）则需要将模拟哈密顿量工程与数字量子电路相结合，以实现非对易群的操作~\cite{gonzalez-cuadra_hardware_2022,zache_fermion-qudit_2023}。沿这些方向的推进将使得对非阿贝尔规范场论开展高时间分辨、可调控的第一性原理研究成为可能，包括实时多阶段强子碰撞以及宇宙学情景中的弦破碎与强子化~\cite{gross_50_2023}。
+
+% \section{本章小结}
+
+% 本章基于可编程里德堡原子阵列实现了（1+1）维 $U(1)$ 格点规范场论的含时哈密顿量工程，建立了从里德堡哈密顿量到量子链接模型及其连续极限描述的对应关系，并给出了质量、拓扑角与有效弦张力的可控映射。实验上，本文表征了禁闭—解禁闭相及其双参数淬火动力学，观测到弦破碎、对称性恢复以及类介子散射的菱形干涉图样。通过在碰撞开始时淬火到强禁闭相，本章实现了对纠缠散射态的动力学冻结，为高分辨率研究非平衡规范动力学提供了实验路径。
 
 \end{document}
