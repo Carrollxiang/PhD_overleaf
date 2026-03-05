@@ -59,7 +59,7 @@
   \label{ch6:fig:SigmaZ}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:SigmaZ}：对应原 `SI\_OTOC\_details.png` 的图 b，以及原 `SI\_ZZ-OTOC\_Sigma\_Z.png`，用于强调微扰校准的重要性)*)}
+% \todo{(此处插入图 \ref{ch6:fig:SigmaZ}：对应原 `SI\_OTOC\_details.png` 的图 b，以及原 `SI\_ZZ-OTOC\_Sigma\_Z.png`，用于强调微扰校准的重要性)*)}
 
 同时，对于中心比特的局域微扰 $\hat{W}_c = \sigma_c^z$，我们通过 795 nm 寻址激光诱导约 $2\pi\times\SI{5}{\MHz}$ 的光频移，在约 $\SI{110}{\ns}$ 内实现独立的 $\pi$ 相移。如图 \ref{ch6:fig:SigmaZ} 的单比特 Ramsey 干涉实验结果所示，被寻址中心原子（蓝线）的相位相比未寻址原子（红线）发生了完美的 $1.01(2)\pi$ 偏移。
 
@@ -83,7 +83,7 @@
 \label{ch6:fig:Z2_Fidelity_70}
 \end{figure}
 
-\todo{(此处插入图 6.3：对应原 `SI\_ZZ-OTOC\_Z2\_eff.png` 和 `SI\_ZZ-OTOC\_exp\_Z2.png`，证明现有初态已经足够好)}
+% \todo{(此处插入图 6.3：对应原 `SI\_ZZ-OTOC\_Z2\_eff.png` 和 `SI\_ZZ-OTOC\_exp\_Z2.png`，证明现有初态已经足够好)}
 
 \newpage
 
@@ -99,9 +99,7 @@
 \end{figure}
 
 
-\todo{
-*(此处插入图 \ref{ch6:fig:OTOC-Mitigate}：对应原 `SI\_Theory\_Mitigate.png` 以及原 `OTOC.png` 的 d, e 图，展示 IZ/ZZ 协议对比及数值验证)*
-}
+% \todo{(此处插入图 \ref{ch6:fig:OTOC-Mitigate}：对应原 `SI\_Theory\_Mitigate.png` 以及原 `OTOC.png` 的 d, e 图，展示 IZ/ZZ 协议对比及数值验证)}
 
 \newpage
 
@@ -118,7 +116,7 @@
 \label{ch6:fig:Z2&trival-OTOC}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:Z2&trival-OTOC}：对应原 `OTOC.png` 的 f-m 图，展示宏大的时空热图对比)}
+% \todo{(此处插入图 \ref{ch6:fig:Z2&trival-OTOC}：对应原 `OTOC.png` 的 f-m 图，展示宏大的时空热图对比)}
 
 缓解后的 OTOC 时空演化热图（图 \ref{ch6:fig:Z2&trival-OTOC}）揭示了这两类初态截然不同的信息输运行为。对于混沌高能初态 $\ket{\mathbf{0}}$（图 \ref{ch6:fig:Z2&trival-OTOC}e），其 OTOC 在局域微扰传播形成的线性光锥（Light cone）内部迅速衰减至零且无任何复苏迹象。这符合强相互作用下的遍历系统（Ergodic systems）预期：局域量子信息被迅速且不可逆地加扰（Scrambled）到了整个庞大的多体希尔伯特空间中。
 
@@ -134,7 +132,7 @@
 \label{ch6:fig:mitigated-otoc}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:mitigated-otoc}：对应原 `Extende\_Fig\_Mitigated\_exp\_data.png`，展示逐格点的严密对比)}
+% \todo{(此处插入图 \ref{ch6:fig:mitigated-otoc}：对应原 `Extende\_Fig\_Mitigated\_exp\_data.png`，展示逐格点的严密对比)}
 
 
 这种在强相互作用多体系统中呈现的信息复苏，有别于单粒子模型（如 Jaynes-Cummings 模型）中简单的相干现象。它有力地证明了：在受限多体体系（PXP动力学）中，相互作用并不总是导致信息的抹平；动力学约束允许局部扰动以近似弹道的形式在系统中传播，并在光锥内部发生周期性的信息回流。
@@ -155,7 +153,7 @@
   \label{ch6:fig:si-fake-collapse}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:si-fake-collapse}：对应原 \ref{ch6:fig:si-fake-collapse}，展示假性塌缩现象与 Holevo 信息的对比)}
+% \todo{(此处插入图 \ref{ch6:fig:si-fake-collapse}：对应原 \ref{ch6:fig:si-fake-collapse}，展示假性塌缩现象与 Holevo 信息的对比)}
 
 正如我们在图 \ref{ch6:fig:si-fake-collapse} 的热图中观察到的，在某些特定的时间区间（例如 $t \approx 0.6\ \mu\text{s}$ 与 $t \approx 1.2\ \mu\text{s}$），所有量子比特的 ZZ-OTOC 值都异常地逼近于 1（如图 \ref{ch6:fig:si-fake-collapse}b 的虚线标注处）。这是否意味着量子信息在此时刻完美地“重聚”了？答案是否定的。这一现象的物理本质在于：在这些时间节点，$\ket{\mathbb{Z}_2}$ 疤痕态的波函数发生部分复苏，导致中心受微扰量子比特以极大概率处于近乎纯粹的 $\ket{\uparrow}$ 或 $\ket{\downarrow}$ 态。此时，沿 Z 方向的蝴蝶算符 $\hat{W}=\sigma_c^z$ 作用在 $\sigma^z$ 的本征态上，仅仅产生一个全局相位，而无法对系统造成实质性的微扰。由于微扰“失效”，系统演化退化为无微扰的 IZ-OTOC，从而在归一化后产生了一个无物理意义的“假性塌缩（Fake collapse）”。
 
@@ -183,7 +181,7 @@
   \label{ch6:fig:hi-sequence}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:hi-sequence}：对应原 `SI\_HI\_sequence.png` 与 `SI\_HI\_dissipative.png`，展示 EIT 屏蔽时序与拉比振荡对比)}
+% \todo{(此处插入图 \ref{ch6:fig:hi-sequence}：对应原 `SI\_HI\_sequence.png` 与 `SI\_HI\_dissipative.png`，展示 EIT 屏蔽时序与拉比振荡对比)}
 
 为了在 PXP 受限空间内强行撕开一个独立的单比特操控窗口，我们使用了一种结合全局拉曼驱动与局域 480 nm 电磁诱导透明（EIT）屏蔽的全量子态层析技术（测量时序见图 \ref{ch6:fig:hi-sequence}a）。在演化结束时，我们首先使用经 SLM 调制的局域 480 nm 寻址光照射目标原子的四个近邻与次近邻格点。该光束与 $\ket{e} \rightarrow \ket{r}$ 跃迁共振，通过短暂的耗散过程（约 $\SI{200}{\nano\second}$），将其上可能存在的里德堡布居迅速通过中间态 $\ket{e}$ 自发辐射“清洗”回基态（如图 \ref{ch6:fig:hi-sequence}b 所示，邻近里德堡布居下降超 96\%）。
 
@@ -209,7 +207,7 @@
 % \label{ch6:fig:trace-distance}
 % \end{figure}
 
-\todo{(此处插入图 \ref{ch6:fig:holevo&trace}：结合原 `Holevo.png` 和 `SI\_trace\_distance.png`，展示 Holevo 热图与迹距离)}
+% \todo{(此处插入图 \ref{ch6:fig:holevo&trace}：结合原 `Holevo.png` 和 `SI\_trace\_distance.png`，展示 Holevo 热图与迹距离)}
 
 如图 \ref{ch6:fig:holevo&trace}a 所示，实验测得的 Holevo 动力学清晰地再现了与 OTOC 一致的线性光锥结构，证实了运动学约束下有限的信息传播速度。更为关键的是，由于 Holevo 信息对所有时刻保持敏感，热图完美地展示了光锥内部连续、清晰的量子信息塌缩与复苏（Collapse and Revival）图案。跟图\ref{ch6:fig:holevo&trace}b 的数值模拟相比，传播模式符合较好。在这段受限演化中，由中心缺陷编码的局域量子信息不仅没有像在遍历系统中那样弥散到整个多体空间中，反而在光锥的特定边界处发生了周期性的汇聚与重现。
 
@@ -236,7 +234,7 @@
 \label{ch6:fig:Holevo_Z2}
 \end{figure}
 
-\todo{(此处插入图 6.10：对应原 `SI\_Holevo\_Information\_Z2.png`，展示不同保真度下的 Holevo 演化)}
+% \todo{(此处插入图 6.10：对应原 `SI\_Holevo\_Information\_Z2.png`，展示不同保真度下的 Holevo 演化)}
 
 如图 \ref{ch6:fig:Holevo_Z2}a-d 所示的模拟结果表明，当态制备保真度较低时，演化后期（例如 $t > 1\ \mu\text{s}$，对应驱动拉比频率 $\sim 2\pi \times 1.2\ \text{MHz}$）的塌缩与复苏动力学将发生严重退化，尤其是对于远离扰动中心（光锥边缘）的量子比特而言，信号会被彻底淹没。然而，得益于本实验高达 $78(1)\%$ 的 $\ket{\mathbb{Z}_2}$ 态真实制备保真度，以及高度集中的误差通道（86\% 为单比特 $\ket{\uparrow} \rightarrow \ket{\downarrow}$ 翻转），我们基于实验测得的微观态组合（MMC）将相等的保真度权重代入含噪模拟。如图 \ref{ch6:fig:Holevo_Z2}e,f 所示，实验制备的含噪初态演化轨迹（虚线）与完美初态的演化轨迹（实线）几乎完美重合。这一交叉比对强有力地证明：当前实验平台的态制备性能已完全满足精准捕捉量子信息塌缩-复苏特征的需求，初态误差不会对动力学的核心物理特征造成实质性影响。
 
@@ -254,13 +252,13 @@
 \label{ch6:fig:mitigated-holevo}
 \end{figure}
 
-\todo{(此处插入图 6.11：对应原 `SI\_HI\_mitigated\_HI.png`，展示 Holevo 信息的实验与模拟对比)}
+% \todo{(此处插入图 6.11：对应原 `SI\_HI\_mitigated\_HI.png`，展示 Holevo 信息的实验与模拟对比)}
 
 为了在缺乏直接误差缓解方案的情况下验证数据的可靠性，我们采用了正向注入噪声的蒙特卡罗交叉验证策略。我们将 6.2 节中经过严格标定的所有实验不完美因素（初态制备误差、有限温度效应、激光高频噪声等）直接注入到 PXP 哈密顿量的蒙特卡罗数值演化中。如图 \ref{ch6:fig:mitigated-holevo} 所示，仅经过探测误差校正的实验数据（蓝点）与包含了全部演化噪声的模拟结果（实线）展现出了一致性。这种“自下而上”的理论与实验的双向奔赴，不仅印证了我们对系统耗散机制的理解，更确证了光锥内非马尔可夫信息回流这一物理现象的真实性。
 
 
 
-\section{物理机制深究：信息复苏必然伴随波函数复苏吗？}
+\section{波函数复苏与信息回流的非等价性}
 
 在本章的前述实验与数值模拟中，我们利用 ZZ-OTOC 和 Holevo 信息，清晰地观测到了量子信息在光锥内部周期性的塌缩与复苏。然而，一个自然且必须被严肃审视的问题是：这种量子信息的复苏，是否仅仅是量子多体疤痕波函数复苏的平庸副产物（Trivial byproduct）？ 换言之，只要一个多体系统存在周期性振荡的非热本征态，是否就必然会导致局域量子信息的周期性回流？本节将深入探究信息复苏的微观机制，并通过引入一个反例模型，给出否定答案。
 
@@ -275,7 +273,7 @@
   \label{ch6:fig:hysteresis}
 \end{figure}
 
-\todo{(此处插入图 6.12：对应原 `SI\_dynamics.png`，展示 $\langle\sigma^y\rangle, \langle\sigma^z\rangle$ 以及 $f(\vec{\sigma},t)$ 的演化)}
+% \todo{(此处插入图 6.12：对应原 `SI\_dynamics.png`，展示 $\langle\sigma^y\rangle, \langle\sigma^z\rangle$ 以及 $f(\vec{\sigma},t)$ 的演化)}
 
 为了在微观层面上直观地理解这一机制，我们追踪了受限演化下单个量子比特的布洛赫矢量 $\vec{\sigma}$。如图 6.12a 和 6.12b 所示，对于 $\ket{\mathbb{Z}_2}$（蓝线）和 $\sigma_c^x\ket{\mathbb{Z}_2}$（红线）这两种初态，各格点上的自旋期望值 $\langle \sigma^y \rangle$ 与 $\langle \sigma^z \rangle$ 均表现出周期性的振荡。值得注意的是，当光锥内的 Holevo 信息趋近于零（即信息塌缩）时，这两条轨迹的布洛赫矢量变得几乎不可分辨；而当它们在相空间中发生分离时，Holevo 信息便随之复苏。
 
@@ -302,7 +300,7 @@ H_{\text{toy}}= \frac{\Omega}{2}\sum_i\sigma^x_i+ \sum_{i}V_{i-1,i+2}P_{i,i+1}
   \label{ch6:fig:toy}
 \end{figure}
 
-\todo{(此处插入图 6.13：对应原 `SI\_toy\_model.png`，展示玩具模型与 PXP 模型的演化对比)}
+% \todo{(此处插入图 6.13：对应原 `SI\_toy\_model.png`，展示玩具模型与 PXP 模型的演化对比)}
 
 我们对 $L=25$ 的周期边界玩具模型进行了数值模拟（设定 $\Omega=2\pi\times\SI{1}{\MHz}, J=2\pi\times\SI{2}{\MHz}$）。如图 6.13a 所示，当系统从 $\ket{\text{Dicke}}$ 态出发时，系统在纯驱动 $\frac{\Omega}{2}\sum_i\sigma^x_i$ 的作用下表现出完全无衰减的完美波函数复苏（保真度周期性回到 1）。
 
