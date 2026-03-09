@@ -14,9 +14,10 @@
 
 人类对自然界物质基本性质的认知，在很大程度上建立在对微观粒子相互作用规律的理解之上。从凝聚态物理中高温超导机制的揭示、新型量子自旋液体的探索，到高能物理中规范场实时动力学的演化，这些前沿科学问题的核心均指向了同一个物理本质：强关联量子多体系统（Strongly Correlated Quantum Many-body Systems）。
 
-然而，在理论与计算层面精确求解这类多体系统的非平衡演化面临着一道难以逾越的鸿沟。根据量子力学基本原理，多体系统的状态由整个系统的波函数描述，其所处的希尔伯特空间（Hilbert Space）维度会随着粒子数的增加呈指数级膨胀。面对这种被称为“指数墙”的维数灾难，即便是采用最先进的张量网络（Tensor Network）或量子蒙特卡洛（Quantum Monte Carlo）等近似数值算法，经典计算机在处理包含数十个以上强烈相互作用粒子的量子多体动力学演化时，也必然会遭遇算力瓶颈或面临极其严峻的“符号问题（Sign Problem）”。\todo{此处需补充张量网络在处理二维长时纠缠增长时失效，以及QMC符号问题导致算力崩溃的2-3篇经典Review文献，以强化经典计算的“死穴”。}
+然而，在理论与计算层面精确求解这类多体系统的非平衡演化面临着一道难以逾越的鸿沟。根据量子力学基本原理，多体系统的状态由整个系统的波函数描述，其所处的希尔伯特空间（Hilbert Space）维度会随着粒子数的增加呈指数级膨胀。面对这种被称为“指数墙”的维数灾难，即便是采用最先进的张量网络（Tensor Network）或量子蒙特卡洛（Quantum Monte Carlo）等近似数值算法，经典计算机在处理包含数十个以上强烈相互作用粒子的量子多体动力学演化时，也必然会遭遇算力瓶颈~\cite{eisert2010colloquium, cirac2021matrix}或面临极其严峻的“符号问题（Sign Problem）”~\cite{troyer2005computational, georgescu2014quantum}。
 
-为了突破这一算力极限，著名物理学家理查德·费曼（Richard Feynman）于 1982 年极具前瞻性地提出了“量子模拟（Quantum Simulation）”的宏大构想：既然经典体系难以有效计算量子现象，最自然且本征的方法便是利用一个高度可控的、人工搭建的量子系统，去直接“模拟”另一个难以求解的复杂量子多体系统的演化过程。\todo{补充费曼1982年关于量子计算与量子模拟构想的原始文献引用。}在量子模拟的范式下，研究人员不再需要进行极其庞大且耗时的矩阵对角化运算，而是通过在实验硬件上精确调控人工量子系统的哈密顿量（Hamiltonian），使其演化规律与目标物理模型在数学形式上保持一致，进而通过直接测量系统末态来提取所需的物理观测量。这一构想为解决跨学科领域的复杂多体动力学难题提供了一条极其优雅且现实的路径。
+
+为了突破这一算力极限，著名物理学家理查德·费曼（Richard Feynman）于 1982 年极具前瞻性地提出了“量子模拟（Quantum Simulation）”的宏大构想~\cite{feynman2018simulating}：既然经典体系难以有效计算量子现象，最自然且本征的方法便是利用一个高度可控的、人工搭建的量子系统，去直接“模拟”另一个难以求解的复杂量子多体系统的演化过程。在量子模拟的范式下，研究人员不再需要进行极其庞大且耗时的矩阵对角化运算，而是通过在实验硬件上精确调控人工量子系统的哈密顿量（Hamiltonian），使其演化规律与目标物理模型在数学形式上保持一致，进而通过直接测量系统末态来提取所需的物理观测量。这一构想为解决跨学科领域的复杂多体动力学难题提供了一条极其优雅且现实的路径。
 
 \subsection{可编程中性原子阵列与哈密顿量工程}
 \label{ch1:subsec:platform}
@@ -43,18 +44,18 @@
 \subsection{底层控制技术的突破与可编程阵列的构筑 (2001-2019)}
 \label{ch1:subsec:status_early}
 
-这一阶段的核心使命，是为复杂多体物理模拟打造无缺陷的“底层积木”。早在 2001 年，研究人员便成功实现了利用光镊（Optical Tweezer）对单个原子的俘获\todo{补充2001年单原子光镊俘获的经典文献引用}，为后续的空间阵列化奠定了基础。随后在 2009 年，单原子级别的里德堡阻塞（Rydberg Blockade）效应在实验上被明确观测到\todo{补充2009年单原子阻塞效应文献}，从根本上证明了利用里德堡态诱导强相互作用网络的可行性。
+这一阶段的核心使命，是为复杂多体物理模拟打造无缺陷的“底层积木”。早在 2001 年，研究人员便成功实现了利用光镊（Optical Tweezer）对单个原子的俘获\cite{schlosser2001sub}，为后续的空间阵列化奠定了基础。随后在 2009 年，单原子级别的里德堡阻塞（Rydberg Blockade）效应在实验上被明确观测到\cite{urban2009observation, gaetan2009observation}，从根本上证明了利用里德堡态诱导强相互作用网络的可行性。
 
-然而，早期实验面临着一个严峻的工程阻碍：由于光镊对原子的俘获服从亚泊松分布（Sub-Poissonian distribution），单束光镊中装载原子的概率存在 50\% 的理论极限（碰撞阻塞极限）。这种随机加载导致的阵列缺陷，严重限制了多体模拟的规模与一致性。直到 2016 年，这一瓶颈被彻底打破。法国巴黎光学研究所（IOGS）的 Browaeys 团队与哈佛大学的 Lukin 团队分别取得重构技术的重大突破：他们利用空间光调制器（SLM）与声光偏转器（AOD），通过实时反馈控制实现了二维无缺陷任意原子阵列的自动组装，以及一维冷原子链的逐个原子确定性排布\todo{此处务必引用 Browaeys 组和 Lukin 组 2016 年在 Science 上的两篇背靠背阵列重构文章}。
+然而，早期实验面临着一个严峻的工程阻碍：由于光镊对原子的俘获服从亚泊松分布（Sub-Poissonian distribution），单束光镊中装载原子的概率存在 50\% 的理论极限（碰撞阻塞极限）。这种随机加载导致的阵列缺陷，严重限制了多体模拟的规模与一致性。直到 2016 年，这一瓶颈被彻底打破。法国巴黎光学研究所（IOGS）的 Browaeys 团队与哈佛大学的 Lukin 团队分别取得重构技术的重大突破：他们利用空间光调制器（SLM）与声光偏转器（AOD），通过实时反馈控制实现了二维无缺陷任意原子阵列的自动组装，以及一维冷原子链的逐个原子确定性排布~\cite{barredo2016atom, endres2016atom}
 
-从“随机俘获”向“确定性组装”的跨越，标志着该平台正式具备了可编程量子模拟器的核心特征。依托这一底层硬件突破，Lukin 团队于 2017 年将一维阵列规模拓展至 51 个原子，在研究里德堡链的淬灭动力学时，首次观测到了违反热力学平衡假设的“量子多体疤痕（Quantum Many-Body Scars, QMBS）”现象\todo{补充 2017 年 Lukin 组 51 原子 QMBS 的 Nature 文献}。这一里程碑式的成果不仅证明了平台在长时间多体相干演化上的极高保真度，更为探索非热化（Non-thermalizing）多体动力学开辟了全新的视野。
+从“随机俘获”向“确定性组装”的跨越，标志着该平台正式具备了可编程量子模拟器的核心特征。依托这一底层硬件突破，Lukin 团队于 2017 年将一维阵列规模拓展至 51 个原子，在研究里德堡链的淬灭动力学时，首次观测到了违反热力学平衡假设的“量子多体疤痕（Quantum Many-Body Scars, QMBS）”现象~\cite{bernien2017probing}。这一里程碑式的成果不仅证明了平台在长时间多体相干演化上的极高保真度，更为探索非热化（Non-thermalizing）多体动力学开辟了全新的视野。
 
 \subsection{复杂多体量子模拟的“黄金时代”与前沿格局 (2020-至今)}
 \label{ch1:subsec:status_golden}
 
 2020年前后，随着底层硬件保真度与光电反馈控制技术的齐备，中性原子平台迎来了探索深层多体物理的爆发期，正式迈入“复杂多体量子模拟的黄金时代”。国际顶尖团队开始将其作为强大的可编程计算工具，去攻克凝聚态物理中极其复杂的强关联模型。
 
-在复杂相变与拓扑物态方面，2021 年 Lukin 团队成功构建了包含 256 个原子的量子模拟器，对二维量子相图进行了深度探索；更为突破性的是，该团队利用卡戈梅（Kagome）几何阻挫晶格，在实验中首次观测到了拓扑自旋液体（Topological Spin Liquid）的强有力证据\todo{补充 2021 年 256 原子相变及 Kagome 晶格拓扑自旋液体的 Nature/Science 顶级文献}。在系统相干性与逻辑操作方面，近期研究开始向着动态重构与容错架构演进。例如，通过原子的相干搬运，研究人员展示了系统在演化过程中动态改变拓扑连通性的能力，并成功演示了在大尺度物理阵列上的高保真度逻辑级相干演化与纠错制备\todo{补充近两年关于中性原子逻辑量子比特、相干搬运的代表性 Nature 成果}。表 \ref{chp1:tab:milestone} 梳理了该领域自发轫至今的代表性里程碑工作。
+在复杂相变与拓扑物态方面，2021 年 Lukin 团队成功构建了包含 256 个原子的量子模拟器，对二维量子相图进行了深度探索；更为突破性的是，该团队利用卡戈梅（Kagome）几何阻挫晶格，在实验中首次观测到了拓扑自旋液体（Topological Spin Liquid）的强有力证据\cite{bluvstein2021controlling, semeghini2021probing}。在系统相干性与逻辑操作方面，近期研究开始向着动态重构与容错架构演进。例如，通过原子的相干搬运，研究人员展示了系统在演化过程中动态改变拓扑连通性的能力，并成功演示了在大尺度物理阵列上的高保真度逻辑级相干演化与纠错制备\todo{补充近两年关于中性原子逻辑量子比特、相干搬运的代表性 Nature 成果}。表 \ref{chp1:tab:milestone} 梳理了该领域自发轫至今的代表性里程碑工作。
 
 % 提示：华科论文模板通常要求表格具备自明性，这里我保留了你原稿的表格框架，但请在定稿时核对文献信息，并确保表格满足学校关于“三线表”和字号（一般为五号或小五号）的排版规范。
 \begin{table}[htb]
@@ -79,9 +80,17 @@
 \end{tabular}
 \end{table}
 
-与国际上的迅猛发展同步，国内在基于里德堡原子阵列的量子模拟领域也正进行着密集且高水平的科研攻关。近年来，国内顶尖科研机构在平台构筑、高保真度操控体系以及新奇多体相变理论等方面均取得了长足的进步\todo{此处是你的盲区，请务必高度概括地补充国内代表性工作！例如：清华大学段路明院士团队在二维原子阵列与量子纠错方向的成果、华南师范大学颜辉/朱诗亮团队在单原子相干操控方向的进展、中科院精测院及其他相关课题组在里德堡相互作用与多体理论方面的贡献。引用 3-5 篇国内优质文献}。
+\subsection{国内研究格局与本平台的建设动机}
+\label{ch1:subsec:domestic_status}
 
-尽管该平台在硬件规模的扩展与通用多体模型（如自旋模型）的模拟上取得了令人瞩目的繁荣，但当我们剥开宏观可观测量的表象，深入探究“里德堡受限动力学”的微观物理潜能时，会发现当前的研究格局中仍然潜藏着极大的理论盲区与实验空白。
+与国际上的迅猛发展同步，近年来国内顶尖科研机构在基于中性原子阵列与里德堡物理的量子信息科学领域，也正进行着密集且高水平的科研攻关，并在底层硬件扩展、高保真度量子逻辑门以及非平衡多体物理模拟等方面取得了长足的进步。
+
+在底层硬件平台的大规模扩展与高保真度操控方面，中国科学技术大学潘建伟院士团队不断突破阵列规模的极限，近期成功实现了迄今为止最大规模的中性原子无缺陷阵列重排\cite{lin2025ai}，为迈向容错量子计算提供了庞大的物理比特资源。在系统相干性方面，山西大学张天才团队通过精细的光学与磁场环境控制，刷新了碱金属原子量子比特的最长相干时间记录\cite{tian2024extending}，这对于实施深度的量子逻辑线路至关重要。此外，针对复杂量子计算架构的需求，中科院精密测量院詹明生团队在多自由度操控上取得了先驱性突破，国际上首次实现了二维无缺陷异核（mixed-species）单原子量子计算阵列，并利用里德堡阻塞效应成功演示了高保真度的同位素量子纠缠\cite{zeng2017entangling, sheng2022defect}。
+
+在前沿非平衡多体物理与里德堡非线性动力学的探索方面，国内团队同样展现出了深刻的物理洞察力。清华大学陈文兰团队利用可编程的里德堡原子阵列，系统研究了跨越量子相变点的非平衡动力学，并在实验上精准观测到了近临界区域的 Kibble-Zurek 普适标度律\cite{zhang2025observation}。在更广泛的受限动力学与遍历性破缺（Ergodicity breaking）研究中，清华大学尤力团队在室温里德堡热气体中首次观测到了连续时间晶体（Time crystal）的特征~\cite{wu2024dissipative}；而中国科学技术大学史保森团队则在耗散的里德堡原子开放体系中，深入探究并观测到了遍历性破缺现象\cite{ding2024ergodicity}。此外，在量子精密测量（Quantum metrology）等交叉领域，山西大学张临杰团队利用里德堡原子对微波电场的极端敏感性，首次实现了基于原子的微波超外差接收机\cite{jing2020atomic}，拓宽了里德堡原子的应用边界。
+
+为了在国际复杂多体动力学模拟的最前沿占据一席之地，我们希望从零开始自主搭建一套兼具大规模确定性重排、超长相干时间以及极高时空操控分辨率的底层物理平台。这正是本论文在第二至第四章开展大规模硬件工程构筑的核心动机与物理初衷。
+
 
 \section{里德堡受限动力学前沿存在的问题}
 \label{ch1:sec:problems}
@@ -90,27 +99,20 @@
 
 \subsection{受限多体系统中局域量子信息加扰与回流的微观探测缺失}
 \label{ch1:subsec:problem_info}
+强关联多体系统在孤立条件下的热化与各态历经性破缺，是当前非平衡统计物理的核心议题 \cite{deutsch1991quantum,srednicki1994chaos,rigol2008thermalization,lewis2019dynamics}。近年来，探究量子信息在多体系统中的加扰（Quantum information scrambling）与扩散，为理解量子热化、量子混沌乃至黑洞信息佯谬提供了全新的微观视角 \cite{swingle2018unscrambling,sekino2008fast,hosur2016chaos,maldacena2016bound,hayden2007black,shenker2014black}。在典型的强关联混沌系统中，局域信息会迅速发生不可逆的加扰 \cite{lewis2019dynamics}；而在多体局域化（MBL）系统中，信息的传播则呈现出极其缓慢的对数增长 \cite{nandkishore2015many,abanin2019colloquium,lukin2019probing,schreiber2015observation,choi2016exploring,rispoli2019quantum,huang2017out,chen2017out,fan2017out,deng2017logarithmic,he2017characterizing,swingle2017slow,banuls2017dynamics}。
 
-强关联多体系统在孤立条件下的热化与各态历经性破缺，是当前非平衡统计物理的核心议题 \cite{deutsch1991quantum,srednicki1994chaos,rigol2008thermalization,lewis2019dynamics}。
-近年来，关于里德堡原子阵列中“量子多体疤痕态（Quantum Many-Body Scars, QMBS）”的研究，揭示了系统可以在特定低熵初态下长时间抵抗热化，并展现出宏观可观测量的周期性振荡特征 \cite{bernien2017probing,turner2018weak,bluvstein2021controlling,serbyn2021quantum}。
+相比之下，里德堡原子阵列 \cite{kumar2018sorting,sheng2022defect,graham2022multi,barnes2022assembly,kim2022rydberg,okuno2022high,chen2023continuous,liu2023realization,singh2023mid,eckner2023realizing,ma2023high,zhao2023floquet,bluvstein2024logical,gregory2024second,pause2024supercharged,shaw2024benchmarking} 凭借其强烈的动力学约束，开辟了探索新奇量子动力学的全新疆域。系统在此约束下涌现的“量子多体疤痕态（Quantum Many-Body Scars, QMBS）”揭示了物理体系可以在特定低熵初态下长时间抵抗热化，并展现出宏观波函数的周期性振荡 \cite{bernien2017probing,turner2018weak,serbyn2021quantum,bluvstein2021controlling,desaules2024ergodicity}。然而，当前对这类受限系统的研究，大多局限于观测宏观单体密度的复苏或整体保真度。从量子信息科学的视角来看，宏观密度的复苏并不等价于局域微观信息的保护 \cite{choi2019emergent}。近期的理论预言指出，在受限的 PXP 动力学空间内，量子信息可能会沿着线性光锥传播并展现出独特的塌缩与复苏特征 \cite{yuan2022quantum}，但这一超越传统热化与 MBL 范式的动力学图景亟待实验确证。
 
-然而，目前对这类动力学受限系统的研究，大多局限于观测宏观单体密度的复苏或整体波函数的保真度。
-从量子信息科学的视角来看，系统在宏观密度分布上偏离热平衡，并不等价于局域的微观量子信息得到了保护 \cite{choi2019emergent}。
-在多体相互作用驱动下，局域编码的量子信息在受限希尔伯特空间（Hilbert Space）内部的扩散、加扰（Scrambling）与输运机制，目前在实验上仍不明确。
-理论预言指出，在受限的疤痕子空间内，量子信息可能会沿着线性光锥传播并展现出独特的塌缩与复苏特征 \cite{yuan2022quantum}，但这一极具价值的动力学图景亟待实验确证。
-
-究其原因，揭示微观信息动力学需要引入高阶信息学指标。
-例如，非时序关联函数（OTOC）虽然在黑洞物理与量子混沌理论中被广泛讨论 \cite{hayden2007black,shenker2014black}，但在实验中运用它需要系统具备执行复杂多体时间反演（Time-reversal）演化的能力；
-而 Holevo 信息则要求在维持体系相互作用不被破坏的前提下，对特定局域格点执行高保真度的全量子态层析。当前实验平台在这两方面均面临严峻挑战：一方面，传统的全局绝热演化（Adiabatic sweeping）方案在系统尺寸扩大时面临能隙急剧缩小的致命瓶颈，导致初态制备保真度出现断崖式下降 \cite{bernien2017probing,omran2019generation}，这种含有大量缺陷的低保真度初态会引发不可逆的快速热化，从而彻底淹没脆弱的高阶信息回流信号；另一方面，缺乏消除相邻原子受限串扰的局域相干操控技术，致使在受限多体体系中对量子信息输运的连续、无盲区追踪仍存在极大空白。
+究其原因，揭示微观信息动力学需要引入诸如非时序关联函数（OTOC）和 Holevo 信息等高阶度量工具。在实验中运用这些工具需要极高的态制备保真度、复杂的多体时间反演（Time-reversal）控制以及原位的全量子态层析能力。当前实验平台在这些方面均面临严峻挑战：例如，传统的全局绝热演化方案在系统尺寸扩大时面临能隙急剧缩小的致命瓶颈 \cite{bernien2017probing,omran2019generation}；而缺乏消除相邻原子受限串扰的局域相干操控技术，更使得在受限多体体系中对量子信息输运的连续、无盲区追踪仍存在极大空白。
 
 \subsection{格点规范场论中实时散射动力学与瞬态干预手段的局限}
 \label{ch1:subsec:problem_lgt}
 
-在强里德堡阻塞极限下，相邻原子不能同时处于激发态的动力学约束，在低能有效子空间内可严格映射为（1+1）维 $U(1)$ 量子链接模型（Quantum Link Model）中的局域规范不变性（如高斯定律）\cite{surace_lattice_2020}。这一深刻的物理对应，使得里德堡原子阵列成为模拟高能物理中格点规范场论（Lattice Gauge Theory, LGT）的理想桌面平台。
+理解规范场论的非平衡动力学是现代高能物理学的核心挑战之一 \cite{Calzetta_Hu_2008,gross_50_2023}。诸如量子色动力学（QCD）中的禁闭 \cite{wilson_confinement_1974}、弦断裂 \cite{bali_observation_2005} 与渐近自由 \cite{Frank_Nobel_2005} 等深刻现象，其对应的重离子、轻子与强子对撞等关键物理过程都发生在远离平衡态的强相互作用演化之中。然而，对这类极度非平衡过程进行从头计算（\textit{ab initio}）面临严峻的理论困难 \cite{wiese_ultracold_2013}；传统的格点规范场论（LGT）在处理实时动力学时面临着指数级增长的资源消耗 \cite{troyer_computational_2005,CarmenBanuls_Review_2020}；而大型粒子对撞机虽能精确测量渐近末态，却难以对超快瞬态的中间过程实施可控的暂停与直接观测 \cite{belyansky_high-energy_2024}。
 
-理解规范场论的非平衡演化是现代物理学的重要挑战。目前，包括超冷原子和超导量子比特在内的多个平台已在实验中观测到了规范场论的平衡态相图或弦破碎（String breaking）等孤立现象。然而，针对高能物理中更为核心的类介子（Meson-like）实时散射（Real-time scattering）动力学，实验进展依然缓慢。
+人工合成的量子模拟器为研究这一难题提供了一条资源高效的替代路径 \cite{jordan_quantum_2012,zohar_quantum_2016,Banuls2020,Karpov_Spatiotemporal_2022,bauer_quantum_2023,bauer_quantum_2023-1,di_meglio_quantum_2024,su_cold-atom_2024,cheng_emergent_2024,halimeh_cold-atom_2025,farrell_digital_2025,Chai2025fermionic,chai2025resource,chai2025scalable}。特别是里德堡原子阵列平台，在强阻塞极限下涌现出的局域规范不变性（如高斯定律），使其天然成为模拟 LGT 的理想桌面系统 \cite{surace_lattice_2020,bernien2017probing,datla_statistical_2025}。目前，包括超导量子比特 \cite{wang_observation_2022,Cochran2025,mildenberger_confinement_2025,cobos2025realtimedynamics21dgauge}、离子阱 \cite{martinez_real-time_2016,kokail_self-verifying_2019,tan_observation_2021,meth_simulating_2025,mueller_quantum_2025} 以及超冷原子 \cite{schweizer_floquet_2019,gorg_realization_2019,yang_observation_2020,mil_scalable_2020,frolian_realizing_2022,zhou_thermalization_2022,wang_interrelated_2023,zhang_observation_2025} 在内的多个平台已在实验中观测到了规范场论中的重要现象，包括弦破碎 \cite{de_observation_2024,liu_string_2024,gonzalez-cuadra_observation_2025,Cochran2025} 和假真空衰变 \cite{zenesini_false_2024,zhu_probing_2024,vodeb_stirring_2025}。
 
-实现实时散射以及极端非平衡条件下的动力学冻结（Dynamical freeze-out）模拟，对实验控制提出了极高的时空工程（Spatiotemporal engineering）要求。一方面，它要求系统不仅能制备全局的基态真空，还必须能够确定性地在空间任意位置“刻写”出高度空间不对称的复合粒子初态；另一方面，它要求实验平台能够在强相互作用的多体演化期间，以纳秒级的分辨率动态切换哈密顿量参数（如交错费米子质量与拓扑角/弦张力）。目前依赖全局静态驱动的传统模拟架构难以胜任这种高时空分辨率的动态干预，严重制约了该平台向更复杂高能物理散射动力学模拟的跨越。
+然而，针对高能物理中更为核心的类介子（Meson-like）实时散射（Real-time scattering）动力学，目前的实验实现依然面临极大的瓶颈。突破这一盲区，对实验系统的时空工程（Spatiotemporal engineering）提出了苛刻的要求：它不仅要求系统能够制备具有确定空间结构的高保真度入射波包，还要求实验平台能够在强相互作用的碰撞期间，以极高的时空分辨率动态干预哈密顿量演化。尤其是在截获高度关联的散射瞬态，以在微观层面上检验重离子碰撞中经典的动力学冻结（Dynamical freeze-out）唯象图像时 \cite{Berges_QCD_2021,borsanyi2013freeze,Heinz:2007in,PhysRevLett.109.192302}，当前依赖静态或低速调控的传统量子模拟架构仍显得无能为力。
 
 
 \section{研究内容与论文章节安排}

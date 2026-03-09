@@ -8,7 +8,7 @@
 
 在第五章和第六章中，本论文利用可编程里德堡原子阵列，系统性地研究了 PXP 模型中的受限多体动力学。我们观察到了量子多体疤痕以及局域量子信息的非马尔可夫回流。然而，里德堡阻塞这一动力学约束的物理意义远不止于此。在理论上，当系统处于强阻塞极限（$V\gg\Omega$）时，相邻原子不能同时被激发至里德堡态的动力学约束，可以在其低能有效子空间内，被严格映射为一种涌现的规范不变性（Emergent gauge invariance）。这种涌现对称性的数学结构直接对应于一维量子电动力学中的高斯定律（Gauss's law）。这一深刻的物理对应关系，使得本实验平台能够从量子信息与凝聚态物理的语境，自然地跨越至高能物理领域的格点规范场论（Lattice gauge theory, LGT）模拟。
 
-理解规范场论的非平衡动力学是现代高能物理学的核心挑战之一。在真实的物理世界中，从重离子碰撞到轻子与强子对撞，许多关键的物理过程都发生在远离平衡态的强相互作用演化之中。然而，对这类极度非平衡的动态过程进行严格的从头计算（\textit{ab initio}）极其困难。尽管格点规范场论为理解能谱和相图等平衡态性质提供了可靠的非微扰框架，但在处理实时演化动力学时，经典计算资源的需求呈指数级增长。在实验方面，传统的大型粒子对撞机能够精确测量渐近末态的产物，却难以对超快瞬态的中间散射过程实施可控的干预与直接读出。
+理解规范场论的非平衡动力学是现代高能物理学的核心挑战之一。在真实的物理世界中，从重离子碰撞到轻子与强子对撞，许多关键的物理过程都发生在远离平衡态的强相互作用演化之中。然而，对这类极度非平衡的动态过程进行严格的第一性原理计算（\textit{ab initio}）极其困难。尽管格点规范场论为理解能谱和相图等平衡态性质提供了可靠的非微扰框架，但在处理实时演化动力学时，经典计算资源的需求呈指数级增长。在实验方面，传统的大型粒子对撞机能够精确测量渐近末态的产物，却难以对超快瞬态的中间散射过程实施可控的干预与直接读出。
 
 在此背景下，人工合成量子系统（量子模拟）为研究规范场动力学提供了一条资源可控的替代路径。近年来，包括囚禁离子、超导量子比特、光格点超冷原子以及里德堡原子阵列在内的多个物理平台，已在实验上观测到了规范场论的多种代表性现象，例如弦断裂（String breaking）与假真空衰变（False vacuum decay）。然而，面向高能物理中最核心的实时散射（Real-time scattering）动力学，实验实现依然面临着巨大的瓶颈：这不仅要求制备具有特定动量结构的入射态，还要求在强相互作用期间具备极高时空分辨率的操控与探测能力。
 
@@ -32,10 +32,9 @@
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig1_experimental_seup_and_LGT_mapping.png}
-\caption{\textbf{里德堡原子格点规范场论量子模拟器以及物理量映射关系。} }
+\caption{里德堡原子格点规范场论量子模拟器以及物理量映射关系。}
   \label{ch7:fig:setup_and_LGT_mapping}
 \end{figure}
-\todo{这里需要重组图\ref{ch7:fig:setup_and_LGT_mapping}的内容，保留a-e}
 
 在这一映射中，存在一个极具物理巧思的反直觉设定（如图 \ref{ch7:fig:setup_and_LGT_mapping}b 与 \ref{ch7:fig:setup_and_LGT_mapping}c 所示）：里德堡原子本身并不代表实物粒子，而是代表定义在链接（Link）上的规范场（Gauge field）；真正的物质场（Matter field，即正负电荷）则被定义在相邻两个原子之间的“空隙（Site）”上。
 为了实现映射，我们在每对被阻塞的原子链接 i,i+1 之间引入一个辅助交错费米子（Staggered fermion）$f_i$。当任一原子处于里德堡态时，该费米子被湮灭；当相邻原子均为基态时，虚拟费米子的狄拉克海被占据。由此，原本的不等式约束在扩大的希尔伯特空间中被严格改写为等式守恒： 
@@ -96,7 +95,7 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_experimental_setup.png}
-  \caption{\textbf{实验装置与时序。} }
+  \caption{LGT实验装置与时序。} 
   \label{ch7:fig:experimental_setup}
 \end{figure}
 
@@ -132,12 +131,9 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig2_Confinement_deconfinement_phases.png}
-  \caption{
-    \textbf{禁闭与解禁闭。}}
+  \caption{禁闭与解禁闭。}
   \label{ch7:fig:confinement_and_deconfinement_phases}
 \end{figure}
-
-\todo{(此处插入图 \ref{ch7:fig:confinement_and_deconfinement_phases}：对应原 `Fig2\_Confinement\_deconfinement\_phases.png`，展示不同参数下电场的时空演化及体电通量的稳态偏置)}
 
 当系统参数设置为 $\theta=\pi$（即实验中交错失谐 $\delta=0$）时，弦张力消失（$\chi=0$），系统处于解禁闭相（Deconfined phase）。根据标量势 $V(\phi)$ 的理论图像，该区域的动力学随质量 $m$ 呈现两种不同的真空响应：当 $m=0$ 时，真空电场振荡但平均值为零，系统保持电荷-宇称（CP）对称性；当 $m>m_c$ 时，真空简并度增加，导致 CP 对称性自发破缺，电场在长时间演化后弛豫到稳定的极小值（如图 \ref{ch7:fig:confinement_and_deconfinement_phases}e 红色圆圈所示）。在这两种情况下，由于弦张力的消失，粒子-反粒子对的产生与分离不再受到宏观能量势垒的限制。如图 \ref{ch7:fig:confinement_and_deconfinement_phases}a（上图）的实验数据所示，初始局域在格点 9 和 17 的电通量在演化过程中迅速弥散至整个系统，表现出典型的解禁闭弹道传播特征。
 
@@ -146,7 +142,7 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_Confinement_deconfinement_phases_simulation.png}
-  \caption{\textbf{禁闭和解禁闭相的数值模拟。}}
+  \caption{禁闭和解禁闭相的数值模拟。}
   \label{ch7:fig:Confinement_deconfinement_phases_simulation}
 \end{figure}
 
@@ -161,11 +157,10 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/Fig3_Quench_dynamics.png}
-  \caption{\textbf{淬火动力学。} }
+  \caption{淬火动力学。} 
   \label{ch7:fig:Quench_dynamics}
 \end{figure}
 
-\todo{(此处插入图 \ref{ch7:fig:Quench_dynamics}：对应原 `Fig3\_Quench\_dynamics.png`，展示双参数淬火序列、弦破碎与光锥传播动力学)}
 
 在演化至 $\Omega t^* = 11.3$（约 $\SI{1.2}{\micro\second}$）时，我们利用声光调制器（AOM）在约 $\SI{20}{\nano\second}$ 内关闭寻址光束，实施了一次深度的双参数淬火（Dual-parameter quench）：将拓扑角突变至 $\theta=\pi$，同时将质量突变至 $m=0$。这一操作瞬间将系统从强禁闭相推入解禁闭相。
 
@@ -176,7 +171,7 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/EDFigure_Quench_dynamics_simulation.png}
-  \caption{\textbf{淬火动力学的数值模拟。} }
+  \caption{淬火动力学的数值模拟。}
   \label{ch7:fig:Quench_dynamics_simulation}
 \end{figure}
 
@@ -193,11 +188,9 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/Fig4_Meson_dynamics.png}
-  \caption{\textbf{$U(1)$ 格点规范场论中的实时散射动力学。}}
+  \caption{$U(1)$ 格点规范场论中的实时散射动力学。}
   \label{ch7:fig:Meson_dynamics}
 \end{figure}
-
-\todo{(此处插入图 \ref{ch7:fig:Meson_dynamics}：对应原 `Fig4\_Meson\_dynamics.png`，展示强禁闭与解禁闭下的电荷密度和动力学电荷演化)}
 
 为了建立对照基准，我们首先在强禁闭区域（$\chi=0.6\kappa$）内探测系统的动力学响应。通过施加较大的交错失谐，真空简并被解除，分离正负电荷需要付出高昂的线性能量代价。如图 \ref{ch7:fig:Meson_dynamics}a 和 \ref{ch7:fig:Meson_dynamics}c 所测得的动力学电荷 $Q_i(t)$ 与粒子数密度 $\rho_i(t) = |Q_i(t)|$ 的时空演化所示，在此参数下，电荷在整个演化周期内被稳定束缚。粒子密度高度集中于初始激发位置，未发生明显的波包扩散或散射，且背景涨落被有效抑制。
 
@@ -212,7 +205,7 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.7\textwidth]{chapters/chapter_07/figure/EDFigure_scattering_simulation.png}
-  \caption{\textbf{散射动力学的数值模拟。}}
+  \caption{散射动力学的数值模拟。}
   \label{ch7:fig:scattering_simulation}
 \end{figure}
 
@@ -227,12 +220,9 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_String_tension.png}
-  \caption{\textbf{不同弦张力下的散射动力学。} }
+  \caption{不同弦张力下的散射动力学。}
   \label{ch7:fig:string-tension}
 \end{figure}
-
-
-\todo{(此处可选择性插入图 \ref{ch7:fig:string-tension}：对应原补充材料 `EDFigure\_String\_tension.png`，展示不同弦张力下的演化与平均电场)}
 
 我们首先固定费米子质量为 $m=1.5\kappa$，系统调节有效弦张力 $\chi$ 的大小（从 0 调制至 0.6$\kappa$），并监测其对类介子散射的影响。如图 \ref{ch7:fig:string-tension}a 和 \ref{ch7:fig:string-tension}b 所示，在较大的弦张力（如 $\chi=0.6\kappa$）下，粒子-反粒子对保持强局域化并形成稳定的束缚态。随着 $\chi$ 的逐渐降低，原本稳定局域的束缚态开始在长时间演化中表现出有限范围内的波包扩散。当 $\chi$ 最终降至 0 时，束缚态彻底融化，系统平滑地过渡到前述的完全散射状态。
 
@@ -244,10 +234,9 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.9\textwidth]{chapters/chapter_07/figure/EDFigure_masses.png}
-  \caption{\textbf{可调费米子质量与弦张力淬火下的散射动力学。}  }
+  \caption{可调费米子质量与弦张力淬火下的散射动力学。} 
   \label{ch7:fig:tune-masses}
 \end{figure}
-\todo{(此处插入图 \ref{ch7:fig:tune-masses}：对应原 EDFigure\_masses.png，展示不同费米子质量下的散射与弦张力淬火动力学)}
 
 在上述关于类介子准弹性散射的主实验中，系统的交错费米子质量被特定地设定为 $m=1.5\kappa$。这一选择并非偶然，而是基于对不同质量下真空涨落与禁闭阈值的系统性评估。为了论证该参数选择的物理合理性，我们补充考察了较轻质量（$m=0$ 与临界质量 $m_c=0.66\kappa$ ）下的散射与淬火行为。
 将系统初始化于无弦张力的解禁闭相（$\chi=0$）中。如图 \ref{ch7:fig:tune-masses}a 和 \ref{ch7:fig:tune-masses}b（左侧）所示，当 $m=0$ 时，标量势 $V(\varphi)$ 在 $\varphi=0$ 处为单一极小值。虽然粒子可以自由传播，但由于缺乏质量项带来的能隙保护，粒子对的产生与湮灭不受能量惩罚，系统中伴随着极为剧烈的背景真空涨落。这种全局的电荷与密度涨落严重淹没了单粒子层面的散射轨迹。当质量被调节至临界值 $m_c=0.66\kappa$（图 \ref{ch7:fig:tune-masses}a 和 \ref{ch7:fig:tune-masses}b 右侧）时，有效势 $V(\varphi)$ 恰好处于由单阱向双阱结构转变的相变点。此时势阱底部极为平坦，导致了更加复杂的非线性动力学演化与背景噪声。通过这一系统性的参数扫描可以得出结论：在主实验中选择较重的质量 $m=1.5\kappa$，其物理意义在于有效压制无关的背景真空涨落，从而在真实的实验信噪比下，提取出最清晰的类介子波包传播与干涉信号。
@@ -266,12 +255,10 @@ V(\phi) = e^2\phi^2 - cm\cos(2\phi-\theta)
 \begin{figure}[!htb]
 \centering
   \includegraphics[width=0.6\textwidth]{chapters/chapter_07/figure/Fig5_Quantum_freeze-out_dynamics.png}
-  \caption{\textbf{动力学冻结。}}
+  \caption{动力学冻结。}
   \label{ch7:fig:Freeze-frame-dynamics}
 \end{figure}
 
-
-\todo{(此处插入图 \ref{ch7:fig:Freeze-frame-dynamics}：对应原 `Fig5\_Quantum\_freeze-out\_dynamics.png`，展示冻结协议、电荷/密度演化及纠缠熵对比)}
 
 从直觉上看，对一个正在发生强相互作用散射的多体系统实施如此剧烈的全局参数淬火，通常会导致大量能量注入，进而驱使系统向无特征的高温热态快速演化。然而，实验测量的时空动力学给出了截然不同的结果。如图 \ref{ch7:fig:Freeze-frame-dynamics}b 和 \ref{ch7:fig:Freeze-frame-dynamics}c 测得的动力学电荷 $Q_i(t)$ 与粒子密度 $\rho_i(t)$ 所示，在淬火时刻 $\Omega t^*$ 之后，原本处于快速演化和干涉中的瞬态散射构型被突然“暂停”。通过对比淬火前（$\Omega t=11.3$）与淬火后长时间演化（$\Omega t=30.2$）的电荷与密度分布（图 \ref{ch7:fig:Freeze-frame-dynamics}c 插图），可以发现两者保持了高度的一致性。这意味着，瞬态的碰撞空间构型在后续的长演化时间尺度上实现了近似守恒，未发生显著的扩散或热化衰减。
 

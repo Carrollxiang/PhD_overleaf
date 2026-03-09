@@ -1,5 +1,5 @@
 % 1. 替换为华科博士学位论文模板
-\documentclass[type=doctor]{hustthesis} 
+\documentclass[type=doctor, anonymous=true]{hustthesis} 
 
 %========== 论文信息配置 (hustsetup) ==========
 \hustsetup { 
@@ -17,7 +17,7 @@
     major* = { Physics },
     supervisor = { 李霖\quad{} 教授 },
     supervisor* = { Prof.~ LI Lin },
-    date = { 2025-02-28 }, % 或直接删除此行由系统根据编译日期生成
+    % date = { 2025-02-28 }, % 或直接删除此行由系统根据编译日期生成
     % committee = { 张三 & 教授 & 华中科技大学 , 李四 & 教授 & 武汉大学 }, % 答辩时填写
   },
 }
@@ -84,6 +84,14 @@ In conclusion, this thesis systematically accomplishes a comprehensive research 
 
 % 生成目录
 \tableofcontents
+
+% 添加插图清单
+\cleardoublepage
+\listoffigures
+
+% 添加表格清单
+\cleardoublepage
+\listoftables
 
 \mainmatter
 
